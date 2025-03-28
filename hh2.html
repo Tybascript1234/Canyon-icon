@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>تحويل صورة إلى SVG</title>
+<style>
+  #image-container, #svg-container, #code-container {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+  }
+  img, svg {
+    max-width: 100%;
+  }
+</style>
+</head>
+<body>
+  <input type="file" id="image-input" accept="image/*">
+  <div id="image-container"></div>
+  <button id="create-svg-btn">إنشئ</button>
+  <button id="copy-svg-code">نسخ الكود</button>
+  <button id="reset-button">إعادة</button>
+  <div id="svg-container"></div>
+  <div id="code-container"></div>
+
+  <script src="https://cdn.jsdelivr.net/gh/jankovicsandras/imagetracerjs/imagetracer_v1.2.6.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
+  <script>
+    document.getElementById('image-input').addEventListener('change', function(event) {
+      const imageContainer = document.getElementById('image-container');
+      imageContainer.innerHTML = ''; // Clear previous image
+
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = document.createElement('img');
+          img.id = 'uploaded-image';
+          img.src = e.target.result;
+          img.style.maxWidth = '100%';
+          imageContainer.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    document.getElementById('create-svg-btn').addEventListener('click', function() {
+      const img = document.getElementById('uploaded-image');
+      if (img) {
+        ImageTracer.imageToSVG(img.src, function(svgString){
+          const svgContainer = document.getElementById('svg-container');
+          svgContainer.innerHTML = svgString; // Display the SVG
+
+          const codeContainer = document.getElementById('code-container');
+          codeContainer.textContent = svgString; // Display the SVG code
+        }, { ltres:1, qtres:1, pathomit:0, colorsampling:0, numberofcolors:16, strokewidth:1 });
+      } else {
+        alert('يرجى رفع صورة أولاً.');
+      }
+    });
+
+    // Initialize Clipboard.js
+    new ClipboardJS('#copy-svg-code', {
+      text: function() {
+        const svgCode = document.getElementById('svg-container').innerHTML;
+        return svgCode;
+      }
+    });
+
+    // Reset Button
+    document.getElementById('reset-button').addEventListener('click', function() {
+      document.getElementById('image-container').innerHTML = '';
+      document.getElementById('svg-container').innerHTML = '';
+      document.getElementById('code-container').innerHTML = '';
+    });
+  </script>
+</body>
+</html>
