@@ -954,9 +954,10 @@ background-color: #0084ff21;
 .search-div-close:hover {
     background-color: #0000001c;
 }
-.search-div-close ion-icon {
+.search-div-close span {
     display: flex;
     margin: 0;
+    font-size: 16px;
 }
 /* .search-div-close2 {
   display: flex;
