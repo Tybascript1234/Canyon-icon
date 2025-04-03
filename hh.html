@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Control Board</title>
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ionicons@5.0.0/dist/ionicons.min.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <script src="icons.js"></script>
+  <!-- <script>
+    let timer; // متغير لحفظ معرف المؤقت
+
+// الدالة للتحقق من كلمة المرور
+function checkPassword() {
+const correctPassword = "Ey23@Ad23"; // كلمة المرور الصحيحة
+let userPassword = prompt("Enter the password to access the page:");
+
+if (userPassword === correctPassword) {
+// إذا كانت كلمة المرور صحيحة، أظهر المحتوى
+clearTimeout(timer); // إلغاء المؤقت
+document.getElementById('content').style.display = "block";
+} else {
+// إذا كانت كلمة المرور غير صحيحة، أغلق الصفحة
+alert("Incorrect password. The page will close.");
+window.close();
+}
+}
+
+// إعداد مؤقت لمدة 10 ثوانٍ
+function startTimer() {
+timer = setTimeout(function() {
+alert("Time is up! The page will close.");
+window.close();
+}, 10000); // 10000 ميلي ثانية = 10 ثوانٍ
+}
+
+// تنفيذ الدالة عند تحميل الصفحة
+window.onload = function() {
+startTimer(); // ابدأ المؤقت
+checkPassword(); // اطلب كلمة المرور
+}
+</script> -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,100;1,300;1,400;1,500&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-size: 14px;
+    font-family: "Rubik", sans-serif;
+      padding-top: 20px;
+      display: inline-grid;
+      /* justify-content: center; */
+      align-items: center;
+      height: 100vh;
+      width: 100%;
+      overflow-y: scroll;
+      margin: 0;
+      background-color: #fff;
+      color: rgb(53, 53, 53);
+      fill: rgb(68, 68, 68);
+    }
+    button {
+      color: #697384;
+    font-family: "Rubik", sans-serif;
+    }
+    input {
+    font-family: "Rubik", sans-serif;
+    }
+
+    h1,h2,h3 {
+    display: flex;
+    justify-content: left;
+    width: -webkit-fill-available;
+    margin-bottom: 10px;
+    padding-left: 50px;
+    }
+
+    ion-icon {
+      display: flex;
+    }
+
+    a {
+      color: rgb(53, 53, 53);
+      fill: rgb(68, 68, 68);
+      text-decoration: none;
+    }
+    
+    .popup {
+      animation: gallery 0.3s ease forwards;
+      z-index: 100;
+      display: none;
+      position: fixed;
+      top: 50px;
+      left: 50%;
+      transform: translate(-50%);
+      background-color: white;
+      padding: 20px;
+      /* height: 96px; */
+      box-shadow: 0px 3px 7px rgba(0, 0, 0, 0.39);
+      border: 1px solid #a5a5a5;
+    }
+    
+    .index1 {
+    /* width: 1468px; */
+    max-width: 100%;
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    }
+    
+    .image-container {
+      font-size: 16px;
+      overflow-y: auto;
+      text-align: center;
+      position: relative;
+      width: 160px;
+      height: 200px;
+      border: 1px solid #ccc0;
+      border-radius: 5px;
+      /* margin-bottom: 20px; */
+      box-shadow: 0px 2px 5px #0000003d;
+      transition: ease 0.2s;
+    }
+    
+    .image-container img {
+      user-select: none;
+      margin: auto;
+      /* width: 100%; */
+      height: 63px;
+      object-fit: cover;
+      display: block;
+      padding-top: 48px;
+      padding-bottom: 31px;
+    }
+    .image-container a {
+      display: none;
+    }
+
+    .delete-btn,
+    .edit-btn {
+      transition: ease 0.2s;
+      border-radius: 4px;
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      color: red;
+      border: solid 1px red;
+      background-color: #00000000;
+      border: none;
+      padding: 5px;
+      cursor: pointer;
+    }
+    .delete-btn:hover ,
+    .edit-btn {
+      background-color: rgba(255, 54, 54, 0.048);
+    }
+    .delete-btn:focus ,
+    .edit-btn {
+      background-color: rgba(255, 54, 54, 0.048);
+    }
+    #closeButton {
+      margin-left: 7px;
+      position: relative;
+      top: 0;
+      right: 0;
+    }
+    #cancelEdit {
+      position: relative;
+      top: 0;
+      right: 0;
+      padding: 8px 10px;
+    }
+    #addButton {
+      position: relative;
+      top: 0;
+      right: 0;
+    }
+
+    .edit-btn {
+      transition: ease 0.2s;
+      padding: 4px 10px;
+      border-radius: 4px;
+      right: auto;
+      left: 5px;
+      color: #3498db;
+      border: solid 1px #3498db;
+      background-color: #00000000;
+    }
+    .edit-btn:hover {
+      background-color: #3498db0a;
+    }
+    .edit-btn:focus {
+      background-color: #3498db0a;
+    }
+    #saveEdit {
+      position: relative;
+      left: 0;
+      top: 0;
+    }
+
+    /* Styles for edit form */
+    .edit-form {
+      animation: gallery 0.3s ease forwards;
+      display: none;
+      position: fixed;
+      top: 50px;
+      left: 50%;
+      transform: translate(-50%);
+      background-color: white;
+      padding: 28px;
+      width: max-content;
+      border: 1px solid #ccc;
+      height: 94px;
+      box-shadow: 0px 3px 7px rgba(0, 0, 0, 0.39);
+      z-index: 100;
+    }
+    @keyframes gallery {
+    0% {
+    box-shadow: none;
+    margin-top: 10px;
+    }
+    100% {
+
+    }
+  }
+    .edi {
+      padding: 0 18px;
+      height: 39px;
+      font-size: 16px;
+      border-radius: 25px;
+      background-color: white;
+      border: solid 1px #cecece;
+      cursor: pointer;
+      margin: auto;
+    }
+    .edi:hover {
+      background-color: rgb(247, 247, 247);
+    }
+    .inpu-text {
+      background: #00000000;
+      border: solid 1px black;
+      padding: 7px 10px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+    .search-container {
+      position: relative;
+      align-items: center;
+      display: flex;
+      padding: 0 40px;
+      height: 49px;
+      width: 300px;
+      max-width: 100%;
+      margin-right: 20px;
+      background-color: white;
+      border-radius: 8px;
+      background-color: white;
+    box-shadow: 0 1px 1px 0 rgba(65, 69, 73, .3), 0 1px 3px 1px rgba(65, 69, 73, .15);
+    }
+    .search-container input {
+      width: -webkit-fill-available;
+      border: none;
+      outline: none;
+      margin-right: 5px;
+    }
+    .search-container button {
+      transition: ease 0.2s;
+      cursor: pointer;
+      padding: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 50px;
+      background-color: #3498db00;
+      border: solid 1px black;
+      color: #000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      right: 0;
+      margin-right: 14px;
+    }
+    .search-container button:hover {
+      background-color: #00000010;
+    }
+    .clear-btm {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      left: 0;
+      font-size: 18px;
+      margin-left: 14px;
+    }
+    .adds {
+      user-select: none;
+      transition: ease 0.2s;
+      cursor: pointer;
+      background-color: white;
+      box-shadow: 0 1px 1px 0 rgba(65, 69, 73, .3), 0 1px 3px 1px rgba(65, 69, 73, .15);
+      padding: 0 16px;
+      height: 49px;
+      border-radius: 8px;
+      z-index: 20;
+      display: inline-flex;
+      border: none;
+      align-items: center;
+      margin-left: 10px;
+    }
+    .adds:hover {
+      box-shadow: 0 1px 3px 0 rgba(65, 69, 73, .3), 0 2px 7px 1px rgba(65, 69, 73, .15);
+    }
+    .adds:active {
+      box-shadow: 0 1px 1px 0 rgba(65, 69, 73, .3), 0 1px 3px 1px rgba(65, 69, 73, .15);
+      background-color: rgb(247, 247, 247);
+    }
+    .adds ion-icon {
+      margin-right: 15px;
+      font-size: 20px;
+    }
+    .menu {
+      position: fixed;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: max-content;
+      padding: 20px;
+      top: 0;
+      overflow-x: auto;
+      max-width: -webkit-fill-available;
+    }
+
+
+  /* chat-wep */
+  .chat-wep {
+    /* display: none; */
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin: 20px;
+    width: 400px;
+    height: 500px;
+    border-radius: 8px;
+    /* #f1f3f5 */
+    background-color: #fff;
+    box-shadow: 0px 1px 1px #00000057, 0px 1px 4px rgba(0, 0, 0, 0.39);
+  }
+  .bag-chat {
+    padding: 10px;
+    margin: 10px;
+    border: solid 1px #e4e4e4;
+    border-radius: 8px;
+    height: 387px;
+    overflow-y: auto;
+    text-align: left;
+  }
+  .send-chat {
+    display: flex;
+    align-items: center;
+    padding: 0 7px;
+    height: 42px;
+    border-radius: 25px;
+    margin: 18px 15px;
+    background-color: #365c6b12;
+  }
+  .send-chat input {
+    padding: 0 7px;
+    outline: none;
+    width: -webkit-fill-available;
+    border: none;
+    background-color: transparent;
+    font-size: 16px;
+  }
+  .send-chat .send_massage {
+    cursor: pointer;
+    padding: 0;
+    border: none;
+    background-color: #00000012;
+    width: 37px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    border-radius: 50px;
+  }
+  .message_chat {
+    display: flex;
+    justify-content: left;
+  }
+  .message_chat ion-icon {
+    font-size: 25px;
+    margin-right: 10px;
+  }
+  .message_chat_div {
+    padding: 10px;
+    border-radius: 3px 15px 15px 15px;
+    background-color: #f1f3f5;
+    width: max-content;
+  }
+  .message-container1 {
+    position: relative;
+    padding: 10px;
+    border-radius: 3px 15px 15px 15px;
+    background-color: #f1f3f5;
+    width: max-content;
+    max-width: 300px;
+    margin: 10px;
+  }
+  .delete-btne {
+    user-select: none;
+    border-radius: 50px;
+    background: #ffd662;
+    top: 0;
+    left: 0;
+    position: absolute;
+    margin: -8px;
+    font-size: 20px;
+    cursor: pointer;
+  }
+  .delete-btne:hover {
+    background-color: rgb(36, 36, 36);
+    color: white;
+  }
+  .delete-btne:active {
+    background-color: rgb(83, 83, 83);
+    color: white;
+  }
+
+  .dragging {
+  background: #f7fbffb9;
+  /* box-shadow: 0 0 0 2.2px #3a93ff; */
+  box-shadow: none;
+  /* transform: scale(0.93); */
+  outline: dashed 1px #0e8fe6;
+}
+.dragging::before {
+  content: "Get away";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0e8fe6;
+  font-weight: 500;
+  background-color: white;
+  z-index: 10;
+}
+  /* .dragging img {
+    transform: scale(0.90);
+  } */
+#imageLinksContainer {
+  overflow: auto;
+  width: 100%;
+}
+body #contents {
+    display: none; /* إخفاء المحتوى حتى يتم إدخال كلمة المرور */
+}
+@media screen and (max-width:600px) {
+  body .image-container img {
+    height: 47px;
+    padding-bottom: 35px;
+  }
+  body .image-container {
+    width: 116px;
+    height: 178px;
+  }
+}
+  </style>
+</head>
+<body id="contents">
+
+  <div class="menu">
+  <div class="search-container">
+    <ion-icon name="search-outline" class="clear-btm"></ion-icon>
+    <script src="https://github.com/Tybascript1234/Canyon-icon/blob/main/can-icon.js"></script>
+
+    <can-icon class="dynamic-icon" name="Add" src="https://api.iconify.design/ion/add-outline.svg" size="36" color="#000000"></can-icon>
+    <input type="text" id="searchInput" class="search-input" placeholder="Search images by name">
+    <button id="clearButton" class="clear-btn"><ion-icon name="close-outline"></ion-icon></button>
+  </div>
+  <button id="deleteAllButton" class="adds" style="background-color: rgb(233, 43, 43);color: white;">Delete All Images</button>
+  <a href="file:///C:/Users/Lenovo/OneDrive/Desktop/Code%20icon-20240405T023439Z-001/New%20Go/index1.html" target="_blank"><div id="" class="adds"><ion-icon name="arrow-redo-outline"></ion-icon>The site</div></a>
+  <div id="openButton" class="adds"><ion-icon name="add-outline"></ion-icon>Add icon</div>
+  <button id="addMultipleButton" class="adds">Add Multiple Images</button> <!-- New button -->
+</div>
+
+<div id="multiplePopup" class="popup" style="display: none;">
+  <textarea id="multipleImageUrls" placeholder="Enter multiple image URLs, separated by commas"></textarea>
+  <span id="urlsCount">0</span>
+  <textarea id="multipleImageNames" placeholder="Enter multiple image names, separated by commas"></textarea>
+  <span id="namesCount">0</span>
+  <label for="multipleImageCategory">Category:</label>
+<select id="multipleImageCategory">
+  <option value="category1">Category 1</option>
+  <option value="category2">Category 2</option>
+  <option value="category3">Category 3</option>
+</select>
+  <button id="addMultipleImages">Add Images</button>
+  <button id="closeMultiplePopup">Close</button>
+</div>
+
+  <div id="imagePopup" class="popup">
+    <h2>Add icon</h2>
+    <textarea id="imageUrls" placeholder="Enter multiple image URLs separated by commas"></textarea>
+    <textarea id="imageNames" placeholder="Enter multiple names separated by commas"></textarea>
+    <br>
+    <input type="file" id="imageInput" accept="image/svg+xml">
+    <input type="text" class="inpu-text" id="imageUrl" placeholder="Image URL">
+    <input type="text" class="inpu-text" id="imageName" placeholder="Image Name">
+    <select id="imageCategory" class="inpu-text">
+      <option value="">No Category</option> <!-- Added option -->
+      <option value="category1">Logos</option>
+      <option value="category2">Emoji</option>
+      <option value="category3">Category 3</option>
+    </select>
+    <button id="addButton" class="edit-btn">Add</button>
+    <button id="closeButton" class="delete-btn">Close</button>
+  </div>
+  <br>
+  <br>
+  <h2>App icons</h2>
+  <div id="index1" class="index1"></div>
+  <br>
+  <br>
+  <h2>Logos</h2>
+  <div id="category1" class="index1"></div>
+  <br>
+  <br>
+  <h2>Emoji</h2>
+  <div id="category2" class="index1"></div>
+  <div id="category3" class="index1"></div>
+  
+
+  <!-- .....links..... -->
+  <div>
+  <button class="adds" id="downloadLinksButton">Download Links</button>
+  <button class="adds" id="copyLinksButton">Copy Links</button>
+  <button class="adds" id="toggleLinksButton">Toggle Image Links</button>
+<div id="imageLinksContainer" style="display: none;">
+  <!-- Links will be dynamically added here -->
+</div>
+</div>
+
+
+          <!-- Chat-wep -->
+          <div class="chat-wep" style="display: none;">
+            <div>
+                <div class="bag-chat" id="messages">
+                    <div class="message_chat"><ion-icon name="person-circle-outline"></ion-icon><div class="message_chat_div"><div>You</div></div></div>
+                </div>
+                <div class="send-chat"><input type="text" id="messageInput" placeholder="Send a message"><label class="send_massage" for="" style="color: #697384;font-size: 24px;background-color: rgba(0, 0, 0, 0);margin-right: 10px;"><ion-icon name="attach-outline"></ion-icon></label><button class="send_massage" onclick="sendMessage()"><ion-icon name="arrow-forward-outline"></ion-icon></button></div>
+                <input type="file" id="" multiple style="display: none;">
+              </div>
+        </div>
+        <!-- chat-wep... -->
+
+  <!-- Edit Form -->
+  <div id="editForm" class="edit-form">
+    <h2>Edit icon</h2>
+    <input type="file" id="editImageInput" accept="image/svg+xml">
+    <input type="text" class="inpu-text" id="editImageUrl" placeholder="New Image URL">
+    <input type="text" class="inpu-text" id="editName" placeholder="New Image Name">
+    <select id="editImageCategory" class="inpu-text">
+      <option value="">No Category</option> <!-- Added option -->
+      <option value="category1">Logos [Edit]</option>
+      <option value="category2">Emoji [Edit]</option>
+      <option value="category3">Category [Edit]</option>
+    </select>
+    <button id="saveEdit" class="edit-btn">Save</button>
+    <button id="cancelEdit" class="delete-btn">Cancel</button>
+  </div>
+  
+
+
+
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+  <script>
+const openButton = document.getElementById('openButton');
+const closeButton = document.getElementById('closeButton');
+const imageInput = document.getElementById('imageInput');
+const imageUrlInput = document.getElementById('imageUrl');
+const imageName = document.getElementById('imageName');
+const imageCategory = document.getElementById('imageCategory');
+const addButton = document.getElementById('addButton');
+const imagePopup = document.getElementById('imagePopup');
+const index1 = document.getElementById('index1');
+const category1 = document.getElementById('category1');
+const category2 = document.getElementById('category2');
+const category3 = document.getElementById('category3');
+const editForm = document.getElementById('editForm');
+const editImageInput = document.getElementById('editImageInput');
+const editImageUrlInput = document.getElementById('editImageUrl');
+const editName = document.getElementById('editName');
+const editImageCategory = document.getElementById('editImageCategory');
+const saveEdit = document.getElementById('saveEdit');
+const cancelEdit = document.getElementById('cancelEdit');
+const searchInput = document.getElementById('searchInput');
+const clearButton = document.getElementById('clearButton');
+
+// New elements
+const toggleLinksButton = document.getElementById('toggleLinksButton');
+const imageLinksContainer = document.getElementById('imageLinksContainer');
+const downloadLinksButton = document.getElementById('downloadLinksButton');
+const copyLinksButton = document.getElementById('copyLinksButton');
+const addMultipleButton = document.getElementById('addMultipleButton');
+const multiplePopup = document.getElementById('multiplePopup');
+const multipleImageUrls = document.getElementById('multipleImageUrls');
+const multipleImageNames = document.getElementById('multipleImageNames');
+const multipleImageCategory = document.getElementById('multipleImageCategory');
+const addMultipleImagesButton = document.getElementById('addMultipleImages');
+const closeMultiplePopupButton = document.getElementById('closeMultiplePopup');
+
+// New elements for counting
+const urlsCount = document.getElementById('urlsCount');
+const namesCount = document.getElementById('namesCount');
+
+// Button to delete all images
+const deleteAllButton = document.getElementById('deleteAllButton');
+
+let imageCount = 0;
+let images = JSON.parse(localStorage.getItem('images')) || [];
+let selectedImageIndex = null;
+
+function displayImages() {
+  index1.innerHTML = '';
+  category1.innerHTML = '';
+  category2.innerHTML = '';
+  category3.innerHTML = '';
+  images.forEach((imageData, index) => {
+    const { imageUrl, name, category } = imageData;
+    const imageContainer = document.createElement('div');
+    imageContainer.className = 'image-container';
+    const image = document.createElement('img');
+    image.src = imageUrl;
+    const nameElement = document.createElement('div');
+    nameElement.textContent = name;
+    const downloadButton = document.createElement('a');
+    downloadButton.href = imageUrl;
+    downloadButton.download = name;
+    downloadButton.innerHTML = '<ion-icon name="cloud-download-outline"></ion-icon>';
+    const deleteButton = document.createElement('button');
+    deleteButton.className = 'delete-btn';
+    deleteButton.textContent = 'Delete';
+    deleteButton.onclick = () => {
+      confirmDelete(index);
+    };
+    const editButton = document.createElement('button');
+    editButton.className = 'edit-btn';
+    editButton.textContent = 'Edit';
+    editButton.onclick = () => {
+      selectedImageIndex = index;
+      editImageUrlInput.value = imageUrl;
+      editName.value = name;
+      editImageCategory.value = category;
+      editForm.style.display = 'block';
+    };
+    imageContainer.appendChild(image);
+    imageContainer.appendChild(nameElement);
+    imageContainer.appendChild(downloadButton);
+    imageContainer.appendChild(deleteButton);
+    imageContainer.appendChild(editButton);
+    switch (category) {
+      case 'category1':
+        category1.appendChild(imageContainer);
+        break;
+      case 'category2':
+        category2.appendChild(imageContainer);
+        break;
+      case 'category3':
+        category3.appendChild(imageContainer);
+        break;
+      default:
+        index1.appendChild(imageContainer);
+        break;
+    }
+  });
+  initializeSortable();
+  updateImageLinks(images); // Update image links when displaying images
+}
+
+function initializeSortable() {
+  const options = {
+    animation: 150,
+    onStart: function (evt) {
+      evt.item.classList.add('dragging');
+    },
+    onEnd: function (evt) {
+      evt.item.classList.remove('dragging');
+      saveOrder();
+    }
+  };
+  Sortable.create(index1, options);
+  Sortable.create(category1, options);
+  Sortable.create(category2, options);
+  Sortable.create(category3, options);
+}
+
+function saveOrder() {
+  const newOrder = [];
+  const allContainers = [index1, category1, category2, category3];
+  allContainers.forEach(container => {
+    [...container.children].forEach(child => {
+      const name = child.querySelector('div').textContent;
+      const image = images.find(img => img.name === name);
+      if (image) newOrder.push(image);
+    });
+  });
+  images = newOrder;
+  localStorage.setItem('images', JSON.stringify(images));
+}
+
+openButton.onclick = () => {
+  imagePopup.style.display = 'block';
+};
+
+closeButton.onclick = () => {
+  imagePopup.style.display = 'none';
+  resetPopupFields();
+};
+
+function resetPopupFields() {
+  imageInput.value = '';
+  imageUrlInput.value = '';
+  imageName.value = '';
+  imageCategory.value = '';
+  imageInput.disabled = false;
+  imageUrlInput.disabled = false;
+}
+
+imageInput.onchange = () => {
+  if (imageInput.files.length > 0) {
+    imageUrlInput.disabled = true;
+  } else {
+    imageUrlInput.disabled = false;
+  }
+};
+
+imageUrlInput.oninput = () => {
+  if (imageUrlInput.value.trim()) {
+    imageInput.disabled = true;
+  } else {
+    imageInput.disabled = false;
+  }
+};
+
+addButton.onclick = () => {
+  const imageUrl = imageUrlInput.value.trim();
+  const name = imageName.value.trim() || `Image ${imageCount + 1}`;
+  const category = imageCategory.value;
+  let imageData;
+
+  if (imageInput.files.length > 0) {
+    const file = imageInput.files[0];
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      imageData = { imageUrl: e.target.result, name, category };
+      images.push(imageData);
+      localStorage.setItem('images', JSON.stringify(images));
+      displayImages();
+      imageCount++;
+      imagePopup.style.display = 'none';
+      resetPopupFields();
+    };
+    reader.readAsDataURL(file);
+  } else if (imageUrl) {
+    imageData = { imageUrl, name, category };
+    images.push(imageData);
+    localStorage.setItem('images', JSON.stringify(images));
+    displayImages();
+    imageCount++;
+    imagePopup.style.display = 'none';
+    resetPopupFields();
+  } else {
+    alert('Please enter an image URL or upload an image.');
+  }
+};
+
+saveEdit.onclick = () => {
+  if (selectedImageIndex !== null) {
+    const newImageUrl = editImageUrlInput.value.trim();
+    const newName = editName.value.trim();
+    const newCategory = editImageCategory.value;
+    if (editImageInput.files.length > 0) {
+      const file = editImageInput.files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        images[selectedImageIndex].imageUrl = e.target.result;
+        images[selectedImageIndex].name = newName;
+        images[selectedImageIndex].category = newCategory;
+        localStorage.setItem('images', JSON.stringify(images));
+        displayImages();
+        editForm.style.display = 'none';
+        selectedImageIndex = null;
+      };
+      reader.readAsDataURL(file);
+    } else if (newImageUrl && newName) {
+      images[selectedImageIndex].imageUrl = newImageUrl;
+      images[selectedImageIndex].name = newName;
+      images[selectedImageIndex].category = newCategory;
+      localStorage.setItem('images', JSON.stringify(images));
+      displayImages();
+      editForm.style.display = 'none';
+      selectedImageIndex = null;
+    } else {
+      alert('Please enter both new image URL and name.');
+    }
+  }
+};
+
+cancelEdit.onclick = () => {
+  editForm.style.display = 'none';
+  selectedImageIndex = null;
+};
+
+function confirmDelete(index) {
+  if (confirm('Are you sure you want to delete this image?')) {
+    images.splice(index, 1);
+    localStorage.setItem('images', JSON.stringify(images));
+    displayImages();
+  }
+}
+
+searchInput.oninput = () => {
+  const searchValue = searchInput.value.toLowerCase();
+  const filteredImages = images.filter((image) => {
+    return image.name.toLowerCase().includes(searchValue);
+  });
+  displayFilteredImages(filteredImages);
+
+  // تحديث ظهور زر clearButton
+  if (searchValue.trim() !== '') {
+    clearButton.style.display = 'flex';
+  } else {
+    clearButton.style.display = 'none';
+  }
+};
+
+// إعادة تعيين قيمة البحث وعرض الصور
+clearButton.onclick = () => {
+  searchInput.value = '';
+  displayImages();
+  clearButton.style.display = 'none';
+};
+
+function displayFilteredImages(filteredImages) {
+  index1.innerHTML = '';
+  category1.innerHTML = '';
+  category2.innerHTML = '';
+  category3.innerHTML = '';
+  filteredImages.forEach((imageData, index) => {
+    const { imageUrl, name, category } = imageData;
+    const imageContainer = document.createElement('div');
+    imageContainer.className = 'image-container';
+    const image = document.createElement('img');
+    image.src = imageUrl;
+    const nameElement = document.createElement('div');
+    nameElement.textContent = name;
+    const downloadButton = document.createElement('a');
+    downloadButton.href = imageUrl;
+    downloadButton.download = name;
+    downloadButton.innerHTML = '<ion-icon name="cloud-download-outline"></ion-icon>';
+    const deleteButton = document.createElement('button');
+    deleteButton.className = 'delete-btn';
+    deleteButton.textContent = 'Delete';
+    deleteButton.onclick = () => {
+      confirmDelete(index);
+    };
+    const editButton = document.createElement('button');
+    editButton.className = 'edit-btn';
+    editButton.textContent = 'Edit';
+    editButton.onclick = () => {
+      selectedImageIndex = index;
+      editImageUrlInput.value = imageUrl;
+      editName.value = name;
+      editImageCategory.value = category;
+      editForm.style.display = 'block';
+    };
+    imageContainer.appendChild(image);
+    imageContainer.appendChild(nameElement);
+    imageContainer.appendChild(downloadButton);
+    imageContainer.appendChild(deleteButton);
+    imageContainer.appendChild(editButton);
+    switch (category) {
+      case 'category1':
+        category1.appendChild(imageContainer);
+        break;
+      case 'category2':
+        category2.appendChild(imageContainer);
+        break;
+      case 'category3':
+        category3.appendChild(imageContainer);
+        break;
+      default:
+        index1.appendChild(imageContainer);
+        break;
+    }
+  });
+  initializeSortable();
+  updateImageLinks(filteredImages); // Update image links when displaying filtered images
+}
+
+toggleLinksButton.onclick = () => {
+  if (imageLinksContainer.style.display === 'none') {
+    imageLinksContainer.style.display = 'block';
+    updateImageLinks(images); // Update image links when showing the container
+  } else {
+    imageLinksContainer.style.display = 'none';
+  }
+};
+
+function updateImageLinks(images) {
+  imageLinksContainer.innerHTML = '';
+  images.forEach((imageData) => {
+    const { imageUrl, name, category } = imageData;
+    const link = document.createElement('a');
+    link.href = imageUrl;
+    link.textContent = `${name} (${category})`;
+    link.target = '_blank';
+    imageLinksContainer.appendChild(link);
+    imageLinksContainer.appendChild(document.createElement('br'));
+  });
+}
+
+downloadLinksButton.onclick = () => {
+  let csvContent = 'data:text/csv;charset=utf-8,';
+  csvContent += 'Name,URL,Category\n';
+  images.forEach((imageData) => {
+    const { imageUrl, name, category } = imageData;
+    csvContent += `${name},${imageUrl},${category}\n`;
+  });
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement('a');
+  link.setAttribute('href', encodedUri);
+  link.setAttribute('download', 'image_links.csv');
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
+copyLinksButton.onclick = () => {
+  let linkText = '';
+  images.forEach((imageData) => {
+    const { imageUrl, name, category } = imageData;
+    linkText += `${name} (${category}): ${imageUrl}\n`;
+  });
+  const tempTextarea = document.createElement('textarea');
+  tempTextarea.value = linkText;
+  document.body.appendChild(tempTextarea);
+  tempTextarea.select();
+  document.execCommand('copy');
+  document.body.removeChild(tempTextarea);
+  alert('Image links copied to clipboard!');
+};
+
+addMultipleButton.onclick = () => {
+  multiplePopup.style.display = 'block';
+};
+
+closeMultiplePopupButton.onclick = () => {
+  multiplePopup.style.display = 'none';
+  resetMultiplePopupFields();
+};
+
+function resetMultiplePopupFields() {
+  multipleImageUrls.value = '';
+  multipleImageNames.value = '';
+  multipleImageCategory.value = '';
+  updateCounts(); // تحديث عدد الروابط والأسماء عند إعادة تعيين الحقول
+}
+
+addMultipleImagesButton.onclick = () => {
+  const urls = multipleImageUrls.value.trim().split('\n');
+  const names = multipleImageNames.value.trim().split('\n');
+  const category = multipleImageCategory.value;
+  if (urls.length !== names.length) {
+    alert('The number of URLs and names must be the same.');
+    return;
+  }
+  urls.forEach((url, index) => {
+    const name = names[index] || `Image ${imageCount + 1}`;
+    addManualImage(url, name, category);
+    imageCount++;
+  });
+  multiplePopup.style.display = 'none';
+  resetMultiplePopupFields();
+};
+
+function addManualImage(imageUrl, imageName, category) {
+  const exists = images.some(image => image.imageUrl === imageUrl && image.name === imageName);
+  if (!exists) {
+    const imageData = { imageUrl, name: imageName, category };
+    images.push(imageData);
+    localStorage.setItem('images', JSON.stringify(images));
+    displayImages();
+  }
+}
+
+// إضافة التحقق من عدد الروابط والأسماء أثناء الكتابة
+multipleImageUrls.oninput = updateCounts;
+multipleImageNames.oninput = updateCounts;
+
+function updateCounts() {
+  const urlsCountValue = multipleImageUrls.value.trim().split('\n').filter(url => url !== '').length;
+  const namesCountValue = multipleImageNames.value.trim().split('\n').filter(name => name !== '').length;
+  urlsCount.textContent = `URLs Count: ${urlsCountValue}`;
+  namesCount.textContent = `Names Count: ${namesCountValue}`;
+}
+
+// إضافة زر حذف جميع الصور
+deleteAllButton.onclick = () => {
+  if (confirm('Are you sure you want to delete all images?')) {
+    images = [];
+    localStorage.setItem('images', JSON.stringify(images));
+    displayImages();
+  }
+};
+
+// Initial call to display images on page load
+displayImages();
+
+  </script>
+</body>
+</html>
