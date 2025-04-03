@@ -304,7 +304,7 @@ function updateButtonIcons(activeButtonId) {
     const dayButton = document.getElementById('dayButton');
     const nightButton = document.getElementById('nightButton');
     
-    const checkmarkIcon = '<ion-icon name="checkmark-outline" role="img" class="md hydrated" aria-label="checkmark outline"></ion-icon>';
+    const checkmarkIcon = '<ice class="material-symbols-outlined"> check </ice>';
 
     // إزالة أيقونة التأكيد من كلا الزرين
     dayButton.innerHTML = 'Light mode';
