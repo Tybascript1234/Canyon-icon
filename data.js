@@ -269,6 +269,146 @@ addManualImage("https://api.iconify.design/ion/open-outline.svg", "Open", "galle
 addManualImage("https://api.iconify.design/ion/options-outline.svg", "Options", "gallery");
 addManualImage("https://api.iconify.design/ion/paper-plane-outline.svg", "Paper-plane", "gallery");
 addManualImage("https://api.iconify.design/ion/partly-sunny-outline.svg", "Partly-sunny", "gallery");
+// الأجهزة والتقنية
+addManualImage("https://api.iconify.design/ion/pause-outline.svg", "Pause", "gallery");
+addManualImage("https://api.iconify.design/ion/paw-outline.svg", "Paw", "gallery");
+addManualImage("https://api.iconify.design/ion/pencil-outline.svg", "Pencil", "gallery");
+addManualImage("https://api.iconify.design/ion/people-outline.svg", "People", "gallery");
+addManualImage("https://api.iconify.design/ion/person-outline.svg", "Person", "gallery");
+
+// الأشخاص والاجتماعيات
+addManualImage("https://api.iconify.design/ion/person-add-outline.svg", "Person-add", "gallery");
+addManualImage("https://api.iconify.design/ion/phone-landscape-outline.svg", "Phone-landscape", "gallery");
+addManualImage("https://api.iconify.design/ion/phone-portrait-outline.svg", "Phone-portrait", "gallery");
+addManualImage("https://api.iconify.design/ion/pie-chart-outline.svg", "Pie-chart", "gallery");
+addManualImage("https://api.iconify.design/ion/pin-outline.svg", "Pin", "gallery");
+
+// الخرائط والمواقع
+addManualImage("https://api.iconify.design/ion/pint-outline.svg", "Pint", "gallery");
+addManualImage("https://api.iconify.design/ion/pizza-outline.svg", "Pizza", "gallery");
+addManualImage("https://api.iconify.design/ion/planet-outline.svg", "Planet", "gallery");
+addManualImage("https://api.iconify.design/ion/play-outline.svg", "Play", "gallery");
+addManualImage("https://api.iconify.design/ion/play-back-outline.svg", "Play-back", "gallery");
+
+// الوسائط المتعددة
+addManualImage("https://api.iconify.design/ion/play-forward-outline.svg", "Play-forward", "gallery");
+addManualImage("https://api.iconify.design/ion/play-skip-back-outline.svg", "Play-skip-back", "gallery");
+addManualImage("https://api.iconify.design/ion/play-skip-forward-outline.svg", "Play-skip-forward", "gallery");
+addManualImage("https://api.iconify.design/ion/plug-outline.svg", "Plug", "gallery");
+addManualImage("https://api.iconify.design/ion/print-outline.svg", "Print", "gallery");
+
+// الطباعة والأعمال
+addManualImage("https://api.iconify.design/ion/pulse-outline.svg", "Pulse", "gallery");
+addManualImage("https://api.iconify.design/ion/push-outline.svg", "Push", "gallery");
+addManualImage("https://api.iconify.design/ion/qr-code-outline.svg", "Qr-code", "gallery");
+addManualImage("https://api.iconify.design/ion/radio-outline.svg", "Radio", "gallery");
+addManualImage("https://api.iconify.design/ion/rainy-outline.svg", "Rainy", "gallery");
+
+// الطقس
+addManualImage("https://api.iconify.design/ion/reader-outline.svg", "Reader", "gallery");
+addManualImage("https://api.iconify.design/ion/receipt-outline.svg", "Receipt", "gallery");
+addManualImage("https://api.iconify.design/ion/recording-outline.svg", "Recording", "gallery");
+addManualImage("https://api.iconify.design/ion/refresh-outline.svg", "Refresh", "gallery");
+addManualImage("https://api.iconify.design/ion/remove-outline.svg", "Remove", "gallery");
+
+// الأدوات الأساسية
+addManualImage("https://api.iconify.design/ion/restaurant-outline.svg", "Restaurant", "gallery");
+addManualImage("https://api.iconify.design/ion/return-down-back-outline.svg", "Return-down-back", "gallery");
+addManualImage("https://api.iconify.design/ion/ribbon-outline.svg", "Ribbon", "gallery");
+addManualImage("https://api.iconify.design/ion/rocket-outline.svg", "Rocket", "gallery");
+addManualImage("https://api.iconify.design/ion/rose-outline.svg", "Rose", "gallery");
+
+// النباتات والطبيعة
+addManualImage("https://api.iconify.design/ion/sad-outline.svg", "Sad", "gallery");
+addManualImage("https://api.iconify.design/ion/save-outline.svg", "Save", "gallery");
+addManualImage("https://api.iconify.design/ion/scale-outline.svg", "Scale", "gallery");
+addManualImage("https://api.iconify.design/ion/school-outline.svg", "School", "gallery");
+addManualImage("https://api.iconify.design/ion/search-outline.svg", "Search", "gallery");
+
+// التعليم والبحث
+addManualImage("https://api.iconify.design/ion/send-outline.svg", "Send", "gallery");
+addManualImage("https://api.iconify.design/ion/server-outline.svg", "Server", "gallery");
+addManualImage("https://api.iconify.design/ion/settings-outline.svg", "Settings", "gallery");
+addManualImage("https://api.iconify.design/ion/shapes-outline.svg", "Shapes", "gallery");
+addManualImage("https://api.iconify.design/ion/share-outline.svg", "Share", "gallery");
+
+// الشبكات والمشاركة
+addManualImage("https://api.iconify.design/ion/shield-outline.svg", "Shield", "gallery");
+addManualImage("https://api.iconify.design/ion/shirt-outline.svg", "Shirt", "gallery");
+addManualImage("https://api.iconify.design/ion/skull-outline.svg", "Skull", "gallery");
+addManualImage("https://api.iconify.design/ion/snow-outline.svg", "Snow", "gallery");
+addManualImage("https://api.iconify.design/ion/speedometer-outline.svg", "Speedometer", "gallery");
+// الطعام والمطاعم
+addManualImage("https://api.iconify.design/ion/cafe-outline.svg", "Cafe", "gallery");
+addManualImage("https://api.iconify.design/ion/wine-outline.svg", "Wine", "gallery");
+addManualImage("https://api.iconify.design/ion/restaurant-outline.svg", "Restaurant", "gallery");
+addManualImage("https://api.iconify.design/ion/nutrition-outline.svg", "Nutrition", "gallery");
+addManualImage("https://api.iconify.design/ion/fast-food-outline.svg", "Fast-food", "gallery");
+
+// الرياضة واللياقة
+addManualImage("https://api.iconify.design/ion/barbell-outline.svg", "Barbell", "gallery");
+addManualImage("https://api.iconify.design/ion/football-outline.svg", "Football", "gallery");
+addManualImage("https://api.iconify.design/ion/tennisball-outline.svg", "Tennisball", "gallery");
+addManualImage("https://api.iconify.design/ion/basketball-outline.svg", "Basketball", "gallery");
+addManualImage("https://api.iconify.design/ion/walk-outline.svg", "Walk", "gallery");
+
+// الصحة والطب
+addManualImage("https://api.iconify.design/ion/fitness-outline.svg", "Fitness", "gallery");
+addManualImage("https://api.iconify.design/ion/medkit-outline.svg", "Medkit", "gallery");
+addManualImage("https://api.iconify.design/ion/pulse-outline.svg", "Pulse", "gallery");
+addManualImage("https://api.iconify.design/ion/bandage-outline.svg", "Bandage", "gallery");
+addManualImage("https://api.iconify.design/ion/medical-outline.svg", "Medical", "gallery");
+
+// المال والأعمال
+addManualImage("https://api.iconify.design/ion/card-outline.svg", "Card", "gallery");
+addManualImage("https://api.iconify.design/ion/cash-outline.svg", "Cash", "gallery");
+addManualImage("https://api.iconify.design/ion/wallet-outline.svg", "Wallet", "gallery");
+addManualImage("https://api.iconify.design/ion/receipt-outline.svg", "Receipt", "gallery");
+addManualImage("https://api.iconify.design/ion/business-outline.svg", "Business", "gallery");
+
+// التعليم والقراءة
+addManualImage("https://api.iconify.design/ion/school-outline.svg", "School", "gallery");
+addManualImage("https://api.iconify.design/ion/library-outline.svg", "Library", "gallery");
+addManualImage("https://api.iconify.design/ion/book-outline.svg", "Book", "gallery");
+addManualImage("https://api.iconify.design/ion/bookmark-outline.svg", "Bookmark", "gallery");
+addManualImage("https://api.iconify.design/ion/calculator-outline.svg", "Calculator", "gallery");
+
+// السفر والنقل
+addManualImage("https://api.iconify.design/ion/car-outline.svg", "Car", "gallery");
+addManualImage("https://api.iconify.design/ion/bus-outline.svg", "Bus", "gallery");
+addManualImage("https://api.iconify.design/ion/train-outline.svg", "Train", "gallery");
+addManualImage("https://api.iconify.design/ion/airplane-outline.svg", "Airplane", "gallery");
+addManualImage("https://api.iconify.design/ion/navigate-outline.svg", "Navigate", "gallery");
+
+// الموسيقى والترفيه
+addManualImage("https://api.iconify.design/ion/musical-notes-outline.svg", "Musical-notes", "gallery");
+addManualImage("https://api.iconify.design/ion/radio-outline.svg", "Radio", "gallery");
+addManualImage("https://api.iconify.design/ion/mic-outline.svg", "Mic", "gallery");
+addManualImage("https://api.iconify.design/ion/headset-outline.svg", "Headset", "gallery");
+addManualImage("https://api.iconify.design/ion/film-outline.svg", "Film", "gallery");
+
+// الطقس والطبيعة
+addManualImage("https://api.iconify.design/ion/sunny-outline.svg", "Sunny", "gallery");
+addManualImage("https://api.iconify.design/ion/rainy-outline.svg", "Rainy", "gallery");
+addManualImage("https://api.iconify.design/ion/snow-outline.svg", "Snow", "gallery");
+addManualImage("https://api.iconify.design/ion/thunderstorm-outline.svg", "Thunderstorm", "gallery");
+addManualImage("https://api.iconify.design/ion/umbrella-outline.svg", "Umbrella", "gallery");
+
+// التكنولوجيا والأجهزة
+addManualImage("https://api.iconify.design/ion/laptop-outline.svg", "Laptop", "gallery");
+addManualImage("https://api.iconify.design/ion/phone-portrait-outline.svg", "Phone-portrait", "gallery");
+addManualImage("https://api.iconify.design/ion/tablet-portrait-outline.svg", "Tablet-portrait", "gallery");
+addManualImage("https://api.iconify.design/ion/watch-outline.svg", "Watch", "gallery");
+addManualImage("https://api.iconify.design/ion/printer-outline.svg", "Printer", "gallery");
+
+// الأدوات المنزلية
+addManualImage("https://api.iconify.design/ion/home-outline.svg", "Home", "gallery");
+addManualImage("https://api.iconify.design/ion/hammer-outline.svg", "Hammer", "gallery");
+addManualImage("https://api.iconify.design/ion/construct-outline.svg", "Construct", "gallery");
+addManualImage("https://api.iconify.design/ion/brush-outline.svg", "Brush", "gallery");
+addManualImage("https://api.iconify.design/ion/key-outline.svg", "Key", "gallery");
+
+
 
 
 
