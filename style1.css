@@ -1193,6 +1193,8 @@ background-color: #0084ff21;
     display: none;
     align-items: center;
     width: 300px;
+    overflow-y: auto;
+    scrollbar-width: none;
     height: -webkit-fill-available;
     background-color: white;
     border-radius: 16px 0px 0px 16px;
