@@ -73,7 +73,7 @@ br {
 }
 on-liy {
   display: block;
-  height: 1px;
+  height: 0.4px;
   background-color: rgb(235 235 235);
   margin: 0 10px;
 }
@@ -108,6 +108,7 @@ label {
 .material-symbols-outlined {
   font-size: 22px;
   user-select: none;
+  display: flex;
 }
 ion-icon {
   position: relative;
@@ -550,8 +551,9 @@ background-color: #0084ff21;
 .btn:hover {
     background: #3f616b1f;
 }
-.btn ion-icon {
+.btn span {
   margin-right: 5px;
+  font-size: 15px;
 }
 .btn a {
   padding: 0;
@@ -781,10 +783,10 @@ background-color: #0084ff21;
     box-shadow: 0px 6px 12px 0px rgba(0, 0, 0, 0.1), 0px 1px 3px 0px rgba(0, 0, 0, 0.08);
 }
 .search-div-input .omn {
-    position: absolute;
-    font-size: 20px;
-    color: #7d7d7d;
-    margin: 0px 15px;
+  position: absolute;
+  font-size: 22px;
+  color: #7d7d7d;
+  margin: 0px 16px;
 }
 /* Results */
 .Results {
@@ -1705,10 +1707,10 @@ background-color: #0084ff21;
     align-items: center;
     font-size: 21px;
   }
-  .full-screen-div:hover ion-icon {
+  .full-screen-div:hover span {
     /* animation: popup 0.3s ease forwards; */
   }
-  .full-screen-div ion-icon {
+  .full-screen-div span {
     margin-right: 8px;
     font-size: 31px;
   }
@@ -2888,8 +2890,8 @@ background-color: #0084ff21;
   display: flex;
   align-items: center;
 }
-.result-item ion-icon {
-  font-size: 20px;
+.result-item svg {
+  font-size: 22px;
   margin-right: 16px;
   color: #7d7d7d;
 }
