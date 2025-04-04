@@ -177,7 +177,11 @@
               <div id="downloadPopup" class="download-popup">
                 <div class="hello">
                   <div id="popupName" style="margin: 0;" class="copy-text"></div>
-                  <div class="history-link" style="margin: 0;" onclick="copyText()"><i id="" class="fi fi-rr-copy"></i></div>
+                  <div style="display: flex;align-items: center;">
+                      <button class="history-link ccd wave-button" style="margin: 0;display: none;" id=""><i id="" class="fi fi-rr-share"></i></button>
+                      <input type="text" id="" style="display: none;" readonly>
+                      <button class="history-link ccd wave-button" style="margin: 0;" onclick="copyText()"><i id="" class="fi fi-rr-copy"></i></button>
+                  </div>
                 </div>
               <div class="download-popup-my-div">
                 <div class="download-popup-div"><img draggable="false" id="popupImage" src="" alt="Image"></div>
