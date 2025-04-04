@@ -175,10 +175,13 @@
 
               </div>
               <div id="downloadPopup" class="download-popup">
+                <div class="hello">
+                  <div id="popupName" style="margin: 0;" class="copy-text"></div>
+                  <div class="history-link" style="margin: 0;" onclick="copyText()"><i id="" class="fi fi-rr-copy"></i></div>
+                </div>
               <div class="download-popup-my-div">
                 <div class="download-popup-div"><img draggable="false" id="popupImage" src="" alt="Image"></div>
                 <div style="padding-left: 10px;box-shadow: -0.1px 0px 0px #000;">
-                <div id="popupName"></div>
                 <div class="spj-wgp download-buttons">
                 <input class="onm-g" type="text" id="searchFormat" placeholder="Search...">
                 <button id="downloadSVG" class="downloadSVGss">Download <d class="notranslate">SVG</d></button>
@@ -634,8 +637,8 @@
     </div>
 
     <!-- DIV//. -->
-    <div class="onscroll" id="scrollTopBtn"><ion-icon name="arrow-up-outline"></ion-icon></div>
 
+    <button id="scrollTopBtn" class="onscroll wave-button"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1f1f1f"><path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z"/></svg></button>
     <!-- <script src="coffee.js"></script> -->
 </body>
 </html>
