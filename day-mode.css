@@ -116,7 +116,7 @@ body.night-mode .click_button{
   outline: solid 1px #f3f3f34d;
 }
 
-body.night-mode .tool2-div-divs span {
+body.night-mode .tool2-div-divs .material-symbols-outlined {
   color: rgb(255 255 255);
   fill: white;
 }
@@ -374,6 +374,29 @@ body.night-mode .result-item:hover {
 body.night-mode .result-item ion-icon {
   color: #ffffffda;
 }
+
+body.night-mode .onscroll {
+  color: white;
+  background-color: #282a2c;
+}
+body.night-mode .onscroll svg {
+  fill: white;
+}
+body.night-mode .onscroll:hover {
+  background-color: #36393d;
+}
+body.night-mode .onscroll:active {
+  background-color: #3c4045;
+}
+
+body.night-mode .result-item svg {
+  fill: rgb(218, 218, 218);
+}
+
+body.night-mode .search-div-close .material-symbols-outlined {
+  color: rgb(218, 218, 218);
+}
+
 body .result-item svg {
   fill: #7d7d7d;
 }
