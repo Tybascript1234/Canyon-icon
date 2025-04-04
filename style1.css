@@ -1190,7 +1190,7 @@ background-color: #0084ff21;
   .download-popup {
     transition: ease 0.3s;
     /* animation: gallery 0.2s ease forwards; */
-    padding: 10px 10px;
+    padding: 0px 10px;
     justify-content: space-between;
     position: fixed;
     top: 0;
@@ -1201,7 +1201,7 @@ background-color: #0084ff21;
     width: 300px;
     overflow-y: auto;
     scrollbar-width: none;
-    height: -webkit-fill-available;
+    height: 100%;
     background-color: white;
     border-radius: 16px 0px 0px 16px;
     box-shadow: 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12);
@@ -1210,6 +1210,7 @@ background-color: #0084ff21;
     display: flex;
     width: 100%;
     position: relative;
+    margin-bottom: 10px;
   }
   .download-popup-div {
     position: relative;
@@ -2714,16 +2715,40 @@ background-color: #0084ff21;
     opacity: .7;
   }
   .history-link i {
+    position: relative;
     transition: ease 0.2s;
     cursor: pointer;
     padding: 0px 10px;
     font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: white;
     color: #8d8d8d;
     margin-left: 2px;
   }
   .history-link i:active {
     color: #494949;
+  }
+  .ccd {
+    width: 40px;
+    border: none;
+    display: flex;
+    justify-content: center;
+    /* height: 40px; */
+    background: #0000;
+    border-radius: 30px;
+  }
+  .ccd i {
+    margin: 0;
+    padding: 0;
+  }
+  .ccd::before {
+    position: absolute;
+    content: '';
+    width: 40px;
+    height: 40px;
+    border-radius: 30px;
   }
   .history-link a {
     margin-left: 10px;
@@ -3196,7 +3221,7 @@ background-color: #0084ff21;
   }
 
   .hello {
-    padding-top: 6px;
+    padding-top: 16px;
     margin-bottom: 16px;
     padding-left: 10px;
     display: flex;
