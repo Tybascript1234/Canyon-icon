@@ -1089,3 +1089,37 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const scrollTopBtn = document.getElementById("scrollTopBtn");
+  
+    // إظهار الزر عند التمرير
+    window.addEventListener("scroll", function () {
+      if (document.documentElement.scrollTop > 100) {
+        scrollTopBtn.style.display = "flex";
+      } else {
+        scrollTopBtn.style.display = "none";
+      }
+    });
+  
+    // عند الضغط، العودة لأعلى الصفحة
+    scrollTopBtn.addEventListener("click", function () {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  });
+
+  function copyText() {
+    let div = document.querySelector('.copy-text'); // تحديد الديف عبر الكلاس
+    let text = div.innerText; // جلب النص داخل الديف
+
+    let textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+
+    alert('تم نسخ النص!');
+}
+  
