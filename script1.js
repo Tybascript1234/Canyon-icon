@@ -1122,4 +1122,3 @@ document.addEventListener("DOMContentLoaded", function () {
 
     alert('تم نسخ النص!');
 }
-  
