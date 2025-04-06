@@ -55,54 +55,62 @@ document.addEventListener("DOMContentLoaded", async () => {
         const resultsFragment = document.createDocumentFragment();
         let filteredImages = [];
     
-        for (const imageData of images) {
-            const { imageUrl, name, category } = imageData;
-            if (name.toLowerCase().includes(searchText)) {
-                filteredImages.push(imageData);
+        // تصفية الصور أولاً
+        filteredImages = images.filter(imageData => {
+            return imageData.name.toLowerCase().includes(searchText);
+        });
+    
+        containerCount.textContent = filteredImages.length;
+    
+        // دالة لتحميل وتقديم دفعة من الصور
+        async function loadImageBatch(startIndex, batchSize) {
+            const endIndex = Math.min(startIndex + batchSize, filteredImages.length);
+            
+            for (let i = startIndex; i < endIndex; i++) {
+                const imageData = filteredImages[i];
+                const { imageUrl, name, category } = imageData;
     
                 const imageContainer = document.createElement("button");
                 imageContainer.className = "image-container";
-                // imageContainer.setAttribute("onclick", "createRipple(event)");
     
                 // إنشاء عنصر canvas بدلاً من img
                 const canvas = document.createElement("canvas");
                 canvas.className = "image-canvas";
-                canvas.width = 100; // يمكنك ضبط الأبعاد حسب الحاجة
+                canvas.width = 100;
                 canvas.height = 100;
                 
                 const ctx = canvas.getContext("2d");
                 const img = new Image();
                 img.src = await fetchImage(imageUrl);
-                
+    
+                // إنشاء div بالـ id "rre" وإظهاره
+                const rreDiv = document.createElement("div");
+                rreDiv.id = "rre";
+                rreDiv.style.display = "flex";
+                imageContainer.appendChild(rreDiv);
+    
                 img.onload = function() {
-                    canvas.width = img.width;
-                    canvas.height = img.height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0);
-                    
-                    // تخزين البيانات الأصلية
-                    canvas.dataset.originalImage = imageUrl;
-                };
-                
-                img.onload = function() {
-                    // رسم الصورة على canvas
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    canvas.dataset.originalImage = imageUrl;
+                    rreDiv.style.display = "none";
                 };
     
                 const nameElement = document.createElement("div");
                 nameElement.className = "image-name";
                 nameElement.textContent = name;
                 nameElement.title = name;
-    
+                            
                 const downloadButton = document.createElement("button");
                 downloadButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1f1f1f"><path d="M240-400q-33 0-56.5-23.5T160-480q0-33 23.5-56.5T240-560q33 0 56.5 23.5T320-480q0 33-23.5 56.5T240-400Zm240 0q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm240 0q-33 0-56.5-23.5T640-480q0-33 23.5-56.5T720-560q33 0 56.5 23.5T800-480q0 33-23.5 56.5T720-400Z"/></svg>';
                 downloadButton.className = "download-btn";
                 downloadButton.addEventListener("click", (event) => showDownloadPopup(event, img.src, name));
-    
+                            
                 imageContainer.appendChild(canvas);
                 imageContainer.appendChild(nameElement);
                 imageContainer.appendChild(downloadButton);
+                imageContainer.addEventListener("click", () => copyImageName(nameElement));
     
+                // تصنيف الصورة حسب الفئة
                 switch (category) {
                     case "category1":
                         category1Container.appendChild(imageContainer);
@@ -118,9 +126,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                         break;
                 }
     
-                // بقية الكود كما هو...
-                imageContainer.addEventListener("click", () => copyImageName(nameElement));
-    
+                // إضافة عنصر البحث
                 const resultItem = document.createElement("button");
                 resultItem.className = "result-item ripple-btn";
                 resultItem.setAttribute("onmousedown", "createRipple(event)");
@@ -140,12 +146,31 @@ document.addEventListener("DOMContentLoaded", async () => {
                 });
                 resultsFragment.appendChild(resultItem);
             }
+    
+            searchResults.innerHTML = "";
+            searchResults.appendChild(resultsFragment);
         }
     
-        searchResults.innerHTML = "";
-        searchResults.appendChild(resultsFragment);
-        containerCount.textContent = filteredImages.length;
-    }   
+        // تحميل الصور على دفعات
+        const batchSize = 14; // عدد الصور في كل دفعة
+        let currentIndex = 0;
+    
+        async function loadNextBatch() {
+            if (currentIndex < filteredImages.length) {
+                await loadImageBatch(currentIndex, batchSize);
+                currentIndex += batchSize;
+                
+                // استخدام requestAnimationFrame للسماح للمتصفح بالرسم
+                requestAnimationFrame(() => {
+                    setTimeout(loadNextBatch, 100); // تأخير بسيط بين الدفعات
+                });
+            }
+        }
+    
+        // بدء عملية التحميل
+        await loadNextBatch();
+    }
+    
 
     function copyImageName(nameElement) {
         const originalName = nameElement.textContent;
