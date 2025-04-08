@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const totalDownloads = document.getElementById("totalDownloads");
     const containerCount = document.getElementById("containerCount");
     const popupLinkInput = document.getElementById("popupLinkInput");
+    const toggleIconsButton = document.getElementById("toggleIcons");
 
     // استبدال بيانات localStorage ببيانات من data.js
     const images = Array.from(document.querySelectorAll('.gallery img, .category1 img')).map(img => ({
@@ -25,6 +26,122 @@ document.addEventListener("DOMContentLoaded", async () => {
     }));
 
     let downloadData = JSON.parse(localStorage.getItem("downloadData")) || {};
+    let isFilled = false;
+    const originalSources = new Map();
+
+    // نظام تبديل الأيقونات
+    if (toggleIconsButton) {
+        toggleIconsButton.addEventListener('click', () => {
+            isFilled = !isFilled;
+            
+            toggleIconsButton.innerHTML = isFilled 
+                ? '<a>Outline</a><div id="ssdr"><span style="background: #298dff;"></span></div>' 
+                : '<a>Fill</a><div><span></span></div>';
+
+            updateAllImages();
+        });
+    }
+
+    function updateAllImages() {
+        updateGalleryImages();
+        updatePopupImage();
+        updateDownloadPopupImage();
+    }
+
+    function updateGalleryImages() {
+        const imageContainers = document.querySelectorAll('.image-container');
+        imageContainers.forEach(container => {
+            const img = container.querySelector('img, canvas');
+            if (img) {
+                let currentSrc = img.src || img.dataset.originalImage;
+                
+                if (currentSrc) {
+                    if (!originalSources.has(img)) {
+                        originalSources.set(img, currentSrc);
+                    }
+    
+                    const newSrc = isFilled ? 
+                        currentSrc.includes('-outline.') ? 
+                            currentSrc.replace('-outline.', '.') : 
+                            currentSrc :
+                        originalSources.get(img) || currentSrc;
+                    
+                    updateImageSource(img, newSrc);
+                }
+            }
+        });
+    }
+
+    function updatePopupImage() {
+        const popupImg = document.getElementById('popupImage');
+        if (popupImg) {
+            let currentSrc = popupImg.src || popupImg.dataset.originalImage;
+            
+            if (currentSrc) {
+                if (!originalSources.has(popupImg)) {
+                    originalSources.set(popupImg, currentSrc);
+                }
+
+                const newSrc = isFilled ? 
+                    currentSrc.replace('-outline.', '.') : 
+                    originalSources.get(popupImg);
+                
+                updateImageSource(popupImg, newSrc);
+                updatePopupDownloadLinks(newSrc);
+            }
+        }
+    }
+
+    function updateDownloadPopupImage() {
+        const downloadPopup = document.getElementById('downloadPopup');
+        if (downloadPopup && downloadPopup.style.display !== 'none') {
+            const popupImg = document.getElementById('popupImage');
+            if (popupImg) {
+                let currentSrc = popupImg.dataset.originalImage || popupImg.src;
+                
+                if (currentSrc) {
+                    const newSrc = isFilled ? 
+                        currentSrc.replace('-outline.', '.') : 
+                        originalSources.get(popupImg) || currentSrc;
+                    
+                    const img = new Image();
+                    img.onload = function() {
+                        popupImg.src = newSrc;
+                        popupImg.dataset.originalImage = newSrc;
+                    };
+                    img.src = newSrc;
+                }
+            }
+        }
+    }
+
+    function updateImageSource(element, newSrc) {
+        if (!element) return;
+        
+        if (element.tagName === 'IMG') {
+            const img = new Image();
+            img.onload = function() {
+                element.src = newSrc;
+                element.dataset.originalImage = newSrc;
+            };
+            img.src = newSrc;
+        } else if (element.tagName === 'CANVAS') {
+            const img = new Image();
+            img.onload = function() {
+                const ctx = element.getContext('2d');
+                ctx.clearRect(0, 0, element.width, element.height);
+                ctx.drawImage(img, 0, 0, element.width, element.height);
+                element.dataset.originalImage = newSrc;
+            };
+            img.src = newSrc;
+        }
+    }
+
+    function updatePopupDownloadLinks(newSrc) {
+        if (popupLinkInput) {
+            popupLinkInput.value = newSrc;
+        }
+    }
 
     function updateTotalDownloads() {
         const total = Object.values(downloadData).reduce((sum, count) => sum + count, 0);
@@ -171,6 +288,101 @@ document.addEventListener("DOMContentLoaded", async () => {
         await loadNextBatch();
     }
     
+    // دالة مساعدة لإنشاء عنصر الصورة
+    async function createImageElement(imageData) {
+        let { imageUrl, name, category } = imageData;
+        
+        // تطبيق حالة التبديل الحالية
+        const displayUrl = isFilled && imageUrl.includes('-outline.') 
+            ? imageUrl.replace('-outline.', '.')
+            : !isFilled && !imageUrl.includes('-outline.') && originalSources.has(imageUrl)
+            ? imageUrl.replace(/(\.svg|\.png)/, '-outline$1')
+            : imageUrl;
+    
+        const imageContainer = document.createElement("button");
+        imageContainer.className = "image-container";
+    
+        // إنشاء عنصر canvas
+        const canvas = document.createElement("canvas");
+        canvas.className = "image-canvas";
+        canvas.width = 100;
+        canvas.height = 100;
+        
+        const ctx = canvas.getContext("2d");
+        const img = new Image();
+        
+        // عنصر التحميل
+        const rreDiv = document.createElement("div");
+        rreDiv.id = "rre";
+        rreDiv.style.display = "flex";
+        imageContainer.appendChild(rreDiv);
+    
+        // تحميل الصورة
+        try {
+            img.src = await fetchImage(displayUrl);
+            await new Promise((resolve, reject) => {
+                img.onload = resolve;
+                img.onerror = reject;
+            });
+            
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            canvas.dataset.originalImage = imageUrl;
+            originalSources.set(canvas, imageUrl);
+            rreDiv.style.display = "none";
+        } catch (error) {
+            console.error("Error loading image:", error);
+            return { container: null, resultItem: null };
+        }
+    
+        // معلومات الصورة
+        const nameElement = document.createElement("div");
+        nameElement.className = "image-name";
+        nameElement.textContent = name;
+        nameElement.title = name;
+        
+        // زر التنزيل
+        const downloadButton = document.createElement("button");
+        downloadButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1f1f1f"><path d="M240-400q-33 0-56.5-23.5T160-480q0-33 23.5-56.5T240-560q33 0 56.5 23.5T320-480q0 33-23.5 56.5T240-400Zm240 0q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm240 0q-33 0-56.5-23.5T640-480q0-33 23.5-56.5T720-560q33 0 56.5 23.5T800-480q0 33-23.5 56.5T720-400Z"/></svg>';
+        downloadButton.className = "download-btn";
+        downloadButton.addEventListener("click", (event) => showDownloadPopup(event, img.src, name));
+        
+        imageContainer.appendChild(canvas);
+        imageContainer.appendChild(nameElement);
+        imageContainer.appendChild(downloadButton);
+        imageContainer.addEventListener("click", () => copyImageName(nameElement));
+    
+        // عنصر نتائج البحث
+        const resultItem = document.createElement("button");
+        resultItem.className = "result-item ripple-btn";
+        resultItem.setAttribute("onmousedown", "createRipple(event)");
+        resultItem.innerHTML = `
+            <div class="result-item-div">
+                <div class="icon-container"><svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 -960 960 960" width="22px" fill="#1f1f1f"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg></div>
+                <div class="image-name">${name}</div>
+            </div>
+            <div>
+                <button class="result-item-button notranslate ripple-btn" onmousedown="createRipple(event)"></button>
+            </div>
+        `;
+        resultItem.addEventListener("click", () => {
+            searchInput.value = name;
+            searchResults.style.display = "none";
+            displayImages();
+        });
+    
+        return { container: imageContainer, resultItem };
+    }
+    
+    // دالة مساعدة للتحقق من وجود الصورة
+    async function imageExists(url) {
+        try {
+            const res = await fetch(url, { method: 'HEAD' });
+            return res.ok;
+        } catch {
+            return false;
+        }
+    }
+    
 
     function copyImageName(nameElement) {
         const originalName = nameElement.textContent;
@@ -251,7 +463,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     
         img.crossOrigin = "Anonymous";
-        img.src = imageUrl;
+        // تطبيق حالة التبديل الحالية على الصورة
+        const displayImageUrl = isFilled ? imageUrl.replace('-outline.', '.') : imageUrl;
+        img.src = displayImageUrl;
     
         img.onload = function() {
             const scaleFactor = Math.min(3, 2000 / img.width);
@@ -263,16 +477,16 @@ document.addEventListener("DOMContentLoaded", async () => {
             tempCtx.drawImage(img, 0, 0, tempCanvas.width, tempCanvas.height);
     
             // حفظ البيانات الأصلية للصورة
-            popupImage.dataset.originalImage = imageUrl;
+            popupImage.dataset.originalImage = displayImageUrl;
             popupImage.dataset.originalCanvas = tempCanvas.toDataURL();
             popupImage.src = tempCanvas.toDataURL();
             popupName.textContent = name;
-            popupLinkInput.value = imageUrl;
+            popupLinkInput.value = displayImageUrl;
             popupPngInput.value = tempCanvas.toDataURL('image/png');
     
             // إذا كانت الصورة SVG
-            if (imageUrl.endsWith('.svg') || imageUrl.startsWith('data:image/svg')) {
-                fetch(imageUrl)
+            if (displayImageUrl.endsWith('.svg') || displayImageUrl.startsWith('data:image/svg')) {
+                fetch(displayImageUrl)
                     .then(response => response.text())
                     .then(svgCode => {
                         popupSvgInput.value = svgCode;
@@ -315,7 +529,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     popupImage.src = tempCanvas.toDataURL();
                     popupPngInput.value = tempCanvas.toDataURL('image/png');
                 };
-                originalImg.src = popupImage.dataset.originalCanvas || imageUrl;
+                originalImg.src = popupImage.dataset.originalCanvas || displayImageUrl;
             });
     
             // إضافة معالجات الأحداث لحجم الصورة
@@ -651,6 +865,3 @@ document.addEventListener("DOMContentLoaded", async () => {
     searchInput.focus();
     updateTotalDownloads();
 });
-
-
-
