@@ -393,6 +393,14 @@ body.night-mode .result-item svg {
   fill: rgb(218, 218, 218);
 }
 
+body.night-mode #toggleIcons div span {
+  background: #ffffff;
+}
+
+body.night-mode #toggleIcons div {
+  border: solid 1px #ffffff5e;
+}
+
 body.night-mode .search-div-close .material-symbols-outlined {
   color: rgb(218, 218, 218);
 }
