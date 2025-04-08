@@ -243,7 +243,7 @@ document.addEventListener('click', function(event) {
     }
 
     // Hide specific divs when clicking outside of them
-    ['wwc1', 'wwc2', 'wwc3', 'wwc4', 'wwc5', 'wwc6', 'wwc7', 'wwc8', 'wwc11', 'wwc12', 'wwc13', 'wwc14', 'wwc15', 'resetButton', 'wwc17'].forEach(function(id) {
+    ['wwc1', 'wwc2', 'wwc3', 'wwc4', 'wwc5', 'wwc6', 'wwc7', 'wwc8', 'wwc11', 'wwc12', 'wwc13', 'wwc14', 'wwc15', 'resetButton', 'wwc17', 'wwc19'].forEach(function(id) {
         const div = document.getElementById(id);
         if (div && div.classList.contains('visible') && !div.contains(target) && !target.matches(`[data-target="${id}"]`)) {
             div.classList.remove('visible');
@@ -267,21 +267,42 @@ document.addEventListener('click', function(event) {
 
 // script.js
 
-document.addEventListener('DOMContentLoaded', (event) => {
+document.addEventListener('DOMContentLoaded', () => {
     const savedMode = localStorage.getItem('mode');
-    if (savedMode) {
-        document.body.classList.add(savedMode);
-        if (savedMode === 'day-mode') {
-            updateButtonIcons('dayButton');
-            updateSelectedButton('Light mode');
-        } else if (savedMode === 'night-mode') {
-            updateButtonIcons('nightButton');
-            updateSelectedButton('Night mode');
-        }
-    } else {
-        // إذا لم يكن هناك وضع مخزن، اعرض الوضع النهاري كالوضع الافتراضي
+    if (savedMode === 'day-mode') {
         setDayMode();
+    } else if (savedMode === 'night-mode') {
+        setNightMode();
+    } else if (savedMode === 'auto-mode') {
+        setAutoMode();
+    } else {
+        // أول مرة يفتح الموقع
+        localStorage.setItem('mode', 'auto-mode');
+        setAutoMode();
     }
+
+    // أزرار التبديل
+    document.getElementById('dayButton').addEventListener('click', () => {
+        localStorage.setItem('mode', 'day-mode');
+        setDayMode();
+    });
+
+    document.getElementById('nightButton').addEventListener('click', () => {
+        localStorage.setItem('mode', 'night-mode');
+        setNightMode();
+    });
+
+    document.getElementById('autoButton').addEventListener('click', () => {
+        localStorage.setItem('mode', 'auto-mode');
+        setAutoMode();
+    });
+
+    // استماع لتغيير إعدادات النظام
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        if (localStorage.getItem('mode') === 'auto-mode') {
+            setAutoMode();
+        }
+    });
 });
 
 function setDayMode() {
@@ -289,7 +310,6 @@ function setDayMode() {
     document.body.classList.add('day-mode');
     updateButtonIcons('dayButton');
     updateSelectedButton('Light mode');
-    localStorage.setItem('mode', 'day-mode');
 }
 
 function setNightMode() {
@@ -297,31 +317,47 @@ function setNightMode() {
     document.body.classList.add('night-mode');
     updateButtonIcons('nightButton');
     updateSelectedButton('Night mode');
-    localStorage.setItem('mode', 'night-mode');
+}
+
+function setAutoMode() {
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (prefersDark) {
+        document.body.classList.remove('day-mode');
+        document.body.classList.add('night-mode');
+        updateSelectedButton('Auto mode (Night)');
+    } else {
+        document.body.classList.remove('night-mode');
+        document.body.classList.add('day-mode');
+        updateSelectedButton('Auto mode (Day)');
+    }
+    updateButtonIcons('autoButton');
 }
 
 function updateButtonIcons(activeButtonId) {
     const dayButton = document.getElementById('dayButton');
     const nightButton = document.getElementById('nightButton');
+    const autoButton = document.getElementById('autoButton');
     
-    const checkmarkIcon = '<ice class="material-symbols-outlined"> check </ice>';
+    const checkIcon = '<span class="material-symbols-outlined">check</span>';
 
-    // إزالة أيقونة التأكيد من كلا الزرين
     dayButton.innerHTML = 'Light mode';
     nightButton.innerHTML = 'Night mode';
+    autoButton.innerHTML = 'Auto mode';
 
-    // إضافة أيقونة التأكيد إلى الزر النشط
     if (activeButtonId === 'dayButton') {
-        dayButton.innerHTML += ' ' + checkmarkIcon;
+        dayButton.innerHTML += ' ' + checkIcon;
     } else if (activeButtonId === 'nightButton') {
-        nightButton.innerHTML += ' ' + checkmarkIcon;
+        nightButton.innerHTML += ' ' + checkIcon;
+    } else if (activeButtonId === 'autoButton') {
+        autoButton.innerHTML += ' ' + checkIcon;
     }
 }
 
-function updateSelectedButton(buttonName) {
-    const selectedButtonSpan = document.getElementById('selectedButton');
-    selectedButtonSpan.textContent = buttonName;
+function updateSelectedButton(label) {
+    const selected = document.getElementById('selectedButton');
+    selected.textContent = label;
 }
+
 
 
 
@@ -1034,61 +1070,61 @@ function clearFilter() {
     });
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('#alphabet-buttons a').forEach((button, index, buttons) => {
+// عند تحميل الصفحة
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('#alphabet-buttons a').forEach((button) => {
         // إضافة خانة اختيار إلى كل رابط
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
-        checkbox.classList.add('checkbox');  // إضافة class بدلاً من id
+        checkbox.classList.add('checkbox');
         button.appendChild(checkbox);
 
-        // دالة لتفعيل التصفية بناءً على الزر المحدد
-        function toggleFilter() {
-            if (checkbox.checked) {
-                filterByLetter(button.textContent.toLowerCase());
-                // تعطيل جميع الـ checkboxes الأخرى
-                buttons.forEach((btn) => {
-                    const otherCheckbox = btn.querySelector('input[type="checkbox"]');
-                    if (otherCheckbox !== checkbox) {
-                        otherCheckbox.checked = false;
-                    }
-                });
-            } else {
+        // دالة لتحديث الفلترة بناءً على كل الأحرف المحددة
+        function updateMultiFilter() {
+            const selectedLetters = Array.from(document.querySelectorAll('#alphabet-buttons input[type="checkbox"]:checked'))
+                .map(cb => cb.parentElement.textContent.trim().toLowerCase());
+
+            if (selectedLetters.length === 0) {
                 clearFilter();
+            } else {
+                filterByLetters(selectedLetters);
             }
         }
 
-        // إضافة حدث النقر على الرابط
-        button.addEventListener('click', function(e) {
-            e.preventDefault();  // منع التنقل عند النقر على الرابط
-            checkbox.checked = !checkbox.checked;  // تبديل حالة التحديد
-            toggleFilter();
+        // التعامل مع النقر على الرابط
+        button.addEventListener('click', function (e) {
+            e.preventDefault();
+            checkbox.checked = !checkbox.checked;
+            updateMultiFilter();
         });
 
-        // إضافة حدث النقر على الـ checkbox
-        checkbox.addEventListener('click', function(e) {
-            e.stopPropagation();  // منع الحدث من الانتقال للأعلى
-            toggleFilter();
+        // التعامل مع النقر على الـ checkbox
+        checkbox.addEventListener('click', function (e) {
+            e.stopPropagation(); // لمنع الحدث من الانتقال لأعلى
+            updateMultiFilter();
         });
     });
 
-    // دالة تصفية الصور بناءً على الحرف المختار
-    function filterByLetter(letter) {
+    // تصفية الصور بناءً على مجموعة أحرف
+    function filterByLetters(letters) {
         ['category1', 'category2', 'category3', 'gallery'].forEach(categoryId => {
             document.querySelectorAll(`#${categoryId} .image-container`).forEach(imageContainer => {
                 const nameElement = imageContainer.querySelector('.image-name');
-                imageContainer.style.display = nameElement?.title?.toLowerCase().startsWith(letter.toLowerCase()) ? 'flex' : 'none';
+                const title = nameElement?.title?.toLowerCase();
+                const matches = letters.some(letter => title?.startsWith(letter));
+                imageContainer.style.display = matches ? 'flex' : 'none';
             });
         });
 
-        // تغيير ألوان الزر المختار
+        // تحديث ألوان الأزرار بناءً على التحديد
         document.querySelectorAll('#alphabet-buttons a').forEach(button => {
-            const isActive = button.textContent.toLowerCase() === letter.toLowerCase();
-            button.style.color = isActive ? "#298dff" : "";
-            button.style.backgroundColor = isActive ? "rgb(161 195 255 / 26%)" : "";
+            const isChecked = button.querySelector('input[type="checkbox"]').checked;
+            button.style.color = isChecked ? "#298dff" : "";
+            button.style.backgroundColor = isChecked ? "rgb(161 195 255 / 26%)" : "";
         });
     }
 });
+
 
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -1122,3 +1158,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     alert('تم نسخ النص!');
 }
+
+window.addEventListener("scroll", function() {
+    const body = document.body;
+    if (window.scrollY > 300) {
+      body.classList.add("scrolled");
+    } else {
+      body.classList.remove("scrolled");
+    }
+  });
