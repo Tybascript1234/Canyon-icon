@@ -50,30 +50,25 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     function updateGalleryImages() {
         const imageContainers = document.querySelectorAll('.image-container');
-        requestAnimationFrame(() => { // استخدام requestAnimationFrame لتجميع التحديثات
-            imageContainers.forEach(container => {
-                const img = container.querySelector('img, canvas');
-                if (img) {
-                    let currentSrc = img.src || img.dataset.originalImage;
-    
-                    if (currentSrc) {
-                        if (!originalSources.has(img)) {
-                            originalSources.set(img, currentSrc);
-                        }
-    
-                        const newSrc = isFilled ?
-                            currentSrc.includes('-outline.') ?
-                                currentSrc.replace('-outline.', '.') :
-                                currentSrc :
-                            originalSources.get(img) || currentSrc;
-    
-                        // التحقق من الحاجة إلى التغيير قبل التحديث
-                        if (newSrc !== (img.src || img.dataset.originalImage)) {
-                            updateImageSource(img, newSrc);
-                        }
+        imageContainers.forEach(container => {
+            const img = container.querySelector('img, canvas');
+            if (img) {
+                let currentSrc = img.src || img.dataset.originalImage;
+                
+                if (currentSrc) {
+                    if (!originalSources.has(img)) {
+                        originalSources.set(img, currentSrc);
                     }
+    
+                    const newSrc = isFilled ? 
+                        currentSrc.includes('-outline.') ? 
+                            currentSrc.replace('-outline.', '.') : 
+                            currentSrc :
+                        originalSources.get(img) || currentSrc;
+                    
+                    updateImageSource(img, newSrc);
                 }
-            });
+            }
         });
     }
 
@@ -174,6 +169,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         category2Container.innerHTML = "";
         category3Container.innerHTML = "";
         const searchText = searchInput.value.trim().toLowerCase();
+        const resultsFragment = document.createDocumentFragment();
         let filteredImages = [];
     
         // تصفية الصور أولاً
@@ -183,129 +179,113 @@ document.addEventListener("DOMContentLoaded", async () => {
     
         containerCount.textContent = filteredImages.length;
     
-        const observer = new IntersectionObserver(async (entries, observer) => {
-            for (const entry of entries) {
-                if (entry.isIntersecting) {
-                    const imageContainer = entry.target;
-                    const index = parseInt(imageContainer.dataset.index);
+        // دالة لتحميل وتقديم دفعة من الصور
+        async function loadImageBatch(startIndex, batchSize) {
+            const endIndex = Math.min(startIndex + batchSize, filteredImages.length);
+            
+            for (let i = startIndex; i < endIndex; i++) {
+                const imageData = filteredImages[i];
+                const { imageUrl, name, category } = imageData;
     
-                    if (filteredImages[index]) {
-                        const { imageUrl, name, category } = filteredImages[index];
+                const imageContainer = document.createElement("button");
+                imageContainer.className = "image-container";
     
-                        // إنشاء عنصر canvas
-                        const canvas = document.createElement("canvas");
-                        canvas.className = "image-canvas";
-                        canvas.width = 100;
-                        canvas.height = 100;
+                // إنشاء عنصر canvas بدلاً من img
+                const canvas = document.createElement("canvas");
+                canvas.className = "image-canvas";
+                canvas.width = 100;
+                canvas.height = 100;
+                
+                const ctx = canvas.getContext("2d");
+                const img = new Image();
+                img.src = await fetchImage(imageUrl);
     
-                        const ctx = canvas.getContext("2d");
-                        const img = new Image();
-                        img.src = await fetchImage(imageUrl);
+                // إنشاء div بالـ id "rre" وإظهاره
+                const rreDiv = document.createElement("div");
+                rreDiv.id = "rre";
+                rreDiv.style.display = "flex";
+                imageContainer.appendChild(rreDiv);
     
-                        const rreDiv = document.createElement("div");
-                        rreDiv.id = "rre";
-                        rreDiv.style.display = "flex";
-                        imageContainer.appendChild(rreDiv);
+                img.onload = function() {
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    canvas.dataset.originalImage = imageUrl;
+                    rreDiv.style.display = "none";
+                };
     
-                        img.onload = function() {
-                            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                            canvas.dataset.originalImage = imageUrl;
-                            rreDiv.style.display = "none";
-                        };
+                const nameElement = document.createElement("div");
+                nameElement.className = "image-name";
+                nameElement.textContent = name;
+                nameElement.title = name;
+                            
+                const downloadButton = document.createElement("button");
+                downloadButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1f1f1f"><path d="M240-400q-33 0-56.5-23.5T160-480q0-33 23.5-56.5T240-560q33 0 56.5 23.5T320-480q0 33-23.5 56.5T240-400Zm240 0q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm240 0q-33 0-56.5-23.5T640-480q0-33 23.5-56.5T720-560q33 0 56.5 23.5T800-480q0 33-23.5 56.5T720-400Z"/></svg>';
+                downloadButton.className = "download-btn";
+                downloadButton.addEventListener("click", (event) => showDownloadPopup(event, img.src, name));
+                            
+                imageContainer.appendChild(canvas);
+                imageContainer.appendChild(nameElement);
+                imageContainer.appendChild(downloadButton);
+                imageContainer.addEventListener("click", () => copyImageName(nameElement));
     
-                        // استبدال العنصر الوهمي (إذا كان موجودًا) بالـ canvas الحقيقي
-                        const placeholder = imageContainer.querySelector('.image-canvas-placeholder');
-                        if (placeholder) {
-                            imageContainer.replaceChild(canvas, placeholder);
-                        } else {
-                            imageContainer.appendChild(canvas); // في حال لم يكن هناك عنصر وهمي
-                        }
-    
-                        observer.unobserve(imageContainer); // إيقاف مراقبة هذا العنصر
-                    }
+                // تصنيف الصورة حسب الفئة
+                switch (category) {
+                    case "category1":
+                        category1Container.appendChild(imageContainer);
+                        break;
+                    case "category2":
+                        category2Container.appendChild(imageContainer);
+                        break;
+                    case "category3":
+                        category3Container.appendChild(imageContainer);
+                        break;
+                    default:
+                        galleryContainer.appendChild(imageContainer);
+                        break;
                 }
-            }
-        }, {
-            rootMargin: '0px 0px 200px 0px', // ابدأ التحميل قبل 200 بكسل من الظهور
-            threshold: 0.01 // جزء صغير من العنصر مرئي لبدء التحميل
-        });
     
-        filteredImages.forEach((imageData, index) => {
-            const { name, category } = imageData;
-    
-            const imageContainer = document.createElement("button");
-            imageContainer.className = "image-container lazy-load"; // أضف كلاس للتحميل الكسول
-            imageContainer.dataset.index = index; // تخزين فهرس الصورة
-    
-            // إنشاء عنصر وهمي (placeholder) لعرضه مؤقتًا
-            const placeholderCanvas = document.createElement("canvas");
-            placeholderCanvas.className = "image-canvas-placeholder";
-            placeholderCanvas.width = 100;
-            placeholderCanvas.height = 100;
-            imageContainer.appendChild(placeholderCanvas);
-    
-            const nameElement = document.createElement("div");
-            nameElement.className = "image-name";
-            nameElement.textContent = name;
-            nameElement.title = name;
-    
-            const downloadButton = document.createElement("button");
-            downloadButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1f1f1f"><path d="M240-400q-33 0-56.5-23.5T160-480q0-33 23.5-56.5T240-560q33 0 56.5 23.5T320-480q0 33-23.5 56.5T240-400Zm240 0q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm240 0q-33 0-56.5-23.5T640-480q0-33 23.5-56.5T720-560q33 0 56.5 23.5T800-480q0 33-23.5 56.5T720-400Z"/></svg>';
-            downloadButton.className = "download-btn";
-            downloadButton.addEventListener("click", (event) => {
-                const imgElement = imageContainer.querySelector('.image-canvas');
-                if (imgElement && imgElement.dataset.originalImage) {
-                    showDownloadPopup(event, imgElement.dataset.originalImage, name);
-                }
-            });
-    
-            imageContainer.appendChild(nameElement);
-            imageContainer.appendChild(downloadButton);
-            imageContainer.addEventListener("click", () => copyImageName(nameElement));
-    
-            switch (category) {
-                case "category1":
-                    category1Container.appendChild(imageContainer);
-                    break;
-                case "category2":
-                    category2Container.appendChild(imageContainer);
-                    break;
-                case "category3":
-                    category3Container.appendChild(imageContainer);
-                    break;
-                default:
-                    galleryContainer.appendChild(imageContainer);
-                    break;
+                // إضافة عنصر البحث
+                const resultItem = document.createElement("button");
+                resultItem.className = "result-item ripple-btn";
+                resultItem.setAttribute("onmousedown", "createRipple(event)");
+                resultItem.innerHTML = `
+                    <div class="result-item-div">
+                        <div class="icon-container"><svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 -960 960 960" width="22px" fill="#1f1f1f"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg></div>
+                        <div class="image-name">${name}</div>
+                    </div>
+                    <div>
+                        <button class="result-item-button notranslate ripple-btn" onmousedown="createRipple(event)"></button>
+                    </div>
+                `;
+                resultItem.addEventListener("click", () => {
+                    searchInput.value = name;
+                    searchResults.style.display = "none";
+                    displayImages();
+                });
+                resultsFragment.appendChild(resultItem);
             }
     
-            observer.observe(imageContainer); // ابدأ مراقبة الحاوية
-        });
+            searchResults.innerHTML = "";
+            searchResults.appendChild(resultsFragment);
+        }
     
-        // إضافة نتائج البحث (يتم إنشاؤها بشكل فوري ولا تحتاج إلى تحميل كسول)
-        const resultsFragment = document.createDocumentFragment();
-        filteredImages.forEach(imageData => {
-            const { name } = imageData;
-            const resultItem = document.createElement("button");
-            resultItem.className = "result-item ripple-btn";
-            resultItem.setAttribute("onmousedown", "createRipple(event)");
-            resultItem.innerHTML = `
-                <div class="result-item-div">
-                    <div class="icon-container"><svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 -960 960 960" width="22px" fill="#1f1f1f"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg></div>
-                    <div class="image-name">${name}</div>
-                </div>
-                <div>
-                    <button class="result-item-button notranslate ripple-btn" onmousedown="createRipple(event)"></button>
-                </div>
-            `;
-            resultItem.addEventListener("click", () => {
-                searchInput.value = name;
-                searchResults.style.display = "none";
-                displayImages();
-            });
-            resultsFragment.appendChild(resultItem);
-        });
-        searchResults.innerHTML = "";
-        searchResults.appendChild(resultsFragment);
+        // تحميل الصور على دفعات
+        const batchSize = 14; // عدد الصور في كل دفعة
+        let currentIndex = 0;
+    
+        async function loadNextBatch() {
+            if (currentIndex < filteredImages.length) {
+                await loadImageBatch(currentIndex, batchSize);
+                currentIndex += batchSize;
+                
+                // استخدام requestAnimationFrame للسماح للمتصفح بالرسم
+                requestAnimationFrame(() => {
+                    setTimeout(loadNextBatch, 100); // تأخير بسيط بين الدفعات
+                });
+            }
+        }
+    
+        // بدء عملية التحميل
+        await loadNextBatch();
     }
     
     // دالة مساعدة لإنشاء عنصر الصورة
