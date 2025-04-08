@@ -10,6 +10,9 @@ body {
     min-height: auto !important; /* إلغاء الـ min-height المضافة */
     top: auto;
 }
+.option {
+  opacity: .5;
+}
 .VIpgJd-ZVi9od-l4eHX-hSRGPd {
   display: none;
 }
@@ -256,10 +259,10 @@ background-color: #0084ff21;
 }
 
 @keyframes ttt {
-  0% {
+  from {
     transform: scale(0.50);
   }
-  100% {
+  to {
     transform: none;
   }
 }
@@ -494,28 +497,31 @@ background-color: #0084ff21;
 }
 
 /* search2 */
-.search2 {
+body .search2 {
   /* height: 45px; */
+  opacity: 0;
+  transition: ease 0.4s;
+  display: flex;
+  z-index: -1;
   border-radius: 8px;
   position: relative;
   width: max-content;
   max-width: 100%;
   margin: auto;
-  display: flex;
   align-items: center;
 }
 .search2 input {
   transition: ease 0.2s;
-  border-radius: 50px;
+  border-radius: 8px;
   border: solid 1px #c3c3c300;
-  background-color: rgb(243, 243, 243);
+  background-color: #f6f7f9;
   color: #3f3f3f;
   border: none;
   outline: none;
-  padding: 14px 40px;
+  padding: 11px 40px;
   width: 300px;
   max-width: 100%;
-  font-size: 15px;
+  font-size: 13px;
 }
 .search2 input:focus {
   background-color: white;
@@ -523,8 +529,8 @@ background-color: #0084ff21;
 }
 .search2-sea {
   position: absolute;
-  font-size: 18px;
-  padding-left: 13px;
+  font-size: 16px;
+  margin-left: 13px;
 }
 .search2 .search-div-close {
   width: 22px;
@@ -585,6 +591,7 @@ background-color: #0084ff21;
     justify-content: right;
 }
 .links-Translate {
+  animation: oli 0.5s ease forwards;
     display: flex;
     align-items: center;
     padding: 5px 7px;
@@ -918,13 +925,29 @@ background-color: #0084ff21;
 .Everyone-menu a:active {
   outline: auto #1884ff;
 }
+.Everyone-menu .v {
+  width: auto;
+  padding: 6px 15px;
+  justify-content: left;
+  cursor: pointer;
+  width: 100%;
+  border: none;
+  background: #0000;
+}
+.Everyone-menu .v:hover {
+  color: #298dff;
+  background-color: rgba(232, 234, 237, 0.199);
+}
+.Everyone-menu .v:active {
+  outline: auto #1884ff;
+}
 @keyframes eew {
-  0% {
+  from {
     max-height: 50px;
     box-shadow: none;
     margin-top: 10px;
   }
-  100% {
+  to {
     max-height: 158px;
     /* box-shadow:; */
   }
@@ -1029,20 +1052,20 @@ background-color: #0084ff21;
     margin: auto;
   }
   @keyframes gallery {
-    0% {
+    from {
     box-shadow: none;
     margin-top: 10px;
     }
-    100% {
+    to {
       /* box-shadow:; */
     }
   }
 
   @keyframes oli {
-    0% {
+    from {
       opacity: 0;
     }
-    100% {
+    to {
       opacity: 1;
     }
   }
@@ -1274,14 +1297,15 @@ background-color: #0084ff21;
     animation: popup 0.3s ease forwards;
     user-select: none;
     height: 36px;
+    user-select: none;
     margin: auto;
   }
   @keyframes popup {
-    0% {
+    from {
         transform: scale(0.70);
         filter: contrast(0.2);
     }
-    100% {
+    to {
 
     }
   }
@@ -2057,11 +2081,11 @@ background-color: #0084ff21;
     right: 20px;
   }
   @keyframes lon {
-    0% {
+    from {
       margin-right: -50px;
       opacity: 0;
     }
-    100% {
+    to {
 
     }
   }
@@ -3286,12 +3310,59 @@ background-color: #0084ff21;
     background-size: cover;
     margin-left: 16px;
   }
-  
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /* -------------------------------------------------------------------- */
+
+  /* .scrolled */
+  .scrolled .search2 {
+    opacity: 1;
+    z-index: 1;
+  }  
+
+
+ #toggleIcons div {
+  transition: ease 0.3s;
+  position: relative;
+  width: 40px;
+  height: 20px;
+  border-radius: 20px;
+  margin-left: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  border: solid 1px #ccc;
+ }
+ #toggleIcons div span {
+  transition: ease 0.3s;
+  position: absolute;
+  padding: 8px;
+  border-radius: 63px;
+  background: #000;
+  margin: 0 2px;
+ }
+  body #ssdr {
+  justify-content: right;
+ }
+ body #ssdr span {
+  background: #298dff;
+ }
 
 
 
@@ -3538,6 +3609,36 @@ background-color: #0084ff21;
     body .onscroll {
       bottom: 100px;
       right: 30px;
+    }
+    .scrolled .con {
+      display: none;
+    } 
+    .scrolled .links-Tran {
+      display: none;
+    } 
+    body .search2 {
+      width: -webkit-fill-available;
+    }
+    body .search2 input {
+      width: -webkit-fill-available;
+    }
+    body .search2 {
+      display: none;
+    }
+    @keyframes search2 {
+      from {
+        opacity: 0;
+      }
+      to {
+        
+      }
+    }
+    .scrolled .search2 {
+      display: flex;
+      animation: search2 0.4s ease forwards;
+    }
+    body .xxs {
+      flex: auto;
     }
   }
 
