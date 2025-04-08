@@ -40,7 +40,7 @@
         <div class="menu">
             <div class="menu-my">
               <div class="logo-div">
-                <div class="logo show-btn" data-target="wwc11"><span class="logo-span"><a id="logo-span-a"></a><span class="span1"><span></span></span><span class="span2"><span></span></span><span class="span3"><img draggable="false" src="Shanb.svg" alt=""></span></span><div class="notranslate">Icon Canyon</div></div>
+                <div class="logo show-btn" data-target="wwc11"><span class="logo-span"><a id="logo-span-a"></a><span class="span1"><span></span></span><span class="span2"><span></span></span><span class="span3"><img draggable="false" src="Shanb.svg" alt=""></span></span><div class="notranslate con">Icon Canyon</div></div>
               <div class="logo-div-div coffees box-shadow on_click xox" id="wwc11">
                 <button class="logo-div-div-button Click_focus wave-button" onclick="open_Link()">Open In New</button>
                 <button class="logo-div-div-button Click_focus wave-button" onclick="reload_Page()">Reload</button>
@@ -48,11 +48,11 @@
               </div>
               </div>  
                 <!-- search2 -->
-                 <div>
-                <div class="search2" id="additionalSearch" style="display: none;">
+                 <div class="xxs">
+                <div class="search2" id="additionalSearch">
                   <ion-icon class="search2-sea" name="search-outline"></ion-icon>
-                  <input type="text" id="additionalSearchInput" placeholder="Search icons">
-                  <button id="additionalClearButton" class="search-div-close wave-button"><ion-icon name="close-outline"></ion-icon></button>
+                  <input type="text" id="" placeholder="Search icons">
+                  <button id="" class="search-div-close wave-button"><ion-icon name="close-outline"></ion-icon></button>
                 </div>
                 </div>
                 <!-- Links -->
@@ -101,6 +101,7 @@
             <div class="margin">
               <div class="Everyone">
                 <div class="xo">
+                  <button class="Everyone-button wave-button" id="toggleIcons"><a>Fill</a><div><span></span></div></button>
                   <div>
                   <button class="Everyone-button wave-button show-btn" data-target="resetButton"><a>Everyone</a> <i class="fi fi-rr-angle-small-down"></i><f class="Everyone-f"></f></button>
                   <div class="Everyone-menu vov on_click" id="resetButton">
@@ -142,10 +143,12 @@
                       <div id="category-navigation">
                         <a class="wave-button" onclick="window.location.href='#App_icons';">App icons</a>
                         <a class="wave-button" onclick="window.location.href='#Logos';">Logos</a>
+                        <a class="wave-button option">Emoji</a>
+                        <a class="wave-button option">Gif</a>
                       </div>
                     </div>
                     </div>
-                    <label for="ali" class="logo wave-button"><button class="Everyone-button"><a>Search by image</a><span class="material-symbols-outlined notranslate" style="margin-left: 5px;"> upload </span><f class="Everyone-f"></f></button></label>
+                    <label for="ali" class="logo wave-button" style="display: none;"><button class="Everyone-button"><a>Search by image</a><span class="material-symbols-outlined notranslate" style="margin-left: 5px;"> upload </span><f class="Everyone-f"></f></button></label>
                     <input type="file" id="ali" style="display: none;">
                   </div>
               </div>
@@ -179,9 +182,9 @@
                 <div class="hello">
                   <div id="popupName" style="margin: 0;" class="copy-text"></div>
                   <div style="display: flex;align-items: center;">
-                      <button class="history-link ccd wave-button" style="margin: 0;display: none;" id=""><i id="" class="fi fi-rr-share"></i></button>
+                      <div class="history-link ccd wave-button" style="margin: 0;display: none;" id=""><i id="" class="fi fi-rr-share"></i></div>
                       <input type="text" id="" style="display: none;" readonly>
-                      <button class="history-link ccd wave-button" style="margin: 0;" onclick="copyText()"><i id="" class="fi fi-rr-copy"></i></button>
+                      <div class="history-link ccd wave-button" style="margin: 0;" onclick="copyText()"><i id="" class="fi fi-rr-copy"></i></div>
                   </div>
                 </div>
               <div class="download-popup-my-div">
@@ -330,14 +333,15 @@
           <!-- Night mode -->
           <div class="lon_div xox" id="wwc2">
             <div class="lon-close hide-btn wave-button" data-target="wwc2"><ice class="material-symbols-outlined"> arrow_back </ice></div>
-            <div class="lon lon-div wave-button" id="dayButton" onclick="setDayMode()">Light mode<ice class="material-symbols-outlined"> check </ice></div>
-            <div class="lon lon-div wave-button" id="nightButton" onclick="setNightMode()">Night mode</div>
+            <div class="lon lon-div wave-button" id="dayButton">Light mode<ice class="material-symbols-outlined"> check </ice></div>
+            <div class="lon lon-div wave-button" id="nightButton">Night mode</div>
+            <div class="lon lon-div wave-button" id="autoButton">Auto mode</div>
           </div>
           <!-- Settings -->
           <div class="lon_div xox" id="wwc3">
             <div class="lon-close hide-btn wave-button" data-target="wwc3"><ice class="material-symbols-outlined"> arrow_back </ice></div>
             <div class="lone">
-            <div class="lon lon-div wave-button">Edit account<ion-icon name="pencil-outline"></ion-icon></div>
+            <div class="lon lon-div show-btn wave-button" data-target="wwc19">Edit account<ion-icon name="pencil-outline"></ion-icon></div>
             <div class="lon lon-div wave-button">Sign out</div>
           </div>
           </div>
@@ -352,6 +356,18 @@
               <button class="lone-button wave-button" type="submit">Send<ion-icon name="send"></ion-icon></button>
             </form>
             <script src="https://smtpjs.com/v3/smtp.js"></script>
+            </div>
+          </div>
+          <div class="lon_div xox" id="wwc19">
+            <div class="lon-close hide-btn wave-button" data-target="wwc19"><ice class="material-symbols-outlined"> arrow_back </ice></div>
+            <div class="lone">
+            <form>
+              <input class="lone_input" id="name" type="text" placeholder="Your Name" name="name" required>
+              <input class="lone_input" id="email" type="email" placeholder="Email id" name="email" required>
+              <br>
+              <button class="lone-button wave-button" type="submit">Edit<ion-icon name="send"></ion-icon></button>
+            </form>
+            
             </div>
           </div>
           <!-- Our news -->
