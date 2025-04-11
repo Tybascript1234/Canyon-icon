@@ -18,29 +18,84 @@ document.addEventListener("DOMContentLoaded", async () => {
     const popupLinkInput = document.getElementById("popupLinkInput");
     const toggleIconsButton = document.getElementById("toggleIcons");
 
-    // استبدال بيانات localStorage ببيانات من data.js
-    const images = Array.from(document.querySelectorAll('.gallery img, .category1 img')).map(img => ({
-        imageUrl: img.src,
-        name: img.alt,
-        category: img.className === 'gallery' ? 'default' : img.className
-    }));
+    // تحميل أيقونات Ionicons من CDN
+    const iconsData = await fetchIoniconsData();
+    
+    // تصنيف الأيقونات حسب النوع
+    const categorizedIcons = {
+        outline: [],
+        filled: [],
+        sharp: []
+    };
+
+    // تصنيف الأيقونات مع تحديد أيقونات الـ logos
+    iconsData.icons.forEach(icon => {
+        const isLogo = icon.name.includes('logo') || icon.name.includes('brand');
+        const category = isLogo ? "category1" : "default";
+        
+        if (icon.name.endsWith('-outline')) {
+            categorizedIcons.outline.push({
+                imageUrl: `https://unpkg.com/ionicons@7.1.0/dist/svg/${icon.name}.svg`,
+                name: icon.name.replace('-outline', ''),
+                category: category,
+                isLogo: isLogo,
+                type: 'outline'
+            });
+        } else if (icon.name.endsWith('-sharp')) {
+            categorizedIcons.sharp.push({
+                imageUrl: `https://unpkg.com/ionicons@7.1.0/dist/svg/${icon.name}.svg`,
+                name: icon.name.replace('-sharp', ''),
+                category: category,
+                isLogo: isLogo,
+                type: 'sharp'
+            });
+        } else {
+            categorizedIcons.filled.push({
+                imageUrl: `https://unpkg.com/ionicons@7.1.0/dist/svg/${icon.name}.svg`,
+                name: icon.name,
+                category: category,
+                isLogo: isLogo,
+                type: 'filled'
+            });
+        }
+    });
+
+    // دمج جميع الأيقونات في مصفوفة واحدة
+    let images = [
+        ...categorizedIcons.outline,
+        ...categorizedIcons.filled,
+        ...categorizedIcons.sharp
+    ];
 
     let downloadData = JSON.parse(localStorage.getItem("downloadData")) || {};
-    let isFilled = false;
     const originalSources = new Map();
+    let currentIconType = 'outline'; // النوع الافتراضي للأيقونات
 
-    // نظام تبديل الأيقونات
-    if (toggleIconsButton) {
-        toggleIconsButton.addEventListener('click', () => {
-            isFilled = !isFilled;
+    // نظام تبديل الأيقونات الجديد
+    const iconTypeButtons = document.querySelectorAll('.icon-type-btn');
+    
+    iconTypeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // إزالة الفعالية من جميع الأزرار
+            iconTypeButtons.forEach(btn => btn.classList.remove('zoom'));
             
-            toggleIconsButton.innerHTML = isFilled 
-                ? '<a>Outline</a><div id="ssdr"><span style="background: #298dff;"></span></div>' 
-                : '<a>Fill</a><div><span></span></div>';
-
-            updateAllImages();
+            // إضافة الفعالية للزر المحدد
+            button.classList.add('zoom');
+            
+            // تحديث النوع الحالي
+            currentIconType = button.dataset.type;
+            
+            // عرض الأيقونات مع النوع الجديد
+            displayImages();
         });
-    }
+    });
+
+    // التخزين المؤقت لتحسين الأداء
+    const iconCache = {
+        outline: null,
+        filled: null,
+        sharp: null
+    };
 
     function updateAllImages() {
         updateGalleryImages();
@@ -53,18 +108,30 @@ document.addEventListener("DOMContentLoaded", async () => {
         imageContainers.forEach(container => {
             const img = container.querySelector('img, canvas');
             if (img) {
-                let currentSrc = img.src || img.dataset.originalImage;
+                let currentSrc = img.dataset.originalImage || img.src;
                 
                 if (currentSrc) {
-                    if (!originalSources.has(img)) {
-                        originalSources.set(img, currentSrc);
-                    }
-    
-                    const newSrc = isFilled ? 
-                        currentSrc.includes('-outline.') ? 
+                    let newSrc = currentSrc;
+                    
+                    if (currentIconType === 'filled') {
+                        newSrc = currentSrc.includes('-outline.') ? 
                             currentSrc.replace('-outline.', '.') : 
-                            currentSrc :
-                        originalSources.get(img) || currentSrc;
+                            currentSrc.includes('-sharp.') ? 
+                                currentSrc.replace('-sharp.', '.') : 
+                                currentSrc;
+                    } else if (currentIconType === 'outline') {
+                        newSrc = currentSrc.includes('.') && !currentSrc.includes('-outline.') && !currentSrc.includes('-sharp.') ? 
+                            currentSrc.replace('.', '-outline.') : 
+                            currentSrc.includes('-sharp.') ? 
+                                currentSrc.replace('-sharp.', '-outline.') : 
+                                currentSrc;
+                    } else if (currentIconType === 'sharp') {
+                        newSrc = currentSrc.includes('.') && !currentSrc.includes('-sharp.') && !currentSrc.includes('-outline.') ? 
+                            currentSrc.replace('.', '-sharp.') : 
+                            currentSrc.includes('-outline.') ? 
+                                currentSrc.replace('-outline.', '-sharp.') : 
+                                currentSrc;
+                    }
                     
                     updateImageSource(img, newSrc);
                 }
@@ -75,16 +142,30 @@ document.addEventListener("DOMContentLoaded", async () => {
     function updatePopupImage() {
         const popupImg = document.getElementById('popupImage');
         if (popupImg) {
-            let currentSrc = popupImg.src || popupImg.dataset.originalImage;
+            let currentSrc = popupImg.dataset.originalImage || popupImg.src;
             
             if (currentSrc) {
-                if (!originalSources.has(popupImg)) {
-                    originalSources.set(popupImg, currentSrc);
+                let newSrc = currentSrc;
+                
+                if (currentIconType === 'filled') {
+                    newSrc = currentSrc.includes('-outline.') ? 
+                        currentSrc.replace('-outline.', '.') : 
+                        currentSrc.includes('-sharp.') ? 
+                            currentSrc.replace('-sharp.', '.') : 
+                            currentSrc;
+                } else if (currentIconType === 'outline') {
+                    newSrc = currentSrc.includes('.') && !currentSrc.includes('-outline.') && !currentSrc.includes('-sharp.') ? 
+                        currentSrc.replace('.', '-outline.') : 
+                        currentSrc.includes('-sharp.') ? 
+                            currentSrc.replace('-sharp.', '-outline.') : 
+                            currentSrc;
+                } else if (currentIconType === 'sharp') {
+                    newSrc = currentSrc.includes('.') && !currentSrc.includes('-sharp.') && !currentSrc.includes('-outline.') ? 
+                        currentSrc.replace('.', '-sharp.') : 
+                        currentSrc.includes('-outline.') ? 
+                            currentSrc.replace('-outline.', '-sharp.') : 
+                            currentSrc;
                 }
-
-                const newSrc = isFilled ? 
-                    currentSrc.replace('-outline.', '.') : 
-                    originalSources.get(popupImg);
                 
                 updateImageSource(popupImg, newSrc);
                 updatePopupDownloadLinks(newSrc);
@@ -100,9 +181,27 @@ document.addEventListener("DOMContentLoaded", async () => {
                 let currentSrc = popupImg.dataset.originalImage || popupImg.src;
                 
                 if (currentSrc) {
-                    const newSrc = isFilled ? 
-                        currentSrc.replace('-outline.', '.') : 
-                        originalSources.get(popupImg) || currentSrc;
+                    let newSrc = currentSrc;
+                    
+                    if (currentIconType === 'filled') {
+                        newSrc = currentSrc.includes('-outline.') ? 
+                            currentSrc.replace('-outline.', '.') : 
+                            currentSrc.includes('-sharp.') ? 
+                                currentSrc.replace('-sharp.', '.') : 
+                                currentSrc;
+                    } else if (currentIconType === 'outline') {
+                        newSrc = currentSrc.includes('.') && !currentSrc.includes('-outline.') && !currentSrc.includes('-sharp.') ? 
+                            currentSrc.replace('.', '-outline.') : 
+                            currentSrc.includes('-sharp.') ? 
+                                currentSrc.replace('-sharp.', '-outline.') : 
+                                currentSrc;
+                    } else if (currentIconType === 'sharp') {
+                        newSrc = currentSrc.includes('.') && !currentSrc.includes('-sharp.') && !currentSrc.includes('-outline.') ? 
+                            currentSrc.replace('.', '-sharp.') : 
+                            currentSrc.includes('-outline.') ? 
+                                currentSrc.replace('-outline.', '-sharp.') : 
+                                currentSrc;
+                    }
                     
                     const img = new Image();
                     img.onload = function() {
@@ -170,22 +269,56 @@ document.addEventListener("DOMContentLoaded", async () => {
         category3Container.innerHTML = "";
         const searchText = searchInput.value.trim().toLowerCase();
         const resultsFragment = document.createDocumentFragment();
-        let filteredImages = [];
-    
-        // تصفية الصور أولاً
-        filteredImages = images.filter(imageData => {
-            return imageData.name.toLowerCase().includes(searchText);
+        
+        // التحقق من وجود النتائج في الذاكرة المؤقتة
+        if (iconCache[currentIconType] && searchText === "") {
+            renderIcons(iconCache[currentIconType]);
+            return;
+        }
+        
+        // تصفية الصور مع فصل Logos عن البقية
+        let filteredImages = images.filter(imageData => {
+            const matchesSearch = imageData.name.toLowerCase().includes(searchText);
+            
+            // إذا كانت أيقونة Logo لا نطبق عليها تصفية النوع
+            if (imageData.isLogo) {
+                return matchesSearch;
+            }
+            
+            // تصفية الأيقونات الأخرى حسب النوع المحدد
+            const matchesType = 
+                (currentIconType === 'outline' && imageData.type === 'outline') ||
+                (currentIconType === 'sharp' && imageData.type === 'sharp') ||
+                (currentIconType === 'filled' && imageData.type === 'filled');
+            
+            return matchesSearch && matchesType;
         });
     
         containerCount.textContent = filteredImages.length;
-    
+        
+        // تخزين النتائج في الذاكرة المؤقتة إذا لم يكن هناك بحث
+        if (searchText === "") {
+            iconCache[currentIconType] = filteredImages;
+        }
+        
+        renderIcons(filteredImages);
+    }
+
+    function renderIcons(filteredImages) {
+        const galleryContainer = document.getElementById("gallery");
+        const category1Container = document.getElementById("category1");
+        const category2Container = document.getElementById("category2");
+        const category3Container = document.getElementById("category3");
+        const searchResults = document.getElementById("searchResults");
+        const resultsFragment = document.createDocumentFragment();
+        
         // دالة لتحميل وتقديم دفعة من الصور
         async function loadImageBatch(startIndex, batchSize) {
             const endIndex = Math.min(startIndex + batchSize, filteredImages.length);
             
             for (let i = startIndex; i < endIndex; i++) {
                 const imageData = filteredImages[i];
-                const { imageUrl, name, category } = imageData;
+                const { imageUrl, name, category, isLogo } = imageData;
     
                 const imageContainer = document.createElement("button");
                 imageContainer.className = "image-container";
@@ -209,6 +342,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 img.onload = function() {
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                     canvas.dataset.originalImage = imageUrl;
+                    canvas.dataset.isLogo = isLogo;
                     rreDiv.style.display = "none";
                 };
     
@@ -220,27 +354,50 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const downloadButton = document.createElement("button");
                 downloadButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1f1f1f"><path d="M240-400q-33 0-56.5-23.5T160-480q0-33 23.5-56.5T240-560q33 0 56.5 23.5T320-480q0 33-23.5 56.5T240-400Zm240 0q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm240 0q-33 0-56.5-23.5T640-480q0-33 23.5-56.5T720-560q33 0 56.5 23.5T800-480q0 33-23.5 56.5T720-400Z"/></svg>';
                 downloadButton.className = "download-btn";
-                downloadButton.addEventListener("click", (event) => showDownloadPopup(event, img.src, name));
+                downloadButton.addEventListener("click", (event) => {
+                    const canvas = event.target.closest('.image-container').querySelector('canvas');
+                    const isLogo = canvas.dataset.isLogo === 'true';
+                    showDownloadPopup(event, canvas.dataset.originalImage, name, isLogo); // إضافة isLogo
+                });
                             
                 imageContainer.appendChild(canvas);
                 imageContainer.appendChild(nameElement);
                 imageContainer.appendChild(downloadButton);
-                imageContainer.addEventListener("click", () => copyImageName(nameElement));
+                imageContainer.addEventListener("click", (event) => {
+                    event.stopPropagation();
+                    copyImageName(nameElement);
+                });
+
+                function copyImageName(nameElement) {
+                    const originalName = nameElement.textContent;
+                    
+                    // تغيير النص إلى "Copy"
+                    nameElement.textContent = "Copied!";
+                    
+                    // نسخ اسم الأيقونة إلى الحافظة
+                    navigator.clipboard.writeText(originalName)
+                        .then(() => {
+                            console.log("Text copied to clipboard");
+                        })
+                        .catch(err => {
+                            console.error("Failed to copy text: ", err);
+                        });
+                    
+                    // إعادة النص الأصلي بعد ثانية
+                    setTimeout(() => {
+                        nameElement.textContent = originalName;
+                    }, 1000);
+                }
     
                 // تصنيف الصورة حسب الفئة
-                switch (category) {
-                    case "category1":
-                        category1Container.appendChild(imageContainer);
-                        break;
-                    case "category2":
-                        category2Container.appendChild(imageContainer);
-                        break;
-                    case "category3":
-                        category3Container.appendChild(imageContainer);
-                        break;
-                    default:
-                        galleryContainer.appendChild(imageContainer);
-                        break;
+                if (category === "category1") {
+                    category1Container.appendChild(imageContainer);
+                } else if (category === "category2") {
+                    category2Container.appendChild(imageContainer);
+                } else if (category === "category3") {
+                    category3Container.appendChild(imageContainer);
+                } else {
+                    galleryContainer.appendChild(imageContainer);
                 }
     
                 // إضافة عنصر البحث
@@ -269,7 +426,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     
         // تحميل الصور على دفعات
-        const batchSize = 14; // عدد الصور في كل دفعة
+        const batchSize = 14;
         let currentIndex = 0;
     
         async function loadNextBatch() {
@@ -277,139 +434,35 @@ document.addEventListener("DOMContentLoaded", async () => {
                 await loadImageBatch(currentIndex, batchSize);
                 currentIndex += batchSize;
                 
-                // استخدام requestAnimationFrame للسماح للمتصفح بالرسم
                 requestAnimationFrame(() => {
-                    setTimeout(loadNextBatch, 100); // تأخير بسيط بين الدفعات
+                    setTimeout(loadNextBatch, 100);
                 });
             }
         }
     
-        // بدء عملية التحميل
-        await loadNextBatch();
+        loadNextBatch();
     }
     
-    // دالة مساعدة لإنشاء عنصر الصورة
-    async function createImageElement(imageData) {
-        let { imageUrl, name, category } = imageData;
-        
-        // تطبيق حالة التبديل الحالية
-        const displayUrl = isFilled && imageUrl.includes('-outline.') 
-            ? imageUrl.replace('-outline.', '.')
-            : !isFilled && !imageUrl.includes('-outline.') && originalSources.has(imageUrl)
-            ? imageUrl.replace(/(\.svg|\.png)/, '-outline$1')
-            : imageUrl;
-    
-        const imageContainer = document.createElement("button");
-        imageContainer.className = "image-container";
-    
-        // إنشاء عنصر canvas
-        const canvas = document.createElement("canvas");
-        canvas.className = "image-canvas";
-        canvas.width = 100;
-        canvas.height = 100;
-        
-        const ctx = canvas.getContext("2d");
-        const img = new Image();
-        
-        // عنصر التحميل
-        const rreDiv = document.createElement("div");
-        rreDiv.id = "rre";
-        rreDiv.style.display = "flex";
-        imageContainer.appendChild(rreDiv);
-    
-        // تحميل الصورة
+    // دالة لجلب بيانات Ionicons
+    async function fetchIoniconsData() {
         try {
-            img.src = await fetchImage(displayUrl);
-            await new Promise((resolve, reject) => {
-                img.onload = resolve;
-                img.onerror = reject;
-            });
-            
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            canvas.dataset.originalImage = imageUrl;
-            originalSources.set(canvas, imageUrl);
-            rreDiv.style.display = "none";
+            const response = await fetch('https://unpkg.com/ionicons@7.1.0/dist/ionicons.json');
+            return await response.json();
         } catch (error) {
-            console.error("Error loading image:", error);
-            return { container: null, resultItem: null };
+            console.error("Error fetching Ionicons data:", error);
+            return { icons: [] };
         }
-    
-        // معلومات الصورة
-        const nameElement = document.createElement("div");
-        nameElement.className = "image-name";
-        nameElement.textContent = name;
-        nameElement.title = name;
-        
-        // زر التنزيل
-        const downloadButton = document.createElement("button");
-        downloadButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1f1f1f"><path d="M240-400q-33 0-56.5-23.5T160-480q0-33 23.5-56.5T240-560q33 0 56.5 23.5T320-480q0 33-23.5 56.5T240-400Zm240 0q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm240 0q-33 0-56.5-23.5T640-480q0-33 23.5-56.5T720-560q33 0 56.5 23.5T800-480q0 33-23.5 56.5T720-400Z"/></svg>';
-        downloadButton.className = "download-btn";
-        downloadButton.addEventListener("click", (event) => showDownloadPopup(event, img.src, name));
-        
-        imageContainer.appendChild(canvas);
-        imageContainer.appendChild(nameElement);
-        imageContainer.appendChild(downloadButton);
-        imageContainer.addEventListener("click", () => copyImageName(nameElement));
-    
-        // عنصر نتائج البحث
-        const resultItem = document.createElement("button");
-        resultItem.className = "result-item ripple-btn";
-        resultItem.setAttribute("onmousedown", "createRipple(event)");
-        resultItem.innerHTML = `
-            <div class="result-item-div">
-                <div class="icon-container"><svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 -960 960 960" width="22px" fill="#1f1f1f"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg></div>
-                <div class="image-name">${name}</div>
-            </div>
-            <div>
-                <button class="result-item-button notranslate ripple-btn" onmousedown="createRipple(event)"></button>
-            </div>
-        `;
-        resultItem.addEventListener("click", () => {
-            searchInput.value = name;
-            searchResults.style.display = "none";
-            displayImages();
-        });
-    
-        return { container: imageContainer, resultItem };
-    }
-    
-    // دالة مساعدة للتحقق من وجود الصورة
-    async function imageExists(url) {
-        try {
-            const res = await fetch(url, { method: 'HEAD' });
-            return res.ok;
-        } catch {
-            return false;
-        }
-    }
-    
-
-    function copyImageName(nameElement) {
-        const originalName = nameElement.textContent;
-        if (nameElement.dataset.copied === "true") {
-            return;
-        }
-        nameElement.dataset.copied = "true";
-        navigator.clipboard.writeText(originalName)
-            .then(() => {
-                nameElement.textContent = "!Copied";
-                setTimeout(() => {
-                    nameElement.textContent = originalName;
-                    nameElement.dataset.copied = "false";
-                }, 1000);
-            })
-            .catch(err => console.error("Error copying text: ", err));
     }
 
+    // التهيئة الأولية
     displayImages();
-
     searchInput.addEventListener("input", () => {
         if (searchInput.value.trim() !== "") {
             displayImages();
             searchResults.style.display = "block";
         } else {
             searchResults.style.display = "none";
-            displayImages(); // Clear the search and display all images
+            displayImages();
         }
         clearButton.style.display = searchInput.value.trim() !== "" ? "flex" : "none";
     });
@@ -423,7 +476,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     async function fetchImage(url) {
         try {
-            // بدلاً من تحويل الصورة إلى blob، نستخدم الرابط مباشرة
             return url;
         } catch (error) {
             console.error("Error fetching image:", error);
@@ -431,7 +483,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    function showDownloadPopup(event, imageUrl, name) {
+    function showDownloadPopup(event, imageUrl, name, isLogo = false) {
         event.stopPropagation();
     
         const tempCanvas = document.createElement('canvas');
@@ -457,14 +509,34 @@ document.addEventListener("DOMContentLoaded", async () => {
         overlay.style.backgroundColor = '#00000021';
         overlay.style.zIndex = 999;
         
-        // إضافة الطبقة فقط إذا كان العرض 800 بكسل أو أقل
-        if (window.innerWidth <= 800) {
-            document.body.appendChild(overlay);
-        }
+        document.body.appendChild(overlay);
     
         img.crossOrigin = "Anonymous";
-        // تطبيق حالة التبديل الحالية على الصورة
-        const displayImageUrl = isFilled ? imageUrl.replace('-outline.', '.') : imageUrl;
+        
+        // تحديد مسار الصورة بناءً على ما إذا كانت أيقونة Logo أم لا
+        let displayImageUrl = imageUrl;
+        if (!isLogo) {
+            if (currentIconType === 'filled') {
+                displayImageUrl = imageUrl.includes('-outline.') ? 
+                    imageUrl.replace('-outline.', '.') : 
+                    imageUrl.includes('-sharp.') ? 
+                        imageUrl.replace('-sharp.', '.') : 
+                        imageUrl;
+            } else if (currentIconType === 'outline') {
+                displayImageUrl = imageUrl.includes('.') && !imageUrl.includes('-outline.') && !imageUrl.includes('-sharp.') ? 
+                    imageUrl.replace('.', '-outline.') : 
+                    imageUrl.includes('-sharp.') ? 
+                        imageUrl.replace('-sharp.', '-outline.') : 
+                        imageUrl;
+            } else if (currentIconType === 'sharp') {
+                displayImageUrl = imageUrl.includes('.') && !imageUrl.includes('-sharp.') && !imageUrl.includes('-outline.') ? 
+                    imageUrl.replace('.', '-sharp.') : 
+                    imageUrl.includes('-outline.') ? 
+                        imageUrl.replace('-outline.', '-sharp.') : 
+                        imageUrl;
+            }
+        }
+        
         img.src = displayImageUrl;
     
         img.onload = function() {
@@ -500,9 +572,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             downloadPopup.style.opacity = 0;
             downloadPopup.style.transform = 'translateX(100%)';
             
-            // تحديد موقع البوب أب على يمين الموقع
             downloadPopup.style.position = 'fixed';
-            downloadPopup.style.zIndex = 1000; // تأكد من أن البوب أب فوق طبقة التغطية
+            downloadPopup.style.zIndex = 1000;
             
             setTimeout(() => {
                 downloadPopup.style.transition = 'transform 0.5s ease, opacity 0.5s ease';
@@ -510,7 +581,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 downloadPopup.style.transform = 'translateX(0)';
             }, 10);
     
-            // تطبيق اللون المختار
             function applyColorToCanvas(canvas, color) {
                 const ctx = canvas.getContext('2d');
                 ctx.globalCompositeOperation = 'source-atop';
@@ -520,7 +590,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
     
             colorPicker.addEventListener("input", () => {
-                // إعادة تحميل الصورة الأصلية قبل تطبيق اللون الجديد
                 const originalImg = new Image();
                 originalImg.onload = function() {
                     tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
@@ -532,7 +601,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 originalImg.src = popupImage.dataset.originalCanvas || displayImageUrl;
             });
     
-            // إضافة معالجات الأحداث لحجم الصورة
             const sizeButtons = {
                 'resize24': 24,
                 'resize28': 28,
@@ -553,7 +621,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 }
             });
     
-            // إغلاق البوب أب عند النقر خارجها
             function closePopupHandler(e) {
                 if (!downloadPopup.contains(e.target) && e.target !== event.target) {
                     downloadPopup.style.transition = 'transform 0.5s ease, opacity 0.5s ease';
@@ -562,20 +629,18 @@ document.addEventListener("DOMContentLoaded", async () => {
                     setTimeout(() => {
                         downloadPopup.style.display = "none";
                         
-                        // التأكد من وجود العنصر overlay قبل محاولة إزالته
                         if (overlay && overlay.parentNode) {
                             document.body.removeChild(overlay);
                         }
                     }, 500);
-                    document.removeEventListener('mousedown', closePopupHandler); // إزالة معالج الفأرة
-                    document.removeEventListener('touchstart', closePopupHandler); // إزالة معالج لمس الأجهزة المحمولة
+                    document.removeEventListener('mousedown', closePopupHandler);
+                    document.removeEventListener('touchstart', closePopupHandler);
                 }
             }            
     
-            document.addEventListener('mousedown', closePopupHandler); // إضافة معالج الفأرة
-            document.addEventListener('touchstart', closePopupHandler); // إضافة معالج لمس الأجهزة المحمولة
-    
-            // إغلاق البوب أب عند النقر على زر الإغلاق
+            document.addEventListener('mousedown', closePopupHandler);
+            document.addEventListener('touchstart', closePopupHandler);
+
             const closeBtn = document.querySelector('.close-popup');
             if (closeBtn) {
                 closeBtn.addEventListener('click', () => {
@@ -590,7 +655,14 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         };
     
-        // دالة مساعدة للنسخ
+        img.onerror = function() {
+            console.error("Error loading image:", displayImageUrl);
+            // عرض صورة بديلة في حالة الخطأ
+            popupImage.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text x="10" y="50" font-family="Arial" font-size="14" fill="red">Error loading image</text></svg>';
+            popupName.textContent = name + " (Error)";
+            downloadPopup.style.display = "block";
+        };
+    
         function copyToClipboard(textAreaId, buttonId) {
             const textArea = document.getElementById(textAreaId);
             const button = document.getElementById(buttonId);
@@ -599,7 +671,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 navigator.clipboard.writeText(textArea.value)
                     .then(() => {
                         textArea.select();
-                        // إظهار رسالة نجاح
                         showCopySuccess(button);
                         setTimeout(() => {
                             window.getSelection().removeAllRanges();
@@ -637,7 +708,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             }, 1500);
         }
     
-        // إعداد معالجات الأحداث لأزرار النسخ
         setupEventListeners();
     
         function setupEventListeners() {
@@ -656,7 +726,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }    
     
-    // تحسين تعديل الألوان مع المحافظة على الجودة
     function applyColorToCanvas(canvas, color) {
         const ctx = canvas.getContext('2d');
         const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -667,70 +736,64 @@ document.addEventListener("DOMContentLoaded", async () => {
         const b = parseInt(hexColor.substr(4, 2), 16);
         
         for (let i = 0; i < data.length; i += 4) {
-            // نحافظ على الشفافية (alpha channel)
             const alpha = data[i+3];
             if (alpha > 0) {
-                // نطبق اللون مع الحفاظ على التدرج الشفاف
-                data[i] = Math.round(r * (alpha / 255));
-                data[i+1] = Math.round(g * (alpha / 255));
-                data[i+2] = Math.round(b * (alpha / 255));
+                data[i] = r;
+                data[i+1] = g;
+                data[i+2] = b;
+                data[i+3] = alpha; // الحفاظ على قناة alpha
             }
         }
         
         ctx.putImageData(imgData, 0, 0);
     }
     
-
     function applyColorToSVG(canvas, color) {
         const ctx = canvas.getContext('2d');
-        
-        // مسح canvas الحالي
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
-        // إنشاء صورة جديدة
         const img = new Image();
         img.src = canvas.dataset.originalImage || canvas.dataset.originalCanvas;
         
         img.onload = function() {
-            // رسم خلفية ملونة
             ctx.fillStyle = color;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // رسم الصورة مع دمج الألوان
             ctx.globalCompositeOperation = 'destination-in';
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            
-            // إعادة ضبط وضع الدمج
             ctx.globalCompositeOperation = 'source-over';
         };
     }
 
     function downloadImage(url, name, format) {
+        const selectedColor = colorPicker.value;
+        
         if (format === "svg") {
             fetch(url)
                 .then(response => response.text())
                 .then(svgData => {
-                    // إنشاء عنصر SVG مؤقت لمعالجة المحتوى
                     const parser = new DOMParser();
                     const svgDoc = parser.parseFromString(svgData, "image/svg+xml");
                     const svgElement = svgDoc.querySelector("svg");
                     
-                    // تطبيق اللون المختار على جميع العناصر داخل SVG
+                    // تطبيق اللون على جميع العناصر
                     const elements = svgElement.querySelectorAll('*');
                     elements.forEach(el => {
                         if (el.hasAttribute('fill') && el.getAttribute('fill') !== 'none') {
-                            el.setAttribute('fill', colorPicker.value);
+                            el.setAttribute('fill', selectedColor);
                         }
                         if (el.hasAttribute('stroke') && el.getAttribute('stroke') !== 'none') {
-                            el.setAttribute('stroke', colorPicker.value);
+                            el.setAttribute('stroke', selectedColor);
                         }
                     });
                     
-                    // تحويل SVG المعدل إلى نص
+                    // إذا لم يكن هناك لون محدد، نطبق اللون المختار على العنصر الرئيسي
+                    if (svgElement.getAttribute('fill') === null) {
+                        svgElement.setAttribute('fill', selectedColor);
+                    }
+                    
                     const serializer = new XMLSerializer();
                     const coloredSVG = serializer.serializeToString(svgElement);
                     
-                    // إنشاء Blob وتنزيله
                     const blob = new Blob([coloredSVG], { type: "image/svg+xml" });
                     const svgUrl = URL.createObjectURL(blob);
                     const a = document.createElement("a");
@@ -741,23 +804,14 @@ document.addEventListener("DOMContentLoaded", async () => {
                     document.body.removeChild(a);
                     URL.revokeObjectURL(svgUrl);
                     
-                    // تحديث عدد التنزيلات
-                    if (!downloadData[name]) downloadData[name] = 0;
-                    downloadData[name]++;
-                    saveDownloadData();
+                    updateDownloadCount(name);
                 })
                 .catch(error => {
                     console.error("Error processing SVG:", error);
-                    // إذا فشلت المعالجة، ننزل الملف الأصلي
-                    const a = document.createElement("a");
-                    a.href = url;
-                    a.download = `${name}.svg`;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
+                    fallbackDownload(url, name, "svg");
                 });
         } else {
-            handleDownload(format);
+            handleDownload(format, name, true); // إضافة معلمة للإشارة إلى أنها Logo
         }
     }
 
@@ -767,7 +821,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         tempCanvas.width = canvas.width;
         tempCanvas.height = canvas.height;
         
-        // تطبيق اللون المحدد
         tempCtx.fillStyle = colorPicker.value;
         tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
         
@@ -776,13 +829,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         img.src = canvas.dataset.originalCanvas;
         tempCtx.drawImage(img, 0, 0);
         
-        // تحميل الصورة الناتجة
         const dataUrl = tempCanvas.toDataURL(`image/${format}`);
         downloadImage(dataUrl, name, format);
     }
 
-    function handleDownload(format) {
-        const name = popupName.textContent;
+    function handleDownload(format, name, isLogo = false) {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
         const img = new Image();
@@ -792,10 +843,11 @@ document.addEventListener("DOMContentLoaded", async () => {
             canvas.height = img.height;
             ctx.drawImage(img, 0, 0);
             
-            // تطبيق اللون المختار
-            applyColorToCanvas(canvas, colorPicker.value);
+            // تطبيق اللون فقط إذا لم تكن Logo (لأن الـ SVG تم معالجته مسبقًا)
+            if (!isLogo) {
+                applyColorToCanvas(canvas, colorPicker.value);
+            }
             
-            // تحميل الصورة
             let mimeType = `image/${format}`;
             if (format === 'jpg') mimeType = 'image/jpeg';
             
@@ -807,13 +859,27 @@ document.addEventListener("DOMContentLoaded", async () => {
             a.click();
             document.body.removeChild(a);
             
-            // تحديث عدد التنزيلات
-            if (!downloadData[name]) downloadData[name] = 0;
-            downloadData[name]++;
-            saveDownloadData();
+            updateDownloadCount(name);
         };
         
         img.src = popupImage.dataset.originalCanvas || popupImage.dataset.originalImage;
+    }
+    
+    function updateDownloadCount(name) {
+        if (!downloadData[name]) downloadData[name] = 0;
+        downloadData[name]++;
+        saveDownloadData();
+        displayDownloadCounts();
+    }
+    
+    function fallbackDownload(url, name, format) {
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${name}.${format}`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        updateDownloadCount(name);
     }
 
     searchFormat.addEventListener("input", () => {
