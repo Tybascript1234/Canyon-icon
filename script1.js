@@ -243,7 +243,7 @@ document.addEventListener('click', function(event) {
     }
 
     // Hide specific divs when clicking outside of them
-    ['wwc1', 'wwc2', 'wwc3', 'wwc4', 'wwc5', 'wwc6', 'wwc7', 'wwc8', 'wwc11', 'wwc12', 'wwc13', 'wwc14', 'wwc15', 'resetButton', 'wwc17', 'wwc19'].forEach(function(id) {
+    ['wwc1', 'wwc2', 'wwc3', 'wwc4', 'wwc5', 'wwc6', 'wwc7', 'wwc8', 'wwc11', 'wwc12', 'wwc13', 'wwc14', 'wwc15', 'resetButton', 'wwc17', 'wwc19', 'wwc20'].forEach(function(id) {
         const div = document.getElementById(id);
         if (div && div.classList.contains('visible') && !div.contains(target) && !target.matches(`[data-target="${id}"]`)) {
             div.classList.remove('visible');
@@ -1057,7 +1057,9 @@ window.addEventListener("touchstart", function(event) {
 // دالة إعادة ضبط الفلترة
 function clearFilter() {
     ['category1', 'category2', 'category3', 'gallery'].forEach(categoryId => {
-        document.querySelectorAll(`#${categoryId} .image-container`).forEach(imageContainer => imageContainer.style.display = 'flex');
+        document.querySelectorAll(`#${categoryId} .image-container`).forEach(imageContainer => {
+            imageContainer.style.display = 'flex';
+        });
     });
 
     document.querySelectorAll('#alphabet-buttons a').forEach(button => {
@@ -1100,7 +1102,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // التعامل مع النقر على الـ checkbox
         checkbox.addEventListener('click', function (e) {
-            e.stopPropagation(); // لمنع الحدث من الانتقال لأعلى
+            e.stopPropagation();
             updateMultiFilter();
         });
     });
@@ -1110,13 +1112,19 @@ document.addEventListener('DOMContentLoaded', function () {
         ['category1', 'category2', 'category3', 'gallery'].forEach(categoryId => {
             document.querySelectorAll(`#${categoryId} .image-container`).forEach(imageContainer => {
                 const nameElement = imageContainer.querySelector('.image-name');
-                const title = nameElement?.title?.toLowerCase();
+                let title = nameElement?.title?.toLowerCase();
+                
+                // تعديل خاص للـ Logos لإزالة البادئة
+                if (imageContainer.closest('#category1')) {
+                    title = title.replace(/^logo-/, ''); // إزالة "logo-" من البداية
+                }
+                
                 const matches = letters.some(letter => title?.startsWith(letter));
                 imageContainer.style.display = matches ? 'flex' : 'none';
             });
         });
 
-        // تحديث ألوان الأزرار بناءً على التحديد
+        // تحديث ألوان الأزرار
         document.querySelectorAll('#alphabet-buttons a').forEach(button => {
             const isChecked = button.querySelector('input[type="checkbox"]').checked;
             button.style.color = isChecked ? "#298dff" : "";
@@ -1161,7 +1169,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 window.addEventListener("scroll", function() {
     const body = document.body;
-    if (window.scrollY > 300) {
+    if (window.scrollY > 400) {
       body.classList.add("scrolled");
     } else {
       body.classList.remove("scrolled");
