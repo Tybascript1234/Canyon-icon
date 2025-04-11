@@ -169,7 +169,7 @@ input {
     height: 18px;
     appearance: none;
     -webkit-appearance: none;
-    background: url('unchecked-image.png') no-repeat center center;
+    background: url('') no-repeat center center;
     background-size: contain;
     border: 1px solid #b4b4b4;
     cursor: pointer;
@@ -354,6 +354,7 @@ background-color: #0084ff21;
   transition: ease 0.2s;
   border: none;
   outline: none;
+  justify-content: space-between;
   padding: 0 14px;
   height: 37px;
   width: 190px;
@@ -361,6 +362,9 @@ background-color: #0084ff21;
 }
 .logo-div-div-button:hover {
   background-color: rgb(252, 252, 252);
+}
+.logo-div-div-button:hover ion-icon {
+  color: #2a86f3;
 }
 .logo-div-div-button img {
   width: 17px;
@@ -3309,6 +3313,21 @@ body .search2 {
     height: 40px;
     background-size: cover;
     margin-left: 16px;
+  }
+
+  .coo {
+    display: none;
+  }
+
+  body .zoom {
+    color: #298dff;
+    background-color: rgb(161 195 255 / 26%);
+  }
+  .zoom i {
+    position: absolute;
+    right: 15px;
+    display: flex;
+    font-size: 13px;
   }
 
 
