@@ -53,6 +53,7 @@ body.night-mode .input-coa{
 body.night-mode .onm-g {
   outline-color: #34373e;
   background-color: #46494f;
+  color: #ffffffda;
 }
 
 body.night-mode .box-shadow {
@@ -87,8 +88,7 @@ body.night-mode .spana  {
 
 body.night-mode .download-popup img  {
   border-radius: 12px;
-  background-color: #a1a1a10a;
-  box-shadow: 0px 0px 21px #00000000, 0px 3px 3px #00000066 inset;
+  background-color: #f0f0f047;
 }
 
 body.night-mode .image-container {
@@ -403,6 +403,17 @@ body.night-mode #toggleIcons div {
 
 body.night-mode .search-div-close .material-symbols-outlined {
   color: rgb(218, 218, 218);
+}
+
+body.night-mode .search2 input {
+  color: rgb(218, 218, 218);
+  background-color: #ffffff24;
+}
+body.night-mode .search2 ion-icon {
+  color: #eef6fd;
+}
+body.night-mode .search2 input:focus {
+  box-shadow: 0 1px 1px 0 rgb(255 255 255 / 30%), 0 1px 3px 1px rgb(0 0 0 / 15%);
 }
 
 body .result-item svg {
