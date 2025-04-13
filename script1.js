@@ -1175,3 +1175,59 @@ window.addEventListener("scroll", function() {
       body.classList.remove("scrolled");
     }
   });
+
+  window.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.material-symbols-outlined').forEach(element => {
+      if (!element.classList.contains('notranslate')) {
+        element.classList.add('notranslate');
+      }
+    });
+  });
+
+  
+  document.addEventListener("DOMContentLoaded", function () {
+    const texts = [
+        "مرحبًا!",
+        "كيف حالك؟",
+        "أهلاً بعودتك من جديد!",
+        '<img src="Flag.png" alt="Pride Flag"> لا تنسى فلسطين',
+        "الهم انصرهم وثبت اقدامهم"
+    ];
+  
+    let index = 0;
+    const span = document.getElementById("mySpan");
+    const div = document.getElementById("logoe");
+
+    function showNextText() {
+        // إخفاء النص الحالي
+        span.style.opacity = 0;
+
+        setTimeout(() => {
+            // هل هناك المزيد من النصوص؟
+            if (index < texts.length) {
+                // عرض النص الجديد (باستخدام innerHTML لدعم HTML مثل الصور)
+                span.innerHTML = texts[index];
+                span.style.opacity = 1;
+
+                // تغيير ستايل الديف
+                div.classList.add("div-style");
+                setTimeout(() => {
+                    div.classList.remove("div-style");
+                }, 2000);
+
+                index++;
+            } else {
+                // عند الانتهاء من كل النصوص:
+                span.style.opacity = 0;
+                setTimeout(() => {
+                    span.style.display = "none";
+                }, 1000); // ننتظر انتهاء التلاشي قبل الإخفاء النهائي
+
+                clearInterval(interval); // إيقاف التكرار
+            }
+        }, 3000); // التأخير قبل ظهور النص التالي (3 ثواني)
+    }
+
+    showNextText(); // أول مرة
+    const interval = setInterval(showNextText, 6000); // كل 3 ثواني إخفاء، 3 ثواني تأخير بين النصوص
+});
