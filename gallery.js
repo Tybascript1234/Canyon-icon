@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const category2Container = document.getElementById("category2");
     const category3Container = document.getElementById("category3");
     const searchInput = document.getElementById("searchInput");
-    const searchInput2 = document.getElementById("searchInput2"); // خانة البحث الجديدة
+    const searchInput2 = document.getElementById("searchInput2");
     const searchResults = document.getElementById("searchResults");
     const clearButton = document.getElementById("clearButton");
     const downloadPopup = document.getElementById("downloadPopup");
@@ -18,6 +18,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     const containerCount = document.getElementById("containerCount");
     const popupLinkInput = document.getElementById("popupLinkInput");
     const toggleIconsButton = document.getElementById("toggleIcons");
+    
+    // عناصر مؤشر التحميل
+    const loadingIndicator = document.getElementById("loadingIndicator");
+    const loadingProgress = document.getElementById("loadingProgress");
+    const loadingText = document.getElementById("loadingText");
+    const loadingPercent = document.getElementById("loadingPercent");
+    const currentIconTypeText = document.getElementById("currentIconType");
 
     // تحميل أيقونات Ionicons من CDN
     const iconsData = await fetchIoniconsData();
@@ -71,16 +78,32 @@ document.addEventListener("DOMContentLoaded", async () => {
     let downloadData = JSON.parse(localStorage.getItem("downloadData")) || {};
     const originalSources = new Map();
     let currentIconType = 'outline'; // النوع الافتراضي للأيقونات
+    let isIconLoading = false; // متغير لتتبع حالة التحميل
 
     // نظام تبديل الأيقونات
     const iconTypeButtons = document.querySelectorAll('.icon-type-btn');
     
     iconTypeButtons.forEach(button => {
-        button.addEventListener('click', () => {
+        button.addEventListener('click', async () => {
+            if (isIconLoading) return;
+            
+            isIconLoading = true;
+            iconTypeButtons.forEach(btn => {
+                btn.disabled = true;
+                btn.style.opacity = '0.5';
+            });
+            
             iconTypeButtons.forEach(btn => btn.classList.remove('zoom'));
             button.classList.add('zoom');
             currentIconType = button.dataset.type;
-            displayImages();
+            
+            await displayImages();
+            
+            iconTypeButtons.forEach(btn => {
+                btn.disabled = false;
+                btn.style.opacity = '1';
+            });
+            isIconLoading = false;
         });
     });
 
@@ -279,7 +302,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const resultsFragment = document.createDocumentFragment();
         
         if (iconCache[currentIconType] && searchText === "") {
-            renderIcons(iconCache[currentIconType]);
+            await renderIcons(iconCache[currentIconType]);
             return;
         }
         
@@ -304,10 +327,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             iconCache[currentIconType] = filteredImages;
         }
         
-        renderIcons(filteredImages);
+        await renderIcons(filteredImages);
     }
 
-    function renderIcons(filteredImages) {
+    async function renderIcons(filteredImages) {
         const galleryContainer = document.getElementById("gallery");
         const category1Container = document.getElementById("category1");
         const category2Container = document.getElementById("category2");
@@ -315,8 +338,29 @@ document.addEventListener("DOMContentLoaded", async () => {
         const searchResults = document.getElementById("searchResults");
         const resultsFragment = document.createDocumentFragment();
         
+        // إظهار مؤشر التحميل
+        loadingIndicator.style.display = "block";
+        currentIconTypeText.textContent = currentIconType.charAt(0).toUpperCase() + currentIconType.slice(1);
+        
+        let loadedCount = 0;
+        const totalCount = filteredImages.length;
+        
+        function updateProgress() {
+            loadedCount++;
+            const percent = Math.round((loadedCount / totalCount) * 100);
+            loadingProgress.style.width = percent + "%";
+            loadingPercent.textContent = percent + "%";
+            
+            if (loadedCount === totalCount) {
+                setTimeout(() => {
+                    loadingIndicator.style.display = "none";
+                }, 500);
+            }
+        }
+        
         async function loadImageBatch(startIndex, batchSize) {
             const endIndex = Math.min(startIndex + batchSize, filteredImages.length);
+            const promises = [];
             
             for (let i = startIndex; i < endIndex; i++) {
                 const imageData = filteredImages[i];
@@ -339,12 +383,21 @@ document.addEventListener("DOMContentLoaded", async () => {
                 rreDiv.style.display = "flex";
                 imageContainer.appendChild(rreDiv);
     
-                img.onload = function() {
-                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    canvas.dataset.originalImage = imageUrl;
-                    canvas.dataset.isLogo = isLogo;
-                    rreDiv.style.display = "none";
-                };
+                const promise = new Promise(resolve => {
+                    img.onload = function() {
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        canvas.dataset.originalImage = imageUrl;
+                        canvas.dataset.isLogo = isLogo;
+                        rreDiv.style.display = "none";
+                        updateProgress();
+                        resolve();
+                    };
+                    img.onerror = () => {
+                        updateProgress();
+                        resolve();
+                    };
+                });
+                promises.push(promise);
     
                 const nameElement = document.createElement("div");
                 nameElement.className = "image-name";
@@ -416,6 +469,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 resultsFragment.appendChild(resultItem);
             }
     
+            await Promise.all(promises);
             searchResults.innerHTML = "";
             searchResults.appendChild(resultsFragment);
         }
@@ -427,14 +481,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (currentIndex < filteredImages.length) {
                 await loadImageBatch(currentIndex, batchSize);
                 currentIndex += batchSize;
-                
-                requestAnimationFrame(() => {
-                    setTimeout(loadNextBatch, 100);
-                });
+                await new Promise(resolve => setTimeout(resolve, 100));
+                await loadNextBatch();
             }
         }
     
-        loadNextBatch();
+        await loadNextBatch();
     }
     
     async function fetchIoniconsData() {
@@ -448,7 +500,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     // التهيئة الأولية
-    displayImages();
+    await displayImages();
     
     searchInput.addEventListener("input", () => {
         if (searchInput.value.trim() !== "") {
