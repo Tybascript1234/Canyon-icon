@@ -314,7 +314,7 @@ background-color: #0084ff21;
 /* menu */
 .menu {
     transition: ease 0.2s;
-    z-index: 500;
+    z-index: 710;
     top: 0;
     position: sticky;
     padding: 0 8px;
@@ -382,6 +382,7 @@ background-color: #0084ff21;
 }
 .logo::before {
   position: absolute;
+  cursor: pointer;
   content: "";
   z-index: 4;
   width: 100%;
@@ -425,7 +426,31 @@ background-color: #0084ff21;
     justify-content: center;
     margin-right: 7px;
 }
+tx {
+  transition: ease 0.3s;
+  position: absolute;
+  content: 'Yes, click.';
+  font-weight: 400;
+  width: max-content;
+  top: 38px;
+  left: 20px;
+  padding: 0px 9px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  border-radius: 5px 16px 16px 16px;
+  background: rgba(60,64,67,.9);
+  color: white;
+  font-size: 12px;
+  z-index: -5;
+  opacity: 0;
+}
+tx img {
+  width: 30px;
+  margin-right: 4px;
+}
 #logo-span-a {
+  animation: logo 0.4s ease forwards;
     position: absolute;
     top: -15px;
     left: 0px;
@@ -433,6 +458,15 @@ background-color: #0084ff21;
     background-size: cover;
     width: 24px;
     height: 17px;
+}
+@keyframes logo {
+  from {
+    transform: rotate(-20deg);
+    margin-right: 5px;
+  }
+  to {
+    
+  }
 }
 #logo-span-a::before {
   content: "";
@@ -498,6 +532,36 @@ background-color: #0084ff21;
     width: 20px;
     bottom: 2px;
     transition: ease 0.0s;
+}
+
+.sse {
+  overflow: hidden;
+}
+.sse::before {
+  transition: ease 0.3s;
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 5px;
+  width: 100%;
+  z-index: 10;
+  background: #ffba2a;
+}
+
+.logo:hover .sse::before {
+  margin-top: -6px;
+}
+
+.div-style .sse::before {
+  margin-top: -3px;
+}
+.div-style .span3 {
+  background: black;
+  padding: 2px;
+  border-radius: 50px;
+  margin-bottom: 3px;
+  /* margin-left: 2px; */
 }
 
 /* search2 */
@@ -3380,6 +3444,10 @@ body .search2 {
   justify-content: right;
  }
 
+ body .con {
+  animation: oli 0.5s ease forwards;
+ }
+
 
 
 
@@ -3521,7 +3589,7 @@ body .search2 {
     .Everyone-menu {
       transition: ease 0.3s;
       max-width: 100%;
-      position: fixed;
+      position: absolute;
       z-index: 700;
     }
     body .Everyone-menu a {
@@ -3536,7 +3604,7 @@ body .search2 {
       display: block;
       margin: 0;
       /* margin-top: 20px; */
-      overflow-x: auto;
+      /* overflow-x: auto; */
       padding-top: 0;
     }
     .xo {
@@ -3655,6 +3723,18 @@ body .search2 {
     }
     body .xxs {
       flex: auto;
+    }
+    body #alphabet-buttons a:hover .checkbox {
+      box-shadow: 0 0 0 0.2em #d1d8e000 inset;
+    }
+    body #alphabet-buttons a:active .checkbox {
+      box-shadow: 0 0 0 0.2em #d1d8e0 inset;
+    }
+    body .logo:hover .sse::before {
+      margin-top: 0;
+    }
+    body .logo:active .sse::before {
+      margin-top: -6px;
     }
   }
 
