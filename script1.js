@@ -1189,9 +1189,9 @@ window.addEventListener("scroll", function() {
     const texts = [
         "مرحبًا!",
         "كيف حالك؟",
-        "أهلاً بعودتك من جديد!",
+        "أهلاً بعودتك من جديد",
         '<img src="Flag.png" alt="Pride Flag"> لا تنسى فلسطين',
-        "الهم انصرهم وثبت اقدامهم"
+        "اللهم انصرهم وثبت اقدامهم"
     ];
   
     let index = 0;
