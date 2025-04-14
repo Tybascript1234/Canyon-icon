@@ -1,4 +1,4 @@
-function addManualImage(url, alt, className) {
+// function addManualImage(url, alt, className) {
 //     const img = document.createElement('img');
 //     img.src = url;
 //     img.alt = alt;
