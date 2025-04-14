@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
+    // عناصر DOM
     const galleryContainer = document.getElementById("gallery");
     const category1Container = document.getElementById("category1");
     const category2Container = document.getElementById("category2");
@@ -26,29 +27,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     const loadingPercent = document.getElementById("loadingPercent");
     const currentIconTypeText = document.getElementById("currentIconType");
 
-    // تحسين: إضافة نظام التخزين المؤقت للصور
+    // تحسين: تخزين مؤقت للبيانات والصور
     const imageCache = new Map();
-
-    // تحسين: دالة محسنة لتحميل الصور مع التخزين المؤقت
-    async function loadImageWithCache(url) {
-        if (imageCache.has(url)) {
-            return imageCache.get(url);
-        }
-        
-        const img = new Image();
-        const promise = new Promise((resolve, reject) => {
-            img.onload = () => {
-                imageCache.set(url, img);
-                resolve(img);
-            };
-            img.onerror = reject;
-            img.src = url;
-        });
-        
-        return promise;
-    }
-
-    // تحميل أيقونات Ionicons من CDN
+    const iconsDataCacheKey = 'ionicons-data-v7.1.0';
+    
+    // تحميل أيقونات Ionicons مع التخزين المؤقت
     const iconsData = await fetchIoniconsData();
     
     // تصنيف الأيقونات حسب النوع
@@ -149,6 +132,25 @@ document.addEventListener("DOMContentLoaded", async () => {
     // إضافة Event listeners لكلا حقلين البحث
     searchInput.addEventListener("input", syncSearchInputs);
     searchInput2.addEventListener("input", syncSearchInputs);
+
+    // تحسين: دالة محسنة لتحميل الصور مع التخزين المؤقت
+    async function loadImageWithCache(url) {
+        if (imageCache.has(url)) {
+            return imageCache.get(url);
+        }
+        
+        const img = new Image();
+        const promise = new Promise((resolve, reject) => {
+            img.onload = () => {
+                imageCache.set(url, img);
+                resolve(img);
+            };
+            img.onerror = reject;
+            img.src = url;
+        });
+        
+        return promise;
+    }
 
     function updateAllImages() {
         updateGalleryImages();
@@ -315,7 +317,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    // تحسين: دالة محسنة لعرض الصور مع تحميل متدرج
     async function displayImages() {
         galleryContainer.innerHTML = "";
         category1Container.innerHTML = "";
@@ -402,7 +403,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const canvas = document.createElement("canvas");
                 canvas.width = 100;
                 canvas.height = 100;
-                const ctx = canvas.getContext("2d");
+                const ctx = canvas.getContext('2d');
                 ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                 canvas.dataset.originalImage = imageUrl;
                 canvas.dataset.isLogo = isLogo;
@@ -445,17 +446,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                         nameElement.textContent = originalName;
                     }, 1000);
                 }
-    
-                if (category === "category1") {
-                    category1Container.appendChild(imageContainer);
-                } else if (category === "category2") {
-                    category2Container.appendChild(imageContainer);
-                } else if (category === "category3") {
-                    category3Container.appendChild(imageContainer);
-                } else {
-                    galleryContainer.appendChild(imageContainer);
-                }
-    
+                
+                // إضافة العنصر إلى الحاوية المناسبة
+                const targetContainer = getTargetContainer(category);
+                targetContainer.appendChild(imageContainer);
+                
+                // إضافة إلى نتائج البحث
                 const resultItem = document.createElement("button");
                 resultItem.className = "result-item ripple-btn";
                 resultItem.setAttribute("onmousedown", "createRipple(event)");
@@ -475,16 +471,25 @@ document.addEventListener("DOMContentLoaded", async () => {
                     displayImages();
                 });
                 searchResults.appendChild(resultItem);
+                
             } catch (error) {
                 console.error("Error loading icon:", imageUrl, error);
             }
         }
+        
+        function getTargetContainer(category) {
+            switch(category) {
+                case "category1": return category1Container;
+                case "category2": return category2Container;
+                case "category3": return category3Container;
+                default: return galleryContainer;
+            }
+        }
     }
-
+    
     // تحسين: دالة محسنة لتحميل بيانات Ionicons مع التخزين المؤقت
     async function fetchIoniconsData() {
-        const cacheKey = 'ionicons-data-v1';
-        const cachedData = localStorage.getItem(cacheKey);
+        const cachedData = localStorage.getItem(iconsDataCacheKey);
         
         if (cachedData) {
             return JSON.parse(cachedData);
@@ -493,7 +498,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         try {
             const response = await fetch('https://unpkg.com/ionicons@7.1.0/dist/ionicons.json');
             const data = await response.json();
-            localStorage.setItem(cacheKey, JSON.stringify(data));
+            localStorage.setItem(iconsDataCacheKey, JSON.stringify(data));
             return data;
         } catch (error) {
             console.error("Error fetching Ionicons data:", error);
@@ -522,15 +527,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         searchResults.style.display = "none";
         clearButton.style.display = "none";
     });
-
-    async function fetchImage(url) {
-        try {
-            return url;
-        } catch (error) {
-            console.error("Error fetching image:", error);
-            return null;
-        }
-    }
 
     function showDownloadPopup(event, imageUrl, name, isLogo = false) {
         event.stopPropagation();
