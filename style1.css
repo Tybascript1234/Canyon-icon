@@ -101,7 +101,7 @@ button {
     cursor: pointer;
 }
 .Click_focus:focus {
-  background: aliceblue;
+  background: rgb(161 195 255 / 26%);
 }
 label {
   /* color: rgb(53, 53, 53); */
@@ -361,7 +361,7 @@ background-color: #0084ff21;
   background-color: #00000000;
 }
 .logo-div-div-button:hover {
-  background-color: rgb(252, 252, 252);
+  background-color: rgb(92 114 138 / 6%);
 }
 .logo-div-div-button:hover ion-icon {
   color: #2a86f3;
@@ -1016,8 +1016,8 @@ body .search2 {
     margin-top: 10px;
   }
   to {
-    max-height: 158px;
-    /* box-shadow:; */
+    /* max-height: 158px; */
+    
   }
 }
 .ever-a {
@@ -2079,7 +2079,6 @@ body .search2 {
     overflow: hidden;
     display: none;
     animation: popup 0.3s ease forwards;
-    /* animation: gallery 0.2s ease forwards; */
     position: fixed;
     z-index: 20;
     right: -33px;
@@ -3445,7 +3444,11 @@ body .search2 {
 
 
 
+  /* --------------------------------- */
 
+  body .Hide_Dave {
+    display: none;
+  }
 
 
 
