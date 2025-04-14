@@ -35,6 +35,27 @@
     <script style="height: auto;" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <!-- --------------------------------------------- -->
     <title class="notranslate">Canyon icon</title>
+
+    <script>
+     // تحديد جميع العناصر التي تحمل الكلاس myDiver
+     const myDivs = document.querySelectorAll('.myDiver');
+
+// استخدام حدث popstate للكشف عن التصفح في المتصفح
+window.addEventListener('popstate', function(event) {
+    // إخفاء جميع العناصر التي تحمل الكلاس myDiver عند الضغط على زر الرجوع
+    myDivs.forEach(div => {
+        div.classList.add('Hide_Dave');
+    });
+});
+
+// إظهار الديف بعد تحميل الصفحة
+setTimeout(() => {
+    myDivs.forEach(div => {
+        div.classList.remove('Hide_Dave');
+        div.style.display = 'block';  // إظهار الديف بعد تحميل الصفحة
+    });
+}, 1000);  // إظهار الديف بعد ثانية واحدة على سبيل المثال
+    </script>
 </head>
 <body id="App_icons">
   <div class="relload" id="loadingIndicator"><span class="libs" id="loadingProgress"></span><span id="loadingText">Loading <span id="currentIconType">Outline</span> icons: <span id="loadingPercent">0%</span></span></div>
@@ -338,9 +359,9 @@
         </div>
 
         <!-- Account-tools -->
-        <div class="Account-tools-div box-shadow coffees on_click xox" id="wwc1">
+        <div class="Account-tools-div box-shadow coffees on_click xox myDiver" id="wwc1">
           <div class="lon-close lon_close hide-btn wave-button" data-target="wwc1"><ice class="material-symbols-outlined"> arrow_back </ice></div>
-          <a onclick="window.location.href='https://tybascript1234.github.io/settings/page1.html';" class="wave-button" style="width: 100%;justify-content: left;display:inline-flex ;padding: 0;"><div class="lon" style="width: 100%;margin-bottom: 4px;margin-top: 0;"><img src="aa.png" alt=""><div><my-start>My Start</my-start><br><my-gmail>mystart@gmail.com</my-gmail></div><span class="spana" data-original-color="rgb(105, 115, 132)"></span></div></a>
+          <a onclick="window.location.href='https://tybascript1234.github.io/settings/page1.html';" style="width: 100%;justify-content: left;display:inline-flex ;padding: 0;"><div class="lon wave-button" style="width: 100%;margin-bottom: 4px;margin-top: 0;"><img src="aa.png" alt=""><div><my-start>My Start</my-start><br><my-gmail>mystart@gmail.com</my-gmail></div><span class="spana" data-original-color="rgb(105, 115, 132)"></span></div></a>
           <on-liy class="onliy-hr"></on-liy>
           <div class="lon lon-div show-btn wave-button" data-target="wwc4">The support</div>
           <div class="lon lon-div show-btn wave-button" data-target="wwc2"><div id="selectedButton">Light mode</div><ice class="material-symbols-outlined"> check </ice></div>
@@ -640,7 +661,7 @@
       <div class="menu2-div show-btn tool2-div-divs wave-button" data-target="wwc6"><span class="material-symbols-outlined">apps</span></div>
       Tools
       </div>
-      <div class="menu2-divs" onclick="window.location.href='https://creativecloudsit.com/?srsltid=AfmBOooj-okHPBWL_EQTrty6a0gQc3Kr-X_Lbd3-xO6V5I4fOi70V2x4';">
+      <div class="menu2-divs" onclick="window.open('https://creativecloudsit.com/?srsltid=AfmBOooj-okHPBWL_EQTrty6a0gQc3Kr-X_Lbd3-xO6V5I4fOi70V2x4', '_blank')">
       <a class="menu2-div tool2-div-divs wave-button"><img src="download.png" alt=""></a>
       Developer
       </div>
