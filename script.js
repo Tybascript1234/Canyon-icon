@@ -68,31 +68,23 @@ window.addEventListener("load", function () {
 
 
 document.addEventListener('DOMContentLoaded', function () {
-    // الحصول على الأزرار والـ divs باستخدام الـ id
     const toggleBtns = [document.getElementById('btn1')];
     const toggleDivs = [document.getElementById('div1')];
   
-    // التأكد من أن الأزرار موجودة
     toggleBtns.forEach(btn => {
       if (btn) {
         btn.addEventListener('click', function(event) {
-          // إيقاف التمرير للأحداث الخاصة بالنقر على الزر
           event.stopPropagation();
-  
-          // الحصول على الـ div المستهدف باستخدام data-target
           const targetId = btn.getAttribute('data-target');
           const targetDiv = document.getElementById(targetId);
   
-          // التأكد من أن الـ div موجود قبل محاولة تغيير الـ style
           if (targetDiv) {
-            // إخفاء جميع الـ divs أولاً ثم إظهار الـ div المستهدف
             toggleDivs.forEach(div => {
-              if (div !== targetDiv) {
+              if (div && div !== targetDiv) {
                 div.style.display = 'none';
               }
             });
   
-            // تبديل حالة ظهور الـ div المستهدف
             targetDiv.style.display = targetDiv.style.display === 'block' ? 'none' : 'block';
           } else {
             console.error(`الـ div مع الـ id "${targetId}" غير موجود.`);
@@ -101,66 +93,61 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   
-    // إخفاء جميع الـ divs عند النقر خارجها
     document.addEventListener('click', function() {
       toggleDivs.forEach(div => {
-        div.style.display = 'none';
+        if (div) {
+          div.style.display = 'none';
+        }
       });
     });
-  });
-
-
+  });  
 
 // --------------------------------------------------------------------------------------------------------
 
 
 
 document.addEventListener('DOMContentLoaded', function () {
-  const codar = document.getElementById("codar");
-  const toggleBtn = document.getElementById("toggleBtn");
-
-  // عند تحميل الصفحة، إذا كان العرض أقل من 800px، يصبح div مخفيًا تلقائيًا
-  function checkScreenSize() {
-      if (window.innerWidth <= 800) {
-          codar.style.width = "0px";
-      } else {
-          codar.style.width = "240px";
-      }
-  }
-
-  // تشغيل الفحص عند تحميل الصفحة
-  checkScreenSize();
-
-  // تشغيل الفحص عند تغيير حجم النافذة
-  window.addEventListener("resize", checkScreenSize);
-
-  // تغيير عرض الديف عند النقر على الزر
-  toggleBtn.addEventListener("click", function () {
-      if (codar.style.width === "0px") {
-          codar.style.width = "240px"; // يعود للحجم الطبيعي
-      } else {
-          codar.style.width = "0px"; // يختفي
-      }
+    const codar = document.getElementById("codar");
+    const toggleBtn = document.getElementById("toggleBtn");
+  
+    if (!codar || !toggleBtn) return; // إيقاف التنفيذ إذا لم يوجد أحد العنصرين
+  
+    function checkScreenSize() {
+        if (window.innerWidth <= 800) {
+            codar.style.width = "0px";
+        } else {
+            codar.style.width = "240px";
+        }
+    }
+  
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+  
+    toggleBtn.addEventListener("click", function () {
+        if (codar.style.width === "0px") {
+            codar.style.width = "240px";
+        } else {
+            codar.style.width = "0px";
+        }
+    });
+  
+    document.addEventListener("touchstart", function (event) {
+        if (window.innerWidth <= 800) {
+            if (!codar.contains(event.target) && event.target !== toggleBtn) {
+                codar.style.width = "0px";
+            }
+        }
+    });
+  
+    document.addEventListener("click", function (event) {
+        if (window.innerWidth <= 800) {
+            if (!codar.contains(event.target) && event.target !== toggleBtn) {
+                codar.style.width = "0px";
+            }
+        }
+    });
   });
-
-  // في وضع الهاتف: إخفاء الديف عند النقر خارجًا (مع استثناء النقر داخل الديف)
-  document.addEventListener("touchstart", function (event) {
-      if (window.innerWidth <= 800) { // التأكد من أن الشاشة صغيرة (وضع الهاتف)
-          if (!codar.contains(event.target) && event.target !== toggleBtn) {
-              codar.style.width = "0px"; // إخفاء الديف عند النقر خارجًا
-          }
-      }
-  });
-
-  // إضافة حدث للنقر بالفأرة (لمستخدمي الكمبيوتر) لإخفاء الـ div عند النقر خارجها
-  document.addEventListener("click", function (event) {
-      if (window.innerWidth <= 800) { // التأكد من أن الشاشة صغيرة (وضع الهاتف)
-          if (!codar.contains(event.target) && event.target !== toggleBtn) {
-              codar.style.width = "0px"; // إخفاء الديف عند النقر خارجًا
-          }
-      }
-  });
-});
+  
 
 
 document.addEventListener("DOMContentLoaded", function () {
