@@ -26,6 +26,28 @@ document.addEventListener("DOMContentLoaded", async () => {
     const loadingPercent = document.getElementById("loadingPercent");
     const currentIconTypeText = document.getElementById("currentIconType");
 
+    // تحسين: إضافة نظام التخزين المؤقت للصور
+    const imageCache = new Map();
+
+    // تحسين: دالة محسنة لتحميل الصور مع التخزين المؤقت
+    async function loadImageWithCache(url) {
+        if (imageCache.has(url)) {
+            return imageCache.get(url);
+        }
+        
+        const img = new Image();
+        const promise = new Promise((resolve, reject) => {
+            img.onload = () => {
+                imageCache.set(url, img);
+                resolve(img);
+            };
+            img.onerror = reject;
+            img.src = url;
+        });
+        
+        return promise;
+    }
+
     // تحميل أيقونات Ionicons من CDN
     const iconsData = await fetchIoniconsData();
     
@@ -293,6 +315,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
+    // تحسين: دالة محسنة لعرض الصور مع تحميل متدرج
     async function displayImages() {
         galleryContainer.innerHTML = "";
         category1Container.innerHTML = "";
@@ -330,75 +353,60 @@ document.addEventListener("DOMContentLoaded", async () => {
         await renderIcons(filteredImages);
     }
 
+    // تحسين: دالة محسنة لعرض الأيقونات مع تحميل متدرج
     async function renderIcons(filteredImages) {
-        const galleryContainer = document.getElementById("gallery");
-        const category1Container = document.getElementById("category1");
-        const category2Container = document.getElementById("category2");
-        const category3Container = document.getElementById("category3");
-        const searchResults = document.getElementById("searchResults");
-        const resultsFragment = document.createDocumentFragment();
-        
-        // إظهار مؤشر التحميل
         loadingIndicator.style.display = "block";
         currentIconTypeText.textContent = currentIconType.charAt(0).toUpperCase() + currentIconType.slice(1);
         
+        const batchSize = 10; // تقليل حجم الدفعة لتحسين الأداء على الهاتف
         let loadedCount = 0;
         const totalCount = filteredImages.length;
         
-        function updateProgress() {
-            loadedCount++;
-            const percent = Math.round((loadedCount / totalCount) * 100);
-            loadingProgress.style.width = percent + "%";
-            loadingPercent.textContent = percent + "%";
-            
-            if (loadedCount === totalCount) {
-                setTimeout(() => {
-                    loadingIndicator.style.display = "none";
-                }, 500);
-            }
-        }
-        
-        async function loadImageBatch(startIndex, batchSize) {
+        async function processBatch(startIndex) {
             const endIndex = Math.min(startIndex + batchSize, filteredImages.length);
-            const promises = [];
+            const batchPromises = [];
             
             for (let i = startIndex; i < endIndex; i++) {
                 const imageData = filteredImages[i];
-                const { imageUrl, name, category, isLogo } = imageData;
-    
-                const imageContainer = document.createElement("button");
-                imageContainer.className = "image-container";
-    
+                batchPromises.push(createIconElement(imageData));
+            }
+            
+            await Promise.all(batchPromises);
+            loadedCount += (endIndex - startIndex);
+            
+            // تحديث شريط التقدم
+            const percent = Math.round((loadedCount / totalCount) * 100);
+            loadingProgress.style.width = `${percent}%`;
+            loadingPercent.textContent = `${percent}%`;
+            
+            // السماح بفرصة للمتصفح لمعالجة الأحداث الأخرى
+            await new Promise(resolve => setTimeout(resolve, 0));
+            
+            if (endIndex < filteredImages.length) {
+                await processBatch(endIndex);
+            } else {
+                loadingIndicator.style.display = "none";
+            }
+        }
+        
+        await processBatch(0);
+        
+        async function createIconElement(imageData) {
+            const { imageUrl, name, category, isLogo } = imageData;
+            const imageContainer = document.createElement("button");
+            imageContainer.className = "image-container";
+            
+            try {
+                const img = await loadImageWithCache(imageUrl);
+                
                 const canvas = document.createElement("canvas");
-                canvas.className = "image-canvas";
                 canvas.width = 100;
                 canvas.height = 100;
-                
                 const ctx = canvas.getContext("2d");
-                const img = new Image();
-                img.src = await fetchImage(imageUrl);
-    
-                const rreDiv = document.createElement("div");
-                rreDiv.id = "rre";
-                rreDiv.style.display = "flex";
-                imageContainer.appendChild(rreDiv);
-    
-                const promise = new Promise(resolve => {
-                    img.onload = function() {
-                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                        canvas.dataset.originalImage = imageUrl;
-                        canvas.dataset.isLogo = isLogo;
-                        rreDiv.style.display = "none";
-                        updateProgress();
-                        resolve();
-                    };
-                    img.onerror = () => {
-                        updateProgress();
-                        resolve();
-                    };
-                });
-                promises.push(promise);
-    
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                canvas.dataset.originalImage = imageUrl;
+                canvas.dataset.isLogo = isLogo;
+                
                 const nameElement = document.createElement("div");
                 nameElement.className = "image-name";
                 nameElement.textContent = name;
@@ -466,33 +474,27 @@ document.addEventListener("DOMContentLoaded", async () => {
                     searchResults.style.display = "none";
                     displayImages();
                 });
-                resultsFragment.appendChild(resultItem);
-            }
-    
-            await Promise.all(promises);
-            searchResults.innerHTML = "";
-            searchResults.appendChild(resultsFragment);
-        }
-    
-        const batchSize = 14;
-        let currentIndex = 0;
-    
-        async function loadNextBatch() {
-            if (currentIndex < filteredImages.length) {
-                await loadImageBatch(currentIndex, batchSize);
-                currentIndex += batchSize;
-                await new Promise(resolve => setTimeout(resolve, 100));
-                await loadNextBatch();
+                searchResults.appendChild(resultItem);
+            } catch (error) {
+                console.error("Error loading icon:", imageUrl, error);
             }
         }
-    
-        await loadNextBatch();
     }
-    
+
+    // تحسين: دالة محسنة لتحميل بيانات Ionicons مع التخزين المؤقت
     async function fetchIoniconsData() {
+        const cacheKey = 'ionicons-data-v1';
+        const cachedData = localStorage.getItem(cacheKey);
+        
+        if (cachedData) {
+            return JSON.parse(cachedData);
+        }
+        
         try {
             const response = await fetch('https://unpkg.com/ionicons@7.1.0/dist/ionicons.json');
-            return await response.json();
+            const data = await response.json();
+            localStorage.setItem(cacheKey, JSON.stringify(data));
+            return data;
         } catch (error) {
             console.error("Error fetching Ionicons data:", error);
             return { icons: [] };
