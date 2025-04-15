@@ -330,7 +330,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         await renderIcons(filteredImages);
     }
 
-    async function renderIcons(filteredImages) {
+async function renderIcons(filteredImages) {
         const galleryContainer = document.getElementById("gallery");
         const category1Container = document.getElementById("category1");
         const category2Container = document.getElementById("category2");
@@ -474,7 +474,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             searchResults.appendChild(resultsFragment);
         }
     
-        const batchSize = 253;
+        const batchSize = 1;
         let currentIndex = 0;
     
         async function loadNextBatch() {
