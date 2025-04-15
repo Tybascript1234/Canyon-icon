@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    // عناصر DOM
     const galleryContainer = document.getElementById("gallery");
     const category1Container = document.getElementById("category1");
     const category2Container = document.getElementById("category2");
@@ -27,11 +26,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const loadingPercent = document.getElementById("loadingPercent");
     const currentIconTypeText = document.getElementById("currentIconType");
 
-    // تحسين: تخزين مؤقت للبيانات والصور
-    const imageCache = new Map();
-    const iconsDataCacheKey = 'ionicons-data-v7.1.0';
-    
-    // تحميل أيقونات Ionicons مع التخزين المؤقت
+    // تحميل أيقونات Ionicons من CDN
     const iconsData = await fetchIoniconsData();
     
     // تصنيف الأيقونات حسب النوع
@@ -132,25 +127,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     // إضافة Event listeners لكلا حقلين البحث
     searchInput.addEventListener("input", syncSearchInputs);
     searchInput2.addEventListener("input", syncSearchInputs);
-
-    // تحسين: دالة محسنة لتحميل الصور مع التخزين المؤقت
-    async function loadImageWithCache(url) {
-        if (imageCache.has(url)) {
-            return imageCache.get(url);
-        }
-        
-        const img = new Image();
-        const promise = new Promise((resolve, reject) => {
-            img.onload = () => {
-                imageCache.set(url, img);
-                resolve(img);
-            };
-            img.onerror = reject;
-            img.src = url;
-        });
-        
-        return promise;
-    }
 
     function updateAllImages() {
         updateGalleryImages();
@@ -354,60 +330,75 @@ document.addEventListener("DOMContentLoaded", async () => {
         await renderIcons(filteredImages);
     }
 
-    // تحسين: دالة محسنة لعرض الأيقونات مع تحميل متدرج
     async function renderIcons(filteredImages) {
+        const galleryContainer = document.getElementById("gallery");
+        const category1Container = document.getElementById("category1");
+        const category2Container = document.getElementById("category2");
+        const category3Container = document.getElementById("category3");
+        const searchResults = document.getElementById("searchResults");
+        const resultsFragment = document.createDocumentFragment();
+        
+        // إظهار مؤشر التحميل
         loadingIndicator.style.display = "block";
         currentIconTypeText.textContent = currentIconType.charAt(0).toUpperCase() + currentIconType.slice(1);
         
-        const batchSize = 10; // تقليل حجم الدفعة لتحسين الأداء على الهاتف
         let loadedCount = 0;
         const totalCount = filteredImages.length;
         
-        async function processBatch(startIndex) {
-            const endIndex = Math.min(startIndex + batchSize, filteredImages.length);
-            const batchPromises = [];
-            
-            for (let i = startIndex; i < endIndex; i++) {
-                const imageData = filteredImages[i];
-                batchPromises.push(createIconElement(imageData));
-            }
-            
-            await Promise.all(batchPromises);
-            loadedCount += (endIndex - startIndex);
-            
-            // تحديث شريط التقدم
+        function updateProgress() {
+            loadedCount++;
             const percent = Math.round((loadedCount / totalCount) * 100);
-            loadingProgress.style.width = `${percent}%`;
-            loadingPercent.textContent = `${percent}%`;
+            loadingProgress.style.width = percent + "%";
+            loadingPercent.textContent = percent + "%";
             
-            // السماح بفرصة للمتصفح لمعالجة الأحداث الأخرى
-            await new Promise(resolve => setTimeout(resolve, 0));
-            
-            if (endIndex < filteredImages.length) {
-                await processBatch(endIndex);
-            } else {
-                loadingIndicator.style.display = "none";
+            if (loadedCount === totalCount) {
+                setTimeout(() => {
+                    loadingIndicator.style.display = "none";
+                }, 500);
             }
         }
         
-        await processBatch(0);
-        
-        async function createIconElement(imageData) {
-            const { imageUrl, name, category, isLogo } = imageData;
-            const imageContainer = document.createElement("button");
-            imageContainer.className = "image-container";
+        async function loadImageBatch(startIndex, batchSize) {
+            const endIndex = Math.min(startIndex + batchSize, filteredImages.length);
+            const promises = [];
             
-            try {
-                const img = await loadImageWithCache(imageUrl);
-                
+            for (let i = startIndex; i < endIndex; i++) {
+                const imageData = filteredImages[i];
+                const { imageUrl, name, category, isLogo } = imageData;
+    
+                const imageContainer = document.createElement("button");
+                imageContainer.className = "image-container";
+    
                 const canvas = document.createElement("canvas");
+                canvas.className = "image-canvas";
                 canvas.width = 100;
                 canvas.height = 100;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                canvas.dataset.originalImage = imageUrl;
-                canvas.dataset.isLogo = isLogo;
                 
+                const ctx = canvas.getContext("2d");
+                const img = new Image();
+                img.src = await fetchImage(imageUrl);
+    
+                const rreDiv = document.createElement("div");
+                rreDiv.id = "rre";
+                rreDiv.style.display = "flex";
+                imageContainer.appendChild(rreDiv);
+    
+                const promise = new Promise(resolve => {
+                    img.onload = function() {
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        canvas.dataset.originalImage = imageUrl;
+                        canvas.dataset.isLogo = isLogo;
+                        rreDiv.style.display = "none";
+                        updateProgress();
+                        resolve();
+                    };
+                    img.onerror = () => {
+                        updateProgress();
+                        resolve();
+                    };
+                });
+                promises.push(promise);
+    
                 const nameElement = document.createElement("div");
                 nameElement.className = "image-name";
                 nameElement.textContent = name;
@@ -446,18 +437,23 @@ document.addEventListener("DOMContentLoaded", async () => {
                         nameElement.textContent = originalName;
                     }, 1000);
                 }
-                
-                // إضافة العنصر إلى الحاوية المناسبة
-                const targetContainer = getTargetContainer(category);
-                targetContainer.appendChild(imageContainer);
-                
-                // إضافة إلى نتائج البحث
+    
+                if (category === "category1") {
+                    category1Container.appendChild(imageContainer);
+                } else if (category === "category2") {
+                    category2Container.appendChild(imageContainer);
+                } else if (category === "category3") {
+                    category3Container.appendChild(imageContainer);
+                } else {
+                    galleryContainer.appendChild(imageContainer);
+                }
+    
                 const resultItem = document.createElement("button");
                 resultItem.className = "result-item ripple-btn";
                 resultItem.setAttribute("onmousedown", "createRipple(event)");
                 resultItem.innerHTML = `
                     <div class="result-item-div">
-                        <div class="icon-container"><svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 -960 960 960" width="22px" fill="#1f1f1f"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T480-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg></div>
+                        <div class="icon-container"><svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 -960 960 960" width="22px" fill="#1f1f1f"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg></div>
                         <div class="image-name">${name}</div>
                     </div>
                     <div>
@@ -470,36 +466,33 @@ document.addEventListener("DOMContentLoaded", async () => {
                     searchResults.style.display = "none";
                     displayImages();
                 });
-                searchResults.appendChild(resultItem);
-                
-            } catch (error) {
-                console.error("Error loading icon:", imageUrl, error);
+                resultsFragment.appendChild(resultItem);
+            }
+    
+            await Promise.all(promises);
+            searchResults.innerHTML = "";
+            searchResults.appendChild(resultsFragment);
+        }
+    
+        const batchSize = 253;
+        let currentIndex = 0;
+    
+        async function loadNextBatch() {
+            if (currentIndex < filteredImages.length) {
+                await loadImageBatch(currentIndex, batchSize);
+                currentIndex += batchSize;
+                await new Promise(resolve => setTimeout(resolve, 100));
+                await loadNextBatch();
             }
         }
-        
-        function getTargetContainer(category) {
-            switch(category) {
-                case "category1": return category1Container;
-                case "category2": return category2Container;
-                case "category3": return category3Container;
-                default: return galleryContainer;
-            }
-        }
+    
+        await loadNextBatch();
     }
     
-    // تحسين: دالة محسنة لتحميل بيانات Ionicons مع التخزين المؤقت
     async function fetchIoniconsData() {
-        const cachedData = localStorage.getItem(iconsDataCacheKey);
-        
-        if (cachedData) {
-            return JSON.parse(cachedData);
-        }
-        
         try {
             const response = await fetch('https://unpkg.com/ionicons@7.1.0/dist/ionicons.json');
-            const data = await response.json();
-            localStorage.setItem(iconsDataCacheKey, JSON.stringify(data));
-            return data;
+            return await response.json();
         } catch (error) {
             console.error("Error fetching Ionicons data:", error);
             return { icons: [] };
@@ -527,6 +520,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         searchResults.style.display = "none";
         clearButton.style.display = "none";
     });
+
+    async function fetchImage(url) {
+        try {
+            return url;
+        } catch (error) {
+            console.error("Error fetching image:", error);
+            return null;
+        }
+    }
 
     function showDownloadPopup(event, imageUrl, name, isLogo = false) {
         event.stopPropagation();
