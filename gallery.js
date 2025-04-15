@@ -474,7 +474,7 @@ async function renderIcons(filteredImages) {
             searchResults.appendChild(resultsFragment);
         }
     
-        const batchSize = 1;
+        const batchSize = 100;
         let currentIndex = 0;
     
         async function loadNextBatch() {
