@@ -343,6 +343,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         const batchSize = 50; // تقليل حجم الدفعة لتحسين الأداء
         const resultsFragment = document.createDocumentFragment();
         
+        document.addEventListener("contextmenu", function(e) {
+            if (e.target.closest('.image-container')) {
+                e.preventDefault();
+            }
+        }, false);
+
         for (let i = 0; i < filteredImages.length; i += batchSize) {
             const batch = filteredImages.slice(i, i + batchSize);
             await Promise.all(batch.map(async (imageData) => {
