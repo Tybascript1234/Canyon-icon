@@ -179,7 +179,7 @@ body.night-mode .input-color {
   box-shadow: 0px 1px 0px #ffffff12 inset;
 }
 
-body.night-mode .image-container canvas {
+body.night-mode .image-container img {
   filter: invert(76%) sepia(0%) saturate(1054%) hue-rotate(0deg) brightness(102%) contrast(85%);
 }
 
@@ -307,7 +307,7 @@ body.night-mode #Uploade  {
 }
 
 body.night-mode .download-app-img::before {
-  background: #2a2f3b17;
+  background: #2a2f3b24;
 }
 
 body.night-mode .coff_div1_button {
@@ -320,7 +320,7 @@ body.night-mode .coff_div1_button ion-icon {
 }
 
 body.night-mode .Click_focus:focus {
-  background: #7ec1ff17;
+  background: rgba(161, 195, 255, 0.26);
   color: white;
 }
 body.night-mode .coff-div2-textarea {
