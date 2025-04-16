@@ -343,7 +343,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const batchSize = 50; // تقليل حجم الدفعة لتحسين الأداء
         const resultsFragment = document.createDocumentFragment();
         
-        document.addEventListener("contextmenu", function(e) {
+        window.addEventListener("contextmenu", function(e) {
             if (e.target.closest('.image-container')) {
                 e.preventDefault();
             }
