@@ -2084,7 +2084,7 @@ justify-content: center;
   display: none;
   animation: popup 0.3s ease forwards;
   position: fixed;
-  z-index: 20;
+  z-index: 40;
   right: -33px;
   padding: 10px 0;
   box-shadow: 0px 6px 14px #00000012, 0px -3px 8px #00000003, 0px 1px 3px #cccccc73;
@@ -2140,6 +2140,15 @@ justify-content: center;
 }
 .lon my-gmail:hover {
   text-decoration: underline;
+}
+.lon::before {
+  position: absolute;
+  content: '';
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index: 4;
 }
 .lon-div {
   padding: 8px 20px;
@@ -3412,6 +3421,7 @@ body .zoom:hover {
   background-color: rgba(145, 184, 252, 0.411)
 }
 .zoom i {
+  animation: lon 0.2s ease forwards;
   position: absolute;
   right: 15px;
   display: flex;
