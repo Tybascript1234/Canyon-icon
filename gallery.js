@@ -137,7 +137,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     function updateGalleryImages() {
         const imageContainers = document.querySelectorAll('.image-container');
         imageContainers.forEach(container => {
-            const img = container.querySelector('img, canvas');
+            const img = container.querySelector('img');
             if (img) {
                 let currentSrc = img.dataset.originalImage || img.src;
                 
@@ -246,25 +246,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     function updateImageSource(element, newSrc) {
-        if (!element) return;
+        if (!element || element.tagName !== 'IMG') return;
         
-        if (element.tagName === 'IMG') {
-            const img = new Image();
-            img.onload = function() {
-                element.src = newSrc;
-                element.dataset.originalImage = newSrc;
-            };
-            img.src = newSrc;
-        } else if (element.tagName === 'CANVAS') {
-            const img = new Image();
-            img.onload = function() {
-                const ctx = element.getContext('2d');
-                ctx.clearRect(0, 0, element.width, element.height);
-                ctx.drawImage(img, 0, 0, element.width, element.height);
-                element.dataset.originalImage = newSrc;
-            };
-            img.src = newSrc;
-        }
+        const img = new Image();
+        img.onload = function() {
+            element.src = newSrc;
+            element.dataset.originalImage = newSrc;
+        };
+        img.src = newSrc;
     }
 
     function updatePopupDownloadLinks(newSrc) {
@@ -330,14 +319,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         await renderIcons(filteredImages);
     }
 
-async function renderIcons(filteredImages) {
-        const galleryContainer = document.getElementById("gallery");
-        const category1Container = document.getElementById("category1");
-        const category2Container = document.getElementById("category2");
-        const category3Container = document.getElementById("category3");
-        const searchResults = document.getElementById("searchResults");
-        const resultsFragment = document.createDocumentFragment();
-        
+    async function renderIcons(filteredImages) {
         // إظهار مؤشر التحميل
         loadingIndicator.style.display = "block";
         currentIconTypeText.textContent = currentIconType.charAt(0).toUpperCase() + currentIconType.slice(1);
@@ -358,62 +340,41 @@ async function renderIcons(filteredImages) {
             }
         }
         
-        async function loadImageBatch(startIndex, batchSize) {
-            const endIndex = Math.min(startIndex + batchSize, filteredImages.length);
-            const promises = [];
-            
-            for (let i = startIndex; i < endIndex; i++) {
-                const imageData = filteredImages[i];
+        const batchSize = 50; // تقليل حجم الدفعة لتحسين الأداء
+        const resultsFragment = document.createDocumentFragment();
+        
+        for (let i = 0; i < filteredImages.length; i += batchSize) {
+            const batch = filteredImages.slice(i, i + batchSize);
+            await Promise.all(batch.map(async (imageData) => {
                 const { imageUrl, name, category, isLogo } = imageData;
-    
+                
                 const imageContainer = document.createElement("button");
                 imageContainer.className = "image-container";
-    
-                const canvas = document.createElement("canvas");
-                canvas.className = "image-canvas";
-                canvas.width = 100;
-                canvas.height = 100;
                 
-                const ctx = canvas.getContext("2d");
-                const img = new Image();
-                img.src = await fetchImage(imageUrl);
-    
-                const rreDiv = document.createElement("div");
-                rreDiv.id = "rre";
-                rreDiv.style.display = "flex";
-                imageContainer.appendChild(rreDiv);
-    
-                const promise = new Promise(resolve => {
-                    img.onload = function() {
-                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                        canvas.dataset.originalImage = imageUrl;
-                        canvas.dataset.isLogo = isLogo;
-                        rreDiv.style.display = "none";
-                        updateProgress();
-                        resolve();
-                    };
-                    img.onerror = () => {
-                        updateProgress();
-                        resolve();
-                    };
-                });
-                promises.push(promise);
-    
+                // استخدام img بدلاً من canvas
+                const imgElement = document.createElement("img");
+                imgElement.className = "svg-icon";
+                imgElement.loading = "lazy"; // تحميل كسول لتحسين الأداء
+                imgElement.src = imageUrl;
+                imgElement.dataset.originalImage = imageUrl;
+                imgElement.dataset.isLogo = isLogo;
+                imgElement.alt = name;
+                
                 const nameElement = document.createElement("div");
                 nameElement.className = "image-name";
                 nameElement.textContent = name;
                 nameElement.title = name;
-                            
+                
                 const downloadButton = document.createElement("button");
                 downloadButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1f1f1f"><path d="M240-400q-33 0-56.5-23.5T160-480q0-33 23.5-56.5T240-560q33 0 56.5 23.5T320-480q0 33-23.5 56.5T240-400Zm240 0q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm240 0q-33 0-56.5-23.5T640-480q0-33 23.5-56.5T720-560q33 0 56.5 23.5T800-480q0 33-23.5 56.5T720-400Z"/></svg>';
                 downloadButton.className = "download-btn";
                 downloadButton.addEventListener("click", (event) => {
-                    const canvas = event.target.closest('.image-container').querySelector('canvas');
-                    const isLogo = canvas.dataset.isLogo === 'true';
-                    showDownloadPopup(event, canvas.dataset.originalImage, name, isLogo);
+                    const img = event.target.closest('.image-container').querySelector('img');
+                    const isLogo = img.dataset.isLogo === 'true';
+                    showDownloadPopup(event, img.dataset.originalImage, name, isLogo);
                 });
-                            
-                imageContainer.appendChild(canvas);
+                
+                imageContainer.appendChild(imgElement);
                 imageContainer.appendChild(nameElement);
                 imageContainer.appendChild(downloadButton);
                 imageContainer.addEventListener("click", (event) => {
@@ -437,7 +398,7 @@ async function renderIcons(filteredImages) {
                         nameElement.textContent = originalName;
                     }, 1000);
                 }
-    
+                
                 if (category === "category1") {
                     category1Container.appendChild(imageContainer);
                 } else if (category === "category2") {
@@ -447,7 +408,7 @@ async function renderIcons(filteredImages) {
                 } else {
                     galleryContainer.appendChild(imageContainer);
                 }
-    
+                
                 const resultItem = document.createElement("button");
                 resultItem.className = "result-item ripple-btn";
                 resultItem.setAttribute("onmousedown", "createRipple(event)");
@@ -467,26 +428,16 @@ async function renderIcons(filteredImages) {
                     displayImages();
                 });
                 resultsFragment.appendChild(resultItem);
-            }
-    
-            await Promise.all(promises);
-            searchResults.innerHTML = "";
-            searchResults.appendChild(resultsFragment);
+                
+                updateProgress();
+            }));
+            
+            // إعطاء المتصفح فرصة للرسم
+            await new Promise(resolve => setTimeout(resolve, 0));
         }
-    
-        const batchSize = 100;
-        let currentIndex = 0;
-    
-        async function loadNextBatch() {
-            if (currentIndex < filteredImages.length) {
-                await loadImageBatch(currentIndex, batchSize);
-                currentIndex += batchSize;
-                await new Promise(resolve => setTimeout(resolve, 100));
-                await loadNextBatch();
-            }
-        }
-    
-        await loadNextBatch();
+        
+        searchResults.innerHTML = "";
+        searchResults.appendChild(resultsFragment);
     }
     
     async function fetchIoniconsData() {
@@ -521,21 +472,9 @@ async function renderIcons(filteredImages) {
         clearButton.style.display = "none";
     });
 
-    async function fetchImage(url) {
-        try {
-            return url;
-        } catch (error) {
-            console.error("Error fetching image:", error);
-            return null;
-        }
-    }
-
     function showDownloadPopup(event, imageUrl, name, isLogo = false) {
         event.stopPropagation();
     
-        const tempCanvas = document.createElement('canvas');
-        const tempCtx = tempCanvas.getContext('2d');
-        const img = new Image();
         const downloadPopup = document.getElementById('downloadPopup');
         const popupImage = document.getElementById('popupImage');
         const popupName = document.getElementById('popupName');
@@ -543,7 +482,6 @@ async function renderIcons(filteredImages) {
         const popupPngInput = document.getElementById('popupPngInput');
         const popupSvgInput = document.getElementById('popupSvgInput');
         const colorPicker = document.getElementById('colorPicker');
-        const copyLinkButton = document.getElementById('copyLinkButton');
     
         const overlay = document.createElement('div');
         overlay.id = 'overlay';
@@ -556,8 +494,6 @@ async function renderIcons(filteredImages) {
         overlay.style.zIndex = 999;
         
         document.body.appendChild(overlay);
-    
-        img.crossOrigin = "Anonymous";
         
         let displayImageUrl = imageUrl;
         if (!isLogo) {
@@ -582,6 +518,11 @@ async function renderIcons(filteredImages) {
             }
         }
         
+        // إنشاء canvas فقط عند الحاجة (لتحويل SVG إلى PNG)
+        const tempCanvas = document.createElement('canvas');
+        const tempCtx = tempCanvas.getContext('2d');
+        const img = new Image();
+        img.crossOrigin = "Anonymous";
         img.src = displayImageUrl;
     
         img.onload = function() {
@@ -595,25 +536,24 @@ async function renderIcons(filteredImages) {
     
             popupImage.dataset.originalImage = displayImageUrl;
             popupImage.dataset.originalCanvas = tempCanvas.toDataURL();
-            popupImage.src = tempCanvas.toDataURL();
+            popupImage.src = displayImageUrl; // عرض SVG مباشرة
             popupName.textContent = name;
             popupLinkInput.value = displayImageUrl;
             popupPngInput.value = tempCanvas.toDataURL('image/png');
     
-            if (displayImageUrl.endsWith('.svg') || displayImageUrl.startsWith('data:image/svg')) {
+            if (displayImageUrl.endsWith('.svg')) {
                 fetch(displayImageUrl)
                     .then(response => response.text())
                     .then(svgCode => {
                         popupSvgInput.value = svgCode;
                     });
             } else {
-                popupSvgInput.value = "SVG code not available (PNG image)";
+                popupSvgInput.value = "SVG code not available";
             }
     
             downloadPopup.style.display = "block";
             downloadPopup.style.opacity = 0;
             downloadPopup.style.transform = 'translateX(100%)';
-            
             downloadPopup.style.position = 'fixed';
             downloadPopup.style.zIndex = 1000;
             
@@ -633,6 +573,7 @@ async function renderIcons(filteredImages) {
     
             colorPicker.addEventListener("input", () => {
                 const originalImg = new Image();
+                originalImg.crossOrigin = "Anonymous"; // هذا السطر مهم
                 originalImg.onload = function() {
                     tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
                     tempCtx.drawImage(originalImg, 0, 0, tempCanvas.width, tempCanvas.height);
@@ -640,7 +581,11 @@ async function renderIcons(filteredImages) {
                     popupImage.src = tempCanvas.toDataURL();
                     popupPngInput.value = tempCanvas.toDataURL('image/png');
                 };
-                originalImg.src = popupImage.dataset.originalCanvas || displayImageUrl;
+                originalImg.onerror = function() {
+                    console.error("Failed to load image with CORS");
+                    // يمكنك إضافة حل بديل هنا
+                };
+                originalImg.src = popupImage.dataset.originalImage + (popupImage.dataset.originalImage.includes('?') ? '&' : '?') + 'timestamp=' + new Date().getTime();
             });
     
             const sizeButtons = {
@@ -749,8 +694,6 @@ async function renderIcons(filteredImages) {
             }, 1500);
         }
     
-        setupEventListeners();
-    
         function setupEventListeners() {
             const buttons = {
                 'copySvgButton': 'popupSvgInput',
@@ -765,6 +708,8 @@ async function renderIcons(filteredImages) {
                 }
             });
         }
+        
+        setupEventListeners();
     }    
     
     function applyColorToCanvas(canvas, color) {
@@ -787,22 +732,6 @@ async function renderIcons(filteredImages) {
         }
         
         ctx.putImageData(imgData, 0, 0);
-    }
-    
-    function applyColorToSVG(canvas, color) {
-        const ctx = canvas.getContext('2d');
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        const img = new Image();
-        img.src = canvas.dataset.originalImage || canvas.dataset.originalCanvas;
-        
-        img.onload = function() {
-            ctx.fillStyle = color;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.globalCompositeOperation = 'destination-in';
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            ctx.globalCompositeOperation = 'source-over';
-        };
     }
 
     function downloadImage(url, name, format) {
@@ -882,7 +811,7 @@ async function renderIcons(filteredImages) {
             updateDownloadCount(name);
         };
         
-        img.src = popupImage.dataset.originalCanvas || popupImage.dataset.originalImage;
+        img.src = popupImage.dataset.originalImage;
     }
     
     function updateDownloadCount(name) {
