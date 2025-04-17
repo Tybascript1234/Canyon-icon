@@ -1231,3 +1231,9 @@ window.addEventListener("scroll", function() {
     showNextText(); // أول مرة
     const interval = setInterval(showNextText, 6000); // كل 3 ثواني إخفاء، 3 ثواني تأخير بين النصوص
 });
+
+
+
+
+// -------------------------------------------------------------------------
+
