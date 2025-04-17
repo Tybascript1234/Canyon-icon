@@ -225,7 +225,7 @@ setTimeout(() => {
                   </div>
                 </div>
               <div class="download-popup-my-div">
-                <div class="download-popup-div"><img draggable="false" id="popupImage" src="" alt="Image"></div>
+                <div class="download-popup-div"><img class="no-menu" draggable="false" id="popupImage" src="" alt="Image"></div>
                 <div style="padding-left: 10px;box-shadow: -0.1px 0px 0px #000;">
                 <div class="spj-wgp download-buttons">
                 <input class="onm-g" type="text" id="searchFormat" placeholder="Search...">
@@ -286,7 +286,7 @@ setTimeout(() => {
             </div>
             <div class="fex">Open the icon in Figma or Photoshop by clicking the following buttons:</div>
             <div class="click">
-              <click class="click_button xo wave-button"><icon style="background-image: url(https://img.utdstc.com/icon/8bd/002/8bd0027fba2b9172fc9261e4720386c3fa98ecfccf75929916c4fbebc8b4ecff:200);"></icon>Open Figma</click>
+              <button id="openInFigma" class="download-format-btn"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 300" width="20" height="20"> <path fill="#1f1f1f" d="M100 200c55.2 0 100-44.8 100-100S155.2 0 100 0 0 44.8 0 100s44.8 100 100 100z"/> <path fill="#0ACF83" d="M50 300V200h50v100H50z"/> <path fill="#A259FF" d="M0 150V50h50v100H0z"/> <path fill="#F24E1E" d="M0 50h50V0H0v50z"/> <path fill="#FF7262" d="M50 100h50V50H50v50z"/> </svg> Figma </button>
               <click class="click_button xo wave-button"><icon style="background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Adobe_Photoshop_CC_icon.svg/1200px-Adobe_Photoshop_CC_icon.svg.png);"></icon>Open Photoshop</click>
             </div>
           </div>
@@ -361,7 +361,7 @@ setTimeout(() => {
         <!-- Account-tools -->
         <div class="Account-tools-div box-shadow coffees on_click xox myDiver" id="wwc1">
           <div class="lon-close lon_close hide-btn wave-button" data-target="wwc1"><ice class="material-symbols-outlined"> arrow_back </ice></div>
-          <a onclick="window.location.href='https://tybascript1234.github.io/settings/page1.html';" style="width: 100%;justify-content: left;display:inline-flex ;padding: 0;"><div class="lon wave-button" style="width: 100%;margin-bottom: 4px;margin-top: 0;"><img src="aa.png" alt=""><div><my-start>My Start</my-start><br><my-gmail>mystart@gmail.com</my-gmail></div><span class="spana" data-original-color="rgb(105, 115, 132)"></span></div></a>
+          <a onclick="window.location.href='https://tybascript1234.github.io/settings/page1.html';" style="width: 100%;justify-content: left;display:inline-flex ;padding: 0;"><div class="lon wave-button" style="width: 100%;margin-bottom: 4px;margin-top: 0;"><img class="no-menu" src="aa.png" alt=""><div><my-start>Subscribe</my-start><br><my-gmail>mystart@gmail.com</my-gmail></div><span class="spana" data-original-color="rgb(105, 115, 132)"></span></div></a>
           <on-liy class="onliy-hr"></on-liy>
           <div class="lon lon-div show-btn wave-button" data-target="wwc4">The support</div>
           <div class="lon lon-div show-btn wave-button" data-target="wwc2"><div id="selectedButton">Light mode</div><ice class="material-symbols-outlined"> check </ice></div>
@@ -702,6 +702,14 @@ setTimeout(() => {
     </div>
 
     <!-- DIV//. -->
+
+    <script>
+        document.querySelectorAll('.no-menu').forEach(function(div) {
+          div.addEventListener('contextmenu', function(e) {
+            e.preventDefault(); // يمنع القائمة الافتراضية
+          });
+        });
+    </script>
 
     <button id="scrollTopBtn" class="onscroll wave-button"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1f1f1f"><path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z"/></svg></button>
     <!-- <script src="coffee.js"></script> -->
