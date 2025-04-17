@@ -174,32 +174,60 @@ document.addEventListener("DOMContentLoaded", async () => {
         const popupImg = document.getElementById('popupImage');
         if (popupImg) {
             let currentSrc = popupImg.dataset.originalImage || popupImg.src;
-            
+    
             if (currentSrc) {
                 let newSrc = currentSrc;
-                
+    
                 if (currentIconType === 'filled') {
-                    newSrc = currentSrc.includes('-outline.') ? 
-                        currentSrc.replace('-outline.', '.') : 
-                        currentSrc.includes('-sharp.') ? 
-                            currentSrc.replace('-sharp.', '.') : 
-                            currentSrc;
+                    newSrc = currentSrc.includes('-outline.')
+                        ? currentSrc.replace('-outline.', '.')
+                        : currentSrc.includes('-sharp.')
+                        ? currentSrc.replace('-sharp.', '.')
+                        : currentSrc;
                 } else if (currentIconType === 'outline') {
-                    newSrc = currentSrc.includes('.') && !currentSrc.includes('-outline.') && !currentSrc.includes('-sharp.') ? 
-                        currentSrc.replace('.', '-outline.') : 
-                        currentSrc.includes('-sharp.') ? 
-                            currentSrc.replace('-sharp.', '-outline.') : 
-                            currentSrc;
+                    newSrc =
+                        currentSrc.includes('.') &&
+                        !currentSrc.includes('-outline.') &&
+                        !currentSrc.includes('-sharp.')
+                            ? currentSrc.replace('.', '-outline.')
+                            : currentSrc.includes('-sharp.')
+                            ? currentSrc.replace('-sharp.', '-outline.')
+                            : currentSrc;
                 } else if (currentIconType === 'sharp') {
-                    newSrc = currentSrc.includes('.') && !currentSrc.includes('-sharp.') && !currentSrc.includes('-outline.') ? 
-                        currentSrc.replace('.', '-sharp.') : 
-                        currentSrc.includes('-outline.') ? 
-                            currentSrc.replace('-outline.', '-sharp.') : 
-                            currentSrc;
+                    newSrc =
+                        currentSrc.includes('.') &&
+                        !currentSrc.includes('-sharp.') &&
+                        !currentSrc.includes('-outline.')
+                            ? currentSrc.replace('.', '-sharp.')
+                            : currentSrc.includes('-outline.')
+                            ? currentSrc.replace('-outline.', '-sharp.')
+                            : currentSrc;
                 }
-                
-                updateImageSource(popupImg, newSrc);
-                updatePopupDownloadLinks(newSrc);
+    
+                // تحديث المصدر
+                fetch(newSrc)
+                    .then((response) => response.text())
+                    .then((svgContent) => {
+                        // تعديل لون الـ SVG بإضافة fill
+                        const parser = new DOMParser();
+                        const svgDoc = parser.parseFromString(svgContent, 'image/svg+xml');
+                        const svgElement = svgDoc.querySelector('svg');
+    
+                        if (svgElement) {
+                            const selectedColor = document.getElementById('colorPicker').value;
+                            svgElement.setAttribute('fill', selectedColor);
+    
+                            const serializer = new XMLSerializer();
+                            const coloredSVG = serializer.serializeToString(svgElement);
+    
+                            const blob = new Blob([coloredSVG], { type: 'image/svg+xml' });
+                            const objectURL = URL.createObjectURL(blob);
+    
+                            popupImg.src = objectURL;
+                            popupImg.dataset.originalImage = newSrc;
+                        }
+                    })
+                    .catch((err) => console.error('Error fetching or processing SVG:', err));
             }
         }
     }
