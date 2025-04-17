@@ -313,7 +313,7 @@ background-color: #0084ff21;
 
 /* menu */
 .menu {
-  transition: ease 0.2s;
+  /* transition: ease 0.2s; */
   z-index: 710;
   top: 0;
   position: sticky;
@@ -1205,6 +1205,7 @@ box-shadow: 0px 3px 5px -1px rgba(0,0,0,.2),0px 6px 10px 0px rgba(0,0,0,.14),0px
 }
 
 .image-container img {
+  transition: ease 0.3s;
   animation: oli 0.4s ease forwards;
   filter: invert(22%) sepia(14%) saturate(1042%) hue-rotate(164deg) brightness(102%) contrast(85%);
   /* margin: 22px 0; */
@@ -2138,7 +2139,7 @@ justify-content: center;
 .lon my-gmail {
   color: rgb(20, 117, 243);
 }
-.lon my-gmail:hover {
+.lon:hover my-gmail {
   text-decoration: underline;
 }
 .lon::before {
