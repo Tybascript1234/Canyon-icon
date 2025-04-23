@@ -783,6 +783,7 @@ width: 95%;
 border: none;
 display: flex;
 align-items: center;
+justify-content: left;
 cursor: pointer;
 height: 37px;
 padding: 0 8px;
@@ -3692,7 +3693,7 @@ body logo {
   border-radius: 25px;
   width: max-content;
   background: rgba(20, 117, 243, 0);
-  border: solid 1px #dbdbdb;
+  border: solid 1px #e7e7e7;
   cursor: pointer;
 }
 .under2:hover {
@@ -3708,7 +3709,7 @@ body logo {
   width: 230px;
   height: 230px;
   border-radius: 15px;
-  outline: solid 0.5px #efefef;
+  outline: solid 0.5px #e7e7e7;
   margin-bottom: 16px;
   justify-content: center;
 }
