@@ -243,7 +243,7 @@ document.addEventListener('click', function(event) {
     }
 
     // Hide specific divs when clicking outside of them
-    ['wwc1', 'wwc2', 'wwc3', 'wwc4', 'wwc5', 'wwc6', 'wwc7', 'wwc8', 'wwc11', 'wwc12', 'wwc13', 'wwc14', 'wwc15', 'resetButton', 'wwc17', 'wwc19', 'wwc20'].forEach(function(id) {
+    ['wwc1', 'wwc2', 'wwc3', 'wwc4', 'wwc5', 'wwc6', 'wwc7', 'wwc8', 'wwc11', 'wwc12', 'wwc13', 'wwc14', 'wwc15', 'resetButton', 'wwc17', 'wwc19', 'wwc20', 'wwc21', 'wwc22', 'wwc23'].forEach(function(id) {
         const div = document.getElementById(id);
         if (div && div.classList.contains('visible') && !div.contains(target) && !target.matches(`[data-target="${id}"]`)) {
             div.classList.remove('visible');
@@ -1237,3 +1237,128 @@ window.addEventListener("scroll", function() {
 
 // -------------------------------------------------------------------------
 
+
+
+// QR ------------------------------------------------------------------
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const qrText = document.getElementById("qrText");
+    const logoInput = document.getElementById("logoInput");
+    const generateBtn = document.getElementById("generateBtn");
+    const downloadBtn = document.getElementById("downloadBtn");
+    const qrcodeContainer = document.getElementById("qrcode");
+    const logo = document.getElementById("logo");
+    
+    let qrCodeInstance = null;
+
+    // تحسين أداء تحميل الصورة
+    logoInput.addEventListener("change", function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            logo.src = event.target.result;
+            logo.style.display = "block";
+        };
+        reader.readAsDataURL(file);
+    });
+
+    // إنشاء QR Code مع تحسين الأداء
+    generateBtn.addEventListener("click", function() {
+        const text = qrText.value.trim();
+        if (!text) {
+            alert("الرجاء إدخال نص أو رابط أولاً!");
+            return;
+        }
+
+        // إزالة QR السابق إن وجد
+        if (qrCodeInstance) {
+            qrCodeInstance.clear();
+            qrcodeContainer.innerHTML = '<img id="logo" src="" alt="Logo">';
+        }
+
+        // إنشاء QR جديد
+        qrCodeInstance = new QRCode(qrcodeContainer, {
+            text: text,
+            width: 200,
+            height: 200,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+
+        // إعادة تعيين اللوجو إن وجد
+        if (logoInput.files[0]) {
+            logo.style.display = "block";
+        }
+
+        downloadBtn.disabled = false;
+    });
+
+    // تنزيل سريع مع تحسينات html2canvas
+    downloadBtn.addEventListener("click", async function() {
+        if (!qrCodeInstance) {
+            alert("الرجاء إنشاء QR Code أولاً!");
+            return;
+        }
+
+        downloadBtn.disabled = true;
+        downloadBtn.textContent = "جاري التجهيز...";
+        
+        try {
+            // إعدادات محسنة للأداء
+            const canvas = await html2canvas(qrcodeContainer, {
+                scale: 1, // تقليل الحجم لزيادة السرعة
+                logging: false,
+                useCORS: true,
+                allowTaint: true,
+                backgroundColor: null,
+                removeContainer: true,
+                cacheBust: false
+            });
+
+            const link = document.createElement("a");
+            link.download = "qrcode_" + Date.now() + ".png";
+            link.href = canvas.toDataURL("image/png", 0.9); // جودة 90%
+            link.click();
+            
+        } catch (err) {
+            console.error("خطأ في التنزيل:", err);
+            alert("حدث خطأ أثناء التنزيل");
+        } finally {
+            downloadBtn.disabled = false;
+            downloadBtn.textContent = "تنزيل QR Code";
+        }
+    });
+});
+
+
+
+
+// ------------------------------------------------------------------------------------
+
+function generateBarcode() {
+    const text = document.getElementById('barcodeText').value;
+    JsBarcode("#barcode", text, { format: "CODE128", displayValue: true });
+  }
+
+  function downloadBarcode() {
+    const svg = document.querySelector("#barcode");
+    const svgData = new XMLSerializer().serializeToString(svg);
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    const img = new Image();
+    img.onload = function () {
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0);
+      const pngFile = canvas.toDataURL("image/png");
+      const downloadLink = document.createElement("a");
+      downloadLink.href = pngFile;
+      downloadLink.download = "barcode.png";
+      downloadLink.click();
+    };
+    img.src = "data:image/svg+xml;base64," + btoa(svgData);
+  }
