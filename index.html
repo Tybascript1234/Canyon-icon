@@ -219,8 +219,8 @@ setTimeout(() => {
                 <div class="hello">
                   <div id="popupName" style="margin: 0;" class="copy-text"></div>
                   <div style="display: flex;align-items: center;">
-                      <div class="history-link ccd wave-button" style="margin: 0;display: none;" id=""><i id="" class="fi fi-rr-share"></i></div>
-                      <input type="text" id="" style="display: none;" readonly>
+                      <div class="history-link ccd wave-button" style="margin: 0;" id="copyShareLinkButton"><i id="" class="fi fi-rr-share"></i></div>
+                      <input type="text" id="popupShareLink" style="display: none;" readonly>
                       <div class="history-link ccd wave-button" style="margin: 0;" onclick="copyText()"><i id="" class="fi fi-rr-copy"></i></div>
                   </div>
                 </div>
@@ -257,6 +257,9 @@ setTimeout(() => {
                   <button class="button_1_color Click_focus" id="resize32">32</button>
                   <button class="button_1_color Click_focus" id="resize36">36</button>
                   <button class="button_1_color Click_focus" id="resize40">40</button>
+                  <button class="button_1_color Click_focus" id="resize44">44</button>
+                  <button class="button_1_color Click_focus" id="resize48">48</button>
+                  <button class="button_1_color Click_focus" id="resize52">52</button>
                 </div>
               </div>
             </div>
@@ -286,7 +289,7 @@ setTimeout(() => {
             </div>
             <div class="fex">Open the icon in Figma or Photoshop by clicking the following buttons:</div>
             <div class="click">
-              <button id="openInFigma" class="download-format-btn"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 300" width="20" height="20"> <path fill="#1f1f1f" d="M100 200c55.2 0 100-44.8 100-100S155.2 0 100 0 0 44.8 0 100s44.8 100 100 100z"/> <path fill="#0ACF83" d="M50 300V200h50v100H50z"/> <path fill="#A259FF" d="M0 150V50h50v100H0z"/> <path fill="#F24E1E" d="M0 50h50V0H0v50z"/> <path fill="#FF7262" d="M50 100h50V50H50v50z"/> </svg> Figma </button>
+              <click class="click_button xo wave-button"><icon style="background-image: url(https://img.utdstc.com/icon/8bd/002/8bd0027fba2b9172fc9261e4720386c3fa98ecfccf75929916c4fbebc8b4ecff:200);"></icon>Open Figma</click>
               <click class="click_button xo wave-button"><icon style="background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Adobe_Photoshop_CC_icon.svg/1200px-Adobe_Photoshop_CC_icon.svg.png);"></icon>Open Photoshop</click>
             </div>
           </div>
@@ -344,10 +347,14 @@ setTimeout(() => {
             Account
           </div>
         </div>
-            <div class="Tools_div noons">
-              <div class="Tools_ion-icon wave-button tool2-div-divs show-btn" data-target="wwc7" id="tool-div"><img class="Tools_ion-icon_img" draggable="false" src="Canyon Sheets-svg.svg" alt=""></div>
-              Sheets
-            </div>
+        <div class="Tools_div noons">
+          <div class="Tools_ion-icon wave-button tool2-div-divs show-btn" data-target="wwc21" id="tool-div"><img class="Tools_ion-icon_img" draggable="false" src="logo2.png" alt=""></div>
+          Can QR
+        </div>
+        <div class="Tools_div noons" style="display: none;">
+          <div class="Tools_ion-icon wave-button tool2-div-divs show-btn" data-target="wwc7" id="tool-div"><img class="Tools_ion-icon_img" draggable="false" src="Canyon Sheets-svg.svg" alt=""></div>
+          Sheets
+        </div>
             <div class="Tools_div noons" style="display: none;">
               <div style="background: linear-gradient(to right, #32c581, #21a365, #107c40);color: white;" class="Tools_ion-icon wave-button" id=""><ion-icon name="grid-outline"></ion-icon></div>
               Sheet
@@ -537,6 +544,7 @@ setTimeout(() => {
           <div class="menu-fmo-div" style="display: none;"><a>Visit us</a></div>
           <on-liy class="onliy-hr"></on-liy>
           <div class="menu-fmo-div" style="display: none;"><a>Advertisement<a id="nife">3</a></a></div>
+          <div class="menu-fmo-div wave-button show-btn" data-target="wwc21">Can QR</div>
           <div class="menu-fmo-div show-btn wave-button" data-target="wwc1">Account</div>
           <div class="menu-fmo-div" style="display: none;">Coffee</div>
           <a href="hh.html" class="menu-fmo-div" style="display: none;">Settings</a>
@@ -596,10 +604,10 @@ setTimeout(() => {
                 <div>
               <button class="coff_div1_button show-btn" data-target="wwc13"><ion-icon name="download-outline"></ion-icon></button>
               <div class="logo-div-div box-shadow xox visible" id="wwc13" style="display: block;margin-top: 17px;">
-                <button class="logo-div-div-button wave-button Click_focus"><img src="Microsoft Excel.png" alt="">Excel</button>
-                <button class="logo-div-div-button wave-button Click_focus"><img src="Google_Docs_2020_Logo.svg.png" alt="">Google Docs</button>
-                <button class="logo-div-div-button wave-button Click_focus"><img src="Google Sheets.png" alt="">Google Sheets</button>
-                <button class="logo-div-div-button wave-button Click_focus"><img src="WordPress.png" alt="">WordPress</button>
+                <button class="logo-div-div-button wave-button Click_focus">Excel<img src="Microsoft Excel.png" alt=""></button>
+                <button class="logo-div-div-button wave-button Click_focus">Google Docs<img src="Google_Docs_2020_Logo.svg.png" alt=""></button>
+                <button class="logo-div-div-button wave-button Click_focus">Google Sheets<img src="Google Sheets.png" alt=""></button>
+                <button class="logo-div-div-button wave-button Click_focus">WordPress<img src="WordPress.png" alt=""></button>
               </div>
                 </div>
                 <button class="coff_div1_button"><ion-icon name="copy-outline"></ion-icon></button>
@@ -699,6 +707,67 @@ setTimeout(() => {
           <span>Loading icons</span>
           <div style="background-image: url(gif.webp);"></div>
       </div>
+    </div>
+
+    <div class="coffee Qr xox" id="wwc21" style="">
+      <div class="qr_on_close" style="box-shadow: none;position: absolute;top: 0;left: 0;margin: 10px; width: -webkit-fill-available;"><a></a><button class="material-symbols-outlined hide-btn" data-target="wwc21"> arrow_forward </button></div>
+      
+        <div class="Qr_div">
+          <div id="Qr_logo"><logo style="background-image: url(logo2.png);"></logo><div class="coffee-logo" style="width: max-content;margin: auto;margin-top: 8px;">Can QR</div></div>
+          <div class="qr_di">
+            <div class="sofe ou show-btn" data-target="wwc23">
+              <div class="sofe_img"><img src="https://static-00.iconduck.com/assets.00/qr-scan-icon-2048x2048-aeh36n7y.png" alt=""></div>
+              <span>Qr</span>
+            </div>
+            <div class="sofe ou show-btn" data-target="wwc22">
+              <div class="sofe_img"><img src="https://cdn-icons-png.freepik.com/512/778/778997.png" alt=""></div>
+              <span>Code 128</span>
+            </div>
+          </div>
+          <!-- ---- -->
+           <!-- 1 -->
+          <div class="qr_on" id="wwc23">
+            <div class="qr_on_close">
+              <div class="ovar"><span class="coffee-logo">Qr</span></div>
+              <div class="ovar" style="justify-content: right;"><button class="material-symbols-outlined hide-btn" data-target="wwc23"> arrow_forward </button></div>
+            </div>
+            <div class="margin" style="margin: auto;width: max-content;">
+              <div class="qr_on_div">
+                <label for="logoInput" class="under">Upload photo</label>
+                <input type="file" id="logoInput" style="display: none;">
+                <input type="text" id="qrText" placeholder="Enter link">
+                <button class="under2" id="generateBtn">create</button>
+              </div>
+              <div class="dow">
+                <div class="brq xo" id="qrcode"><img id="logo" src="" alt=""></div>
+                <label class="under" id="downloadBtn" disabled>Download</label>
+              </div>
+            </div>
+            <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+          </div>
+
+           <!-- 2 -->
+           <div class="qr_on" id="wwc22">
+            <div class="qr_on_close">
+              <div class="ovar"><span class="coffee-logo">Code 128</span></div>
+              <div class="ovar" style="justify-content: right;"><button class="material-symbols-outlined hide-btn" data-target="wwc22"> arrow_forward </button></div>
+            </div>
+            <div class="margin" style="margin: auto;width: max-content;max-width: 100%;">
+              <div class="qr_on_div">
+                <input type="text" id="barcodeText" placeholder="Enter link">
+                <button class="under2" onclick="generateBarcode()">create</button>
+              </div>
+              <div class="dow">
+                <div class="brq xo"><svg id="barcode"></svg></div>
+                <label class="under" onclick="downloadBarcode()">Download</label>
+              </div>
+            </div>
+            <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+          </div>
+          <!-- ---- -->
+          <lin>Can QR 2025 Edition</lin>
+        </div>
     </div>
 
     <!-- DIV//. -->
