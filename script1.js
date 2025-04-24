@@ -243,7 +243,7 @@ document.addEventListener('click', function(event) {
     }
 
     // Hide specific divs when clicking outside of them
-    ['wwc1', 'wwc2', 'wwc3', 'wwc4', 'wwc5', 'wwc6', 'wwc7', 'wwc8', 'wwc11', 'wwc12', 'wwc13', 'wwc14', 'wwc15', 'resetButton', 'wwc17', 'wwc19', 'wwc20', 'wwc21', 'wwc22', 'wwc23'].forEach(function(id) {
+    ['wwc1', 'wwc2', 'wwc3', 'wwc4', 'wwc5', 'wwc6', 'wwc7', 'wwc8', 'wwc11', 'wwc12', 'wwc13', 'wwc14', 'wwc15', 'resetButton', 'wwc17', 'wwc19', 'wwc20', 'wwc21', 'wwc22', 'wwc23', 'wwc24'].forEach(function(id) {
         const div = document.getElementById(id);
         if (div && div.classList.contains('visible') && !div.contains(target) && !target.matches(`[data-target="${id}"]`)) {
             div.classList.remove('visible');
