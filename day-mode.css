@@ -1,449 +1,448 @@
 /* mood */
 body.day-mode {
-    background-color: #ffffff;
-    /* color: #000000; */
+  background-color: #ffffff;
+  /* color: #000000; */
 }
 
 body.night-mode  .history-link i {
-  color: white;
+color: white;
 }
 
 body.night-mode .history-link i:active {
-  color: #cccccc;
+color: #cccccc;
 }
 
 body.day-mode #content {
-    border-color: #000000;
+  border-color: #000000;
 }
 
 body.night-mode {
-    background-color: #20232b;
-    color: #fffaf4;
+  background-color: #20232b;
+  color: #fffaf4;
 }
 
 body.night-mode .vov {
-  background-color: rgba(255, 255, 255, 0.075);
-  box-shadow: none;
+background-color: rgba(255, 255, 255, 0.075);
+box-shadow: none;
 }
 body.night-mode .vov ion-icon {
-  fill: white;
+fill: white;
 }
 
 body.night-mode .Everyone-button i {
-  color: #ffdb7d;
+color: #ffdb7d;
 }
 
 body.night-mode .material-symbols-outlined {
-  color: #ffdb7d;
+color: #ffdb7d;
 }
 
 body.night-mode .image-container:focus {
-  background: rgb(132 177 255 / 10%);
+background: rgb(132 177 255 / 10%);
 }
 
 body.night-mode #content {
-    border-color: #ffffff3b;
+  border-color: #ffffff3b;
 }
 body.night-mode .input-coa{
-  border: solid 2px #ffffff38;
-  color: white;
-  background: #0000;
+border: solid 2px #ffffff38;
+color: white;
+background: #0000;
 }
 
 body.night-mode .onm-g {
-  outline-color: #34373e;
-  background-color: #46494f;
-  color: #ffffffda;
+outline-color: #34373e;
+background-color: #46494f;
+color: #ffffffda;
 }
 
 body.night-mode .box-shadow {
-  box-shadow: 0px 6px 14px #00000012, 0px -3px 8px #00000003, 0px 1px 3px #00000075;
+box-shadow: 0px 6px 14px #00000012, 0px -3px 8px #00000003, 0px 1px 3px #00000075;
 }
 
 body.night-mode a {
-    color: #ffffffda;
-}
-body.night-mode .logo-div-div-button {
   color: #ffffffda;
 }
+body.night-mode .logo-div-div-button {
+color: #ffffffda;
+}
 body.night-mode .logo-div-div-button:hover {
-  background-color: rgb(252 252 252 / 4%);
+background-color: rgb(252 252 252 / 4%);
 }
 body.night-mode .links-a:hover {
-  color: #ffffffa8;
+color: #ffffffa8;
 }
 
 body.night-mode .menu  {
-  background: #34373e;
-  backdrop-filter: blur(2px);
+background: #34373e;
+backdrop-filter: blur(2px);
 }
 
 body.night-mode .full-screen  {
-  background: #34373e83;
+background: #34373e83;
 }
 
 body.night-mode .spana  {
-  filter: invert(1);
+filter: invert(1);
 }
 
 body.night-mode .download-popup-div {
-  background-color: #f0f0f047;
+background-color: #f0f0f047;
 }
 
 body.night-mode .image-container {
-  border: solid 1px #cccccc29;
-  color: aliceblue;
+border: solid 1px #cccccc29;
+color: aliceblue;
 }
 
 body.night-mode .click_button {
-  color: aliceblue;
+color: aliceblue;
 }
 
 body.night-mode .history-link i {
-  background-color: #0000;
+background-color: #0000;
 }
 
 body.night-mode .onlye-div {
-  border-bottom: solid 2px #616368;
+border-bottom: solid 2px #616368;
 }
 body.night-mode .indicator {
-  background-color: #ffffff;
+background-color: #ffffff;
 }
 
 body.night-mode .click_button{
-  background: #ededed1a;
-  outline: solid 1px #f3f3f34d;
+background: #ededed1a;
+outline: solid 1px #f3f3f34d;
 }
 
 body.night-mode .tool2-div-divs .material-symbols-outlined {
-  color: rgb(255 255 255);
-  fill: white;
+color: rgb(255 255 255);
+fill: white;
 }
 body.night-mode .tool2-div-divs {
-  background-color: #ffffff12;
+background-color: #ffffff12;
 }
 body.night-mode .tool-span {
-  background-color: #ffffff00;
+background-color: #ffffff00;
 }
 
 body.night-mode .xox {
-  background-color: #34373e;
+background-color: #34373e;
 }
 
 body.night-mode .lon:hover {
-  background-color: rgb(252 252 252 / 4%);
+background-color: rgb(252 252 252 / 4%);
 }
 
 body.night-mode .lon ion-icon {
-  color: white;
-  fill: white;
+color: white;
+fill: white;
 }
 
 body.night-mode .btn span {
-  color: #ffffff;
+color: #ffffff;
 }
 
 body.night-mode .Tools_ion-icon ion-icon {
-  color: rgb(68, 68, 68);
-  fill: rgb(68, 68, 68);
+color: rgb(68, 68, 68);
+fill: rgb(68, 68, 68);
 }
 
 body.night-mode .search-div-input input {
-  background-color: rgb(50 52 59);
-  color: antiquewhite;
+background-color: rgb(50 52 59);
+color: antiquewhite;
 }
 body.night-mode .search-div-input input:focus {
-  background-color: rgb(56 58 67);
-  box-shadow: 0 1px 1px 0 rgb(255 255 255 / 30%), 0 1px 3px 1px rgb(0 0 0 / 15%);
+background-color: rgb(56 58 67);
+box-shadow: 0 1px 1px 0 rgb(255 255 255 / 30%), 0 1px 3px 1px rgb(0 0 0 / 15%);
 }
 body.night-mode .omn {
-  color: rgb(218, 218, 218);
+color: rgb(218, 218, 218);
 }
 body.night-mode .search-div-close {
-  color: rgb(218, 218, 218);
-  background-color: #ffffff1f;
+color: rgb(218, 218, 218);
+background-color: #ffffff1f;
 }
 
 body.night-mode #content-container.fullscreen {
-  background-color: #34373e;
+background-color: #34373e;
 }
 body.night-mode .tool-full {
-  background-color: #ffffff0d;
-  color: white;
+background-color: #ffffff0d;
+color: white;
 }
 
 body.night-mode .input-color {
-  color: #ffffffda;
-  background-color: #41454d;
-  box-shadow: 0px 1px 0px #ffffff12 inset;
+color: #ffffffda;
+background-color: #41454d;
+box-shadow: 0px 1px 0px #ffffff12 inset;
 }
 
 body.night-mode .image-container img {
-  filter: invert(76%) sepia(0%) saturate(1054%) hue-rotate(0deg) brightness(102%) contrast(85%);
+filter: invert(76%) sepia(0%) saturate(1054%) hue-rotate(0deg) brightness(102%) contrast(85%);
 }
 
 body.night-mode .download-popup {
-  background-color: #34373e;
+background-color: #34373e;
 }
 
 body.night-mode .downloadSVGss {
-  color: #ffffffda;
-  background-color: #41454d;
-  box-shadow: 0px 1px 0px #ffffff12 inset;
+color: #ffffffda;
+background-color: #41454d;
+box-shadow: 0px 1px 0px #ffffff12 inset;
 }
 body.night-mode .downloadSVGss:hover {
-  background: #cbcbcb23;
+background: #cbcbcb23;
 }
 
 body.night-mode on-liy {
-  background-color: rgb(255 255 255 / 11%);
+background-color: rgb(255 255 255 / 11%);
 }
 
 body.night-mode .Translate-div:hover {
-  background-color: #7ec1ff17;
+background-color: #7ec1ff17;
 }
 body.night-mode .Translate-div:focus {
-  background-color: #7ec1ff17;
+background-color: #7ec1ff17;
 }
 
 body.night-mode .title-gallery {
-  background: #20232b;
-  box-shadow: 0px -7px 8px #20232b, 0px 7px 8px #20232b;
-  color: #f5f5f5;
+background: #20232b;
+box-shadow: 0px -7px 8px #20232b, 0px 7px 8px #20232b;
+color: #f5f5f5;
 }
 
 body.night-mode .button_1_color {
-  color: #f5f5f5;
+color: #f5f5f5;
 }
 
 body.night-mode .lon my-gmail {
-  color: rgb(117 177 255);
+color: rgb(117 177 255);
 }
 
 body.night-mode .bag-chat {
-  border: solid 1px #e4e4e41f;
+border: solid 1px #e4e4e41f;
 }
 body.night-mode .message_chat_div {
-  background-color: #ffffff2e;
+background-color: #ffffff2e;
 }
 body.night-mode .send_massage ion-icon {
-  color: rgba(255, 255, 255, 0.89);
+color: rgba(255, 255, 255, 0.89);
 }
 body.night-mode .message_chat ion-icon {
-  fill: white;
+fill: white;
 }
 body.night-mode .send-chat {
-  background-color: #ffffff0a;
+background-color: #ffffff0a;
 }
 body.night-mode .send-chat input {
-  color: rgb(226, 226, 226);
+color: rgb(226, 226, 226);
 }
 body.night-mode .message-text {
-  background-color: #ffffff2e;
+background-color: #ffffff2e;
 }
 
 body.night-mode .btn {
-  background: #cbcbcb12;
+background: #cbcbcb12;
 }
 body.night-mode .btn:hover {
-  background: #cbcbcb23;
+background: #cbcbcb23;
 }
 
 body.night-mode .lone_input {
-  background: #ffffff0a;
-  color: rgb(226, 226, 226);
+background: #ffffff0a;
+color: rgb(226, 226, 226);
 }
 body.night-mode .lone-button {
-  color: antiquewhite;
+color: antiquewhite;
 }
 body.night-mode .lone-button ion-icon {
-  fill: antiquewhite;
+fill: antiquewhite;
 }
 
 body.night-mode .onv {
-  color: #ffd662;
+color: #ffd662;
 }
 body.night-mode #downloadCounts div {
-  background-color: #ffffff0a;
+background-color: #ffffff0a;
 }
 body.night-mode #downloadCounts div:active {
-  background-color: #ffffff1a;
+background-color: #ffffff1a;
 }
 
 body.night-mode .menu-fmo-div {
-  color: #ffffff;
+color: #ffffff;
 }
 body.night-mode .menu-fmo-div:hover {
-  background-color: rgb(255 255 255 / 5%);
+background-color: rgb(255 255 255 / 5%);
 }
 
 body.night-mode .ripple {
-  background-color: rgba(255, 255, 255, 0.096);
+background-color: rgba(255, 255, 255, 0.096);
 }
 
 /* coffee */
 body.night-mode .coffee-button2  {
-  background: #ffffff00;
+background: #ffffff00;
 }
 body.night-mode .coffee-button2:hover  {
-  background: #ffffff11;
+background: #ffffff11;
 }
 body.night-mode .onliy-hr-div  {
-  background: #ffd662;
+background: #ffd662;
 }
 body.night-mode .coff-div1-button  {
-  color: #bdbdbd;
+color: #bdbdbd;
 }
 body.night-mode .coff-div1-button:hover  {
-  background-color: #ffffff17;
+background-color: #ffffff17;
 }
 
 body.night-mode .full-screen ion-icon  {
-  fill: antiquewhite;
+fill: antiquewhite;
 }
 body.night-mode #Uploade  {
-  color: rgb(68, 68, 68);
+color: rgb(68, 68, 68);
 }
 
 body.night-mode .download-app-img::before {
-  background: #2a2f3b24;
+background: #2a2f3b24;
 }
 
 body.night-mode .coff_div1_button {
-  background: #ffffff08;
-  color: #e0e0e0;
+background: #ffffff08;
+color: #e0e0e0;
 }
 body.night-mode .coff_div1_button ion-icon {
-  color: #e0e0e0;
-  fill: #e0e0e0;
+color: #e0e0e0;
+fill: #e0e0e0;
 }
 
 body.night-mode .Click_focus:focus {
-  background: rgba(161, 195, 255, 0.26);
-  color: white;
+background: rgba(161, 195, 255, 0.26);
+color: white;
 }
 body.night-mode .coff-div2-textarea {
-  color: #e0e0e0;
+color: #e0e0e0;
 }
 body.night-mode .llo:hover::before {
-  background-color: #9bcfff1f;
+background-color: #9bcfff1f;
 }
 
 body.night-mode .Everyone {
-  box-shadow: 0px -2px 0px #ffffff29 inset;
+box-shadow: 0px -2px 0px #ffffff29 inset;
 }
 
 body.night-mode .download-btn {
-  background-color: #34373e;
-  color: #ffffffda;
-  box-shadow: 0px 1px 0px #ffffff12 inset;
+background-color: #34373e;
+color: #ffffffda;
+box-shadow: 0px 1px 0px #ffffff12 inset;
 }
 body.night-mode .download-btn:hover {
-  background-color: #41454d;
+background-color: #41454d;
 }
 body.night-mode .download-btn svg {
-  fill: white;
+fill: white;
 }
 body.night-mode .download-btn:active {
-  background-color: #5b606b;
+background-color: #5b606b;
 }
 
 body.night-mode #content-container.fullscreen .tool2 {
-  background-color: rgba(255, 255, 255, 0);
+background-color: rgba(255, 255, 255, 0);
 }
 
 body.night-mode .dox {
-  background-color: #54575f;
-  color: #ffffffda;
+background-color: #54575f;
+color: #ffffffda;
 }
 body.night-mode .dox span {
-  fill: #ffffffda;
-  color: #ffffffda;
+fill: #ffffffda;
+color: #ffffffda;
 }
 body.night-mode .dox:active {
-  background-color: #5b606b;
+background-color: #5b606b;
 }
 
 body.night-mode .result-item {
-  color: #ffffffda;
+color: #ffffffda;
 }
 body.night-mode .result-item:hover {
-  background-color: #ffffff12;
+background-color: #ffffff12;
 }
 body.night-mode .result-item ion-icon {
-  color: #ffffffda;
+color: #ffffffda;
 }
 
 body.night-mode .onscroll {
-  color: white;
-  background-color: #282a2c;
+color: white;
+background-color: #282a2c;
 }
 body.night-mode .onscroll svg {
-  fill: white;
+fill: white;
 }
 body.night-mode .onscroll:hover {
-  background-color: #36393d;
+background-color: #36393d;
 }
 body.night-mode .onscroll:active {
-  background-color: #3c4045;
+background-color: #3c4045;
 }
 
 body.night-mode .result-item svg {
-  fill: rgb(218, 218, 218);
+fill: rgb(218, 218, 218);
 }
 
 body.night-mode #toggleIcons div span {
-  background: #ffffff;
+background: #ffffff;
 }
 
 body.night-mode #toggleIcons div {
-  border: solid 1px #ffffff5e;
+border: solid 1px #ffffff5e;
 }
 
 body.night-mode .search-div-close .material-symbols-outlined {
-  color: rgb(218, 218, 218);
+color: rgb(218, 218, 218);
 }
 
 body.night-mode .search2 input {
-  color: rgb(218, 218, 218);
-  background-color: #ffffff24;
+color: rgb(218, 218, 218);
+background-color: #ffffff24;
 }
 body.night-mode .search2 ion-icon {
-  color: #eef6fd;
+color: #eef6fd;
 }
 body.night-mode .search2 input:focus {
-  box-shadow: 0 1px 1px 0 rgb(255 255 255 / 30%), 0 1px 3px 1px rgb(0 0 0 / 15%);
+box-shadow: 0 1px 1px 0 rgb(255 255 255 / 30%), 0 1px 3px 1px rgb(0 0 0 / 15%);
 }
 
 body.night-mode #toggleDownloadCounts {
-  background: #34373e;
-  box-shadow: 4px -4px 0px #34373e;
+background: #34373e;
+box-shadow: 4px -4px 0px #34373e;
 }
 
 body.night-mode .sofe_img {
-  outline-color: #efefef47;
+outline-color: #efefef47;
 }
 
 body.night-mode .sofe_img img {
-  filter: invert(1);
+filter: invert(1);
 }
 
 body.night-mode .qr_on_close {
-  box-shadow: 0px 1px 0px #f1f1f12b;
+box-shadow: 0px 1px 0px #f1f1f12b;
 }
 body.night-mode .qr_on_div input {
-  background: #515359;
-  color: #fffaf4;
+background: #515359;
+color: #fffaf4;
 }
 body.night-mode .under2 {
-  border: solid 1px #83b9ff;
-  color: #fffaf4;
+border: solid 1px #83b9ff;
+color: #fffaf4;
 }
 body.night-mode {
-  
+
 }
 
 body .result-item svg {
-  fill: #7d7d7d;
+fill: #7d7d7d;
 }
-
