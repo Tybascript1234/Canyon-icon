@@ -627,7 +627,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                 'resize28': 28,
                 'resize32': 32,
                 'resize36': 36,
-                'resize40': 40
+                'resize40': 40,
+                'resize44': 44,
+                'resize48': 48,
+                'resize52': 52
             };
     
             Object.keys(sizeButtons).forEach(id => {
