@@ -129,19 +129,17 @@ setTimeout(() => {
               <div class="Everyone">
                 <div class="xo">
                   <!-- <button class="Everyone-button wave-button" id="toggleIcons"><a>Fill</a><div><span></span></div></button> -->
-                  <div>
-                      <button class="Everyone-button wave-button show-btn" data-target="wwc20"><a>Type</a><f class="Everyone-f"></f></button>
-                      <div class="Everyone-menu vov xox on_click" id="wwc20">
+                      <button class="Everyone-button wave-button click-button" data-menu="menu1"><a>Type</a><f class="Everyone-f"></f></button>
+                      <div class="Everyone-menu vov box-shadow xox on_click menu3" id="menu1">
                         <div id="category-navigation" class="icon-type-toggle">
                           <a class="icon-type-btn wave-button zoom" data-type="outline">Outline<i class="fi fi-br-check coo"></i></a>
                           <a class="icon-type-btn wave-button" data-type="filled">Filled<i class="fi fi-br-check coo"></i></a>
                           <a class="icon-type-btn wave-button" data-type="sharp">Sharp<i class="fi fi-br-check coo"></i></a>
                         </div>
                       </div>
-                  </div>
-                  <div>
-                  <button class="Everyone-button wave-button show-btn" data-target="resetButton"><a>Everyone</a> <i class="fi fi-rr-angle-small-down"></i><f class="Everyone-f"></f></button>
-                  <div class="Everyone-menu vov xox on_click" id="resetButton">
+
+                  <button class="Everyone-button wave-button click-button" data-menu="menu2"><a>Everyone</a> <i class="fi fi-rr-angle-small-down"></i><f class="Everyone-f"></f></button>
+                  <div class="Everyone-menu vov box-shadow xox on_click menu3" id="menu2">
                   <a id="resetButton" class="wave-button" onclick="clearFilter()">No</a>
                   <div id="alphabet-buttons" class="notranslate">
                   <a class="wave-button">A</a>
@@ -171,12 +169,10 @@ setTimeout(() => {
                   <a class="wave-button">Y</a>
                   <a class="wave-button">Z</a>
                   </div>
-                              
                   </div>
-                  </div>
-                  <div>
-                    <button class="Everyone-button wave-button show-btn" data-target="wwc17"><a>Sections</a> <i class="fi fi-rr-angle-small-down"></i><f class="Everyone-f"></f></button>
-                    <div class="Everyone-menu vov xox on_click" id="wwc17">
+
+                    <button class="Everyone-button wave-button click-button" data-menu="menu3"><a>Sections</a> <i class="fi fi-rr-angle-small-down"></i><f class="Everyone-f"></f></button>
+                    <div class="Everyone-menu vov box-shadow xox on_click menu3" id="menu3">
                       <div id="category-navigation">
                         <a class="wave-button" onclick="window.location.href='#App_icons';">App icons</a>
                         <a class="wave-button" onclick="window.location.href='#Logos';">Logos</a>
@@ -184,7 +180,7 @@ setTimeout(() => {
                         <a class="wave-button option">Gif</a>
                       </div>
                     </div>
-                    </div>
+
                     <label for="ali" class="logo wave-button" style="display: none;"><button class="Everyone-button"><a>Search by image</a><span class="material-symbols-outlined notranslate" style="margin-left: 5px;"> upload </span><f class="Everyone-f"></f></button></label>
                     <input type="file" id="ali" style="display: none;">
                   </div>
@@ -235,7 +231,7 @@ setTimeout(() => {
                 <button id="downloadWEBP" class="downloadSVGss">Download <d class="notranslate">WEBP</d></button>
                 <button id="downloadGIF" class="downloadSVGss">Download <d class="notranslate">GIF</d></button>
                 <button id="downloadPDF" class="downloadSVGss">Download <d class="notranslate">PDF</d></button>
-                <button id="downloadMP4" class="downloadSVGss">Download <d class="notranslate">MP4</d></button>
+                <button id="downloadMP4" class="downloadSVGss none">Download <d class="notranslate">MP4</d></button>
                 <button id="downloadTDS" class="downloadSVGss">Download <d class="notranslate">TDS</d></button>
                 <button id="downloadTIFF" class="downloadSVGss">Download <d class="notranslate">TIFF</d></button>
                 <button id="downloadTGA" class="downloadSVGss">Download <d class="notranslate">TGA</d></button>
@@ -248,9 +244,9 @@ setTimeout(() => {
             </div>
             </div>
             <div class="download-fonts">
-              <div class="download-fonts-button tool2-div-divs show-btn" data-target="wwc15" id="sizeDisplay">36</div>
+              <div class="download-fonts-button tool2-div-divs show-btn vov" data-target="wwc15" id="sizeDisplay">36</div>
               <!-- --- -->
-              <div class="sheets box-shadow visible xox" style="margin-top: 4px;width: 152px;display: block;" id="wwc15">
+              <div class="sheets box-shadow visible xox" style="margin-top: 4px;width: 39px;max-height: 180px;display: block;" id="wwc15">
                 <div class="sheets-menu" id="sizeSelector">
                   <button class="button_1_color Click_focus" id="resize24">24</button>
                   <button class="button_1_color Click_focus" id="resize28">28</button>
@@ -265,7 +261,7 @@ setTimeout(() => {
             </div>
             <div class="colorInput">
             <label for="colorPicker" class="input-color"><div class="material-symbols-outlined"> colors </div></label>
-            <input type="color" id="colorPicker" style="display: none;">
+            <input type="color" id="colorPicker">
             </div>
           </div>
           <div class="download-popup-my-div" style="margin-top: 30px;display: block;">
@@ -709,7 +705,7 @@ setTimeout(() => {
       </div>
     </div>
 
-    <div class="coffee Qr xox" id="wwc21" style="">
+    <div class="coffee Qr box-shadow on_click xox" id="wwc21" style="">
       <div class="qr_on_close" style="box-shadow: none;position: absolute;top: 0;left: 0;margin: 10px; width: -webkit-fill-available;"><a></a><button class="material-symbols-outlined hide-btn" data-target="wwc21"> arrow_forward </button></div>
       
         <div class="Qr_div">
@@ -726,9 +722,9 @@ setTimeout(() => {
           </div>
           <!-- ---- -->
            <!-- 1 -->
-          <div class="qr_on" id="wwc23">
+          <div class="qr_on xox" id="wwc23">
             <div class="qr_on_close">
-              <div class="ovar"><span class="coffee-logo">Qr</span></div>
+              <div class="ovar"><div class="coffee-logo">Qr</div></div>
               <div class="ovar" style="justify-content: right;"><button class="material-symbols-outlined hide-btn" data-target="wwc23"> arrow_forward </button></div>
             </div>
             <div class="margin" style="margin: auto;width: max-content;max-width: 100%;">
@@ -748,9 +744,9 @@ setTimeout(() => {
           </div>
 
            <!-- 2 -->
-           <div class="qr_on" id="wwc22">
+           <div class="qr_on xox" id="wwc22">
             <div class="qr_on_close">
-              <div class="ovar"><span class="coffee-logo">Code 128</span></div>
+              <div class="ovar"><div class="coffee-logo">Code 128</div></div>
               <div class="ovar" style="justify-content: right;"><button class="material-symbols-outlined hide-btn" data-target="wwc22"> arrow_forward </button></div>
             </div>
             <div class="margin" style="margin: auto;width: max-content;">
@@ -779,6 +775,8 @@ setTimeout(() => {
           });
         });
     </script>
+
+<div id="menu-overlay" style="display: none;"></div>
 
     <button id="scrollTopBtn" class="onscroll wave-button"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1f1f1f"><path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z"/></svg></button>
     <!-- <script src="coffee.js"></script> -->
