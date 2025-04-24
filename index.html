@@ -215,8 +215,15 @@ setTimeout(() => {
                 <div class="hello">
                   <div id="popupName" style="margin: 0;" class="copy-text"></div>
                   <div style="display: flex;align-items: center;">
-                      <div class="history-link ccd wave-button" style="margin: 0;" id="copyShareLinkButton"><i id="" class="fi fi-rr-share"></i></div>
-                      <input type="text" id="popupShareLink" style="display: none;" readonly>
+                    <div style="position: relative;">
+                      <div class="history-link ccd wave-button ou show-btn" data-target="wwc24" style="margin: 0;"><i id="" class="fi fi-rr-share"></i></div>
+                      <div class="Everyone-menu vov box-shadow xox on_click menu3" style="right: 0;width: 211px;max-width: max-content;" id="wwc24">
+                        <div id="category-navigation">
+                          <a class="wave-button" id="copyShareLinkButton">Copy link</a>
+                          <div class="qr_on_div" style="overflow: visible;"><input style="user-select: all;" type="text" id="popupShareLink" readonly></div>
+                        </div>
+                      </div>
+                    </div>
                       <div class="history-link ccd wave-button" style="margin: 0;" onclick="copyText()"><i id="" class="fi fi-rr-copy"></i></div>
                   </div>
                 </div>
@@ -266,10 +273,13 @@ setTimeout(() => {
           </div>
           <div class="download-popup-my-div" style="margin-top: 30px;display: block;">
             <div class="onlye-div">
-              <a class="onlye-button wave-button tab" onclick="showTab(0)">Copy Link</a>
-              <a class="onlye-button wave-button tab" onclick="showTab(1)">Copy SVG</a>
-              <a class="onlye-button wave-button tab" onclick="showTab(2)">Copy PNG</a>
+              <div style="display: flex;align-items: center;">
+                <a class="onlye-button wave-button tab" onclick="showTab(0)">Copy Link</a>
+                <a class="onlye-button wave-button tab" onclick="showTab(1)">Copy SVG</a>
+                <a class="onlye-button wave-button tab" onclick="showTab(2)">Copy PNG</a>
+                <a class="onlye-button wave-button tab" onclick="showTab(3)">Usage</a>
               <div class="indicator"></div>
+              </div>
             </div>
             <div id="content0" class="content active">
               <div class="history-link" style="width: 100%;"><a>Copy link</a><i id="copyLinkButton" class="fi fi-rr-copy"></i></div>
@@ -282,6 +292,17 @@ setTimeout(() => {
             <div id="content2" class="content heade">
               <div class="history-link" style="width: 100%;"><a>Copy PNG</a><i id="copyPngButton" class="fi fi-rr-copy"></i></div>
               <textarea id="popupPngInput" style="padding-right: 14px;" class="input-coa" readonly></textarea>
+            </div>
+            <div id="content3" class="content heade">
+              <div class="history-link" style="width: 100%;"><a>Usage</a><i id="" class="fi fi-rr-copy none"></i></div>
+              <textarea id="" style="padding-right: 14px;" class="input-coa" readonly>
+
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+--------------------------
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+--------------------------
+<ion-icon name="heart"></ion-icon>
+              </textarea>
             </div>
             <div class="fex">Open the icon in Figma or Photoshop by clicking the following buttons:</div>
             <div class="click">
