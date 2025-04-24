@@ -94,7 +94,7 @@ i {
 }
 img {
 user-select: none;
-display: inline-block;
+display: block;
 -webkit-user-drag: none;
 }
 svg {
@@ -289,6 +289,23 @@ to {
   height: 100%;
   z-index: 4;
 }
+body .none {
+  display: none;
+}
+
+#colorPicker {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  opacity: 0;
+}
+
+.weee {
+  background-color: yellow; /* أي تنسيق ترغب في إضافته */
+}
+
 
 /* .Click_focus.button_1_color::before {
 transition: ease 0.2s;
@@ -988,7 +1005,7 @@ background-color: #298dff00;
 animation: eew 0.3s ease forwards;
 backdrop-filter: blur(39px);
 transition: ease 0.3s;
-margin-top: 4px;
+/* margin-top: 4px; */
 user-select: none;
 display: none;
 scrollbar-width: none;
@@ -1366,28 +1383,30 @@ justify-content: center;
 .download-popup-div {
   position: relative;
   margin: auto;
-  width: 100%;
-  height: 100%;
+  width: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
+  border-radius: 12px;
 }
 .download-popup-div::before {
   z-index: 2;
   content: "Icon Canyon";
   position: absolute;
   top: 0;
-  left: 0;
-  width: 100%;
+  /* left: 0; */
+  width: max-content;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 18px;
+  font-size: 12px;
   font-weight: 500;
   color: #e5e5e59c;
-  /* color: #b7b7b754; */
 }
 .download-popup img {
-  /* filter: invert(22%) sepia(14%) saturate(1042%) hue-rotate(164deg) brightness(102%) contrast(85%); */
-  padding: 8px;
+  transition: ease 0.1s;
   animation: popup 0.3s ease forwards;
   user-select: none;
   height: 36px;
@@ -2797,6 +2816,8 @@ user-select: all;
   top: 46px;
   width: 128px;
   padding-top: 6px;
+  overflow-y: auto;
+  scrollbar-width: none;
   padding-left: 6px;
   border-radius: 8px;
   box-shadow: 0px 6px 14px #00000012, 0px -3px 8px #00000003, 0px 1px 3px #cccccc73;
@@ -3723,6 +3744,15 @@ body logo {
 #barcode {
   margin: 20px auto;
   max-width: 100%;
+}
+#menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -4;
+  width: 100%;
+  height: 100%;
+  background: #0000;
 }
 
 
