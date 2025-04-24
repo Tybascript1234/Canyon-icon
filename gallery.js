@@ -18,6 +18,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const containerCount = document.getElementById("containerCount");
     const popupLinkInput = document.getElementById("popupLinkInput");
     const toggleIconsButton = document.getElementById("toggleIcons");
+    const popupShareLink = document.getElementById("popupShareLink");
+    const copyShareLinkButton = document.getElementById("copyShareLinkButton");
     
     // عناصر مؤشر التحميل
     const loadingIndicator = document.getElementById("loadingIndicator");
@@ -80,32 +82,43 @@ document.addEventListener("DOMContentLoaded", async () => {
     let currentIconType = 'outline'; // النوع الافتراضي للأيقونات
     let isIconLoading = false; // متغير لتتبع حالة التحميل
 
-    // نظام تبديل الأيقونات
-    const iconTypeButtons = document.querySelectorAll('.icon-type-btn');
+// في نظام تبديل الأيقونات
+const iconTypeButtons = document.querySelectorAll('.icon-type-btn');
     
-    iconTypeButtons.forEach(button => {
-        button.addEventListener('click', async () => {
-            if (isIconLoading) return;
-            
-            isIconLoading = true;
-            iconTypeButtons.forEach(btn => {
-                btn.disabled = true;
-                btn.style.opacity = '0.5';
-            });
-            
-            iconTypeButtons.forEach(btn => btn.classList.remove('zoom'));
-            button.classList.add('zoom');
-            currentIconType = button.dataset.type;
-            
-            await displayImages();
-            
-            iconTypeButtons.forEach(btn => {
-                btn.disabled = false;
-                btn.style.opacity = '1';
-            });
-            isIconLoading = false;
+// تطبيق تأثير zoom على الزر الافتراضي (outline) عند التحميل
+document.querySelector(`.icon-type-btn[data-type="${currentIconType}"]`).classList.add('zoom');
+
+iconTypeButtons.forEach(button => {
+    button.addEventListener('click', async () => {
+        if (isIconLoading) return;
+        
+        isIconLoading = true;
+        iconTypeButtons.forEach(btn => {
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
         });
+        
+        // إزالة تأثير zoom من جميع الأزرار وإضافته للزر المحدد
+        iconTypeButtons.forEach(btn => {
+            btn.classList.remove('zoom');
+            btn.style.transform = '';
+            btn.style.boxShadow = '';
+        });
+        button.classList.add('zoom');
+        // button.style.transform = 'scale(1.1)';
+        // button.style.boxShadow = 'rgb(0 0 0 / 10%) 0px 0px 4px, rgb(114 180 255) 0px 0px 1px';
+        currentIconType = button.dataset.type;
+        currentIconTypeText.textContent = currentIconType.charAt(0).toUpperCase() + currentIconType.slice(1);
+        
+        await displayImages();
+        
+        iconTypeButtons.forEach(btn => {
+            btn.disabled = false;
+            btn.style.opacity = '1';
+        });
+        isIconLoading = false;
     });
+});
 
     // التخزين المؤقت لتحسين الأداء
     const iconCache = {
@@ -330,6 +343,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 return matchesSearch;
             }
             
+            // التأكد من عرض الأيقونات الخاصة بالنوع المحدد فقط
             const matchesType = 
                 (currentIconType === 'outline' && imageData.type === 'outline') ||
                 (currentIconType === 'sharp' && imageData.type === 'sharp') ||
@@ -484,6 +498,103 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
+    // دالة لإنشاء رابط مشاركة للبوب
+    function generateShareableLink(imageUrl, name) {
+        const baseUrl = window.location.origin + window.location.pathname;
+        const encodedUrl = encodeURIComponent(imageUrl);
+        const encodedName = encodeURIComponent(name);
+        let category = 'all';
+        
+        // تحديد القسم إذا كانت الأيقونة ضمن تصنيف معين
+        const iconData = images.find(img => img.imageUrl === imageUrl);
+        if (iconData) {
+            category = iconData.category || 'all';
+        }
+        
+        // تضمين النوع الحالي للأيقونات في الرابط
+        return `${baseUrl}?popup=1&image=${encodedUrl}&name=${encodedName}&type=${currentIconType}&category=${category}`;
+    }
+
+    // دالة لعرض رابط المشاركة في البوب
+    function showShareableLink(imageUrl, name) {
+        const shareLink = generateShareableLink(imageUrl, name);
+        
+        if (popupShareLink) {
+            popupShareLink.value = shareLink;
+        }
+        
+        if (copyShareLinkButton) {
+            copyShareLinkButton.onclick = function() {
+                navigator.clipboard.writeText(shareLink)
+                    .then(() => {
+                        alert('تم نسخ رابط المشاركة!');
+                    })
+                    .catch(err => {
+                        console.error('فشل نسخ الرابط: ', err);
+                    });
+            };
+        }
+        
+        // تحديث عنوان الصفحة ليعرض الرابط (بدون إعادة تحميل الصفحة)
+        window.history.pushState({}, '', shareLink);
+    }
+
+    // دالة للتحقق من وجود معلمات البوب عند تحميل الصفحة
+    function checkForPopupOnLoad() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const popupParam = urlParams.get('popup');
+        const imageParam = urlParams.get('image');
+        const nameParam = urlParams.get('name');
+        const typeParam = urlParams.get('type');
+        const categoryParam = urlParams.get('category');
+        
+        if (popupParam === '1' && imageParam && nameParam) {
+            const decodedImage = decodeURIComponent(imageParam);
+            const decodedName = decodeURIComponent(nameParam);
+            
+            // تعيين نوع الأيقونة إذا كان موجودًا في الرابط
+            if (typeParam && ['outline', 'filled', 'sharp'].includes(typeParam)) {
+                currentIconType = typeParam;
+                // تحديث زر النوع المحدد مع تأثير zoom
+                document.querySelectorAll('.icon-type-btn').forEach(btn => {
+                    btn.classList.remove('zoom');
+                    if (btn.dataset.type === currentIconType) {
+                        btn.classList.add('zoom');
+                        // إضافة تأثير إضافي للتوضيح
+                        // btn.style.transform = 'scale(1.1)';
+                        // btn.style.boxShadow = 'rgb(0 0 0 / 10%) 0px 0px 4px, rgb(114 180 255) 0px 0px 1px';
+                        btn.style.transition = 'all 0.3s ease';
+                    }
+                });
+                // تحديث نص النوع الحالي
+                currentIconTypeText.textContent = currentIconType.charAt(0).toUpperCase() + currentIconType.slice(1);
+            }
+            
+            // إذا كان هناك قسم محدد، قم بتمييزه
+            if (categoryParam) {
+                document.querySelectorAll('.category-navigation button').forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.dataset.category === categoryParam) {
+                        btn.classList.add('active');
+                    }
+                });
+            }
+            
+            // عرض البوب مباشرة عند تحميل الصفحة
+            setTimeout(() => {
+                showDownloadPopup({ 
+                    stopPropagation: () => {},
+                    target: document.querySelector('.image-container') 
+                }, decodedImage, decodedName);
+            }, 500);
+            
+            // عرض الأيقونات الخاصة بالنوع المحدد
+            setTimeout(() => {
+                displayImages();
+            }, 300);
+        }
+    }
+
     // التهيئة الأولية
     await displayImages();
     
@@ -580,10 +691,17 @@ document.addEventListener("DOMContentLoaded", async () => {
                     .then(response => response.text())
                     .then(svgCode => {
                         popupSvgInput.value = svgCode;
+                    })
+                    .catch(err => {
+                        console.error("Error fetching SVG:", err);
+                        popupSvgInput.value = "SVG code not available";
                     });
             } else {
                 popupSvgInput.value = "SVG code not available";
             }
+
+            // عرض رابط المشاركة في البوب
+            showShareableLink(displayImageUrl, name);
     
             downloadPopup.style.display = "block";
             downloadPopup.style.opacity = 0;
@@ -656,6 +774,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                         if (overlay && overlay.parentNode) {
                             document.body.removeChild(overlay);
                         }
+
+                        // إعادة تعيين عنوان URL عند إغلاق البوب
+                        window.history.pushState({}, '', window.location.pathname);
                     }, 500);
                     document.removeEventListener('mousedown', closePopupHandler);
                     document.removeEventListener('touchstart', closePopupHandler);
@@ -674,6 +795,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                     setTimeout(() => {
                         downloadPopup.style.display = "none";
                         document.body.removeChild(overlay);
+                        
+                        // إعادة تعيين عنوان URL عند إغلاق البوب
+                        window.history.pushState({}, '', window.location.pathname);
                     }, 500);
                 });
             }
@@ -681,9 +805,36 @@ document.addEventListener("DOMContentLoaded", async () => {
     
         img.onerror = function() {
             console.error("Error loading image:", displayImageUrl);
-            popupImage.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text x="10" y="50" font-family="Arial" font-size="14" fill="red">Error loading image</text></svg>';
-            popupName.textContent = name + " (Error)";
-            downloadPopup.style.display = "block";
+            // محاولة تحميل الصورة الأصلية كحل بديل
+            const fallbackImage = new Image();
+            fallbackImage.onload = function() {
+                popupImage.src = imageUrl;
+                popupImage.dataset.originalImage = imageUrl;
+                popupName.textContent = name;
+                popupLinkInput.value = imageUrl;
+                
+                // عرض رابط المشاركة في البوب
+                showShareableLink(imageUrl, name);
+                
+                downloadPopup.style.display = "block";
+                downloadPopup.style.opacity = 0;
+                downloadPopup.style.transform = 'translateX(100%)';
+                downloadPopup.style.position = 'fixed';
+                downloadPopup.style.zIndex = 1000;
+                
+                setTimeout(() => {
+                    downloadPopup.style.transition = 'transform 0.5s ease, opacity 0.5s ease';
+                    downloadPopup.style.opacity = 1;
+                    downloadPopup.style.transform = 'translateX(0)';
+                }, 10);
+            };
+            fallbackImage.onerror = function() {
+                console.error("Fallback image also failed to load:", imageUrl);
+                popupImage.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text x="10" y="50" font-family="Arial" font-size="14" fill="red">Error loading image</text></svg>';
+                popupName.textContent = name + " (Error)";
+                downloadPopup.style.display = "block";
+            };
+            fallbackImage.src = imageUrl;
         };
     
         function copyToClipboard(textAreaId, buttonId) {
@@ -735,7 +886,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             const buttons = {
                 'copySvgButton': 'popupSvgInput',
                 'copyPngButton': 'popupPngInput',
-                'copyLinkButton': 'popupLinkInput'
+                'copyLinkButton': 'popupLinkInput',
+                'copyShareLinkButton': 'popupShareLink'
             };
             
             Object.entries(buttons).forEach(([buttonId, textAreaId]) => {
@@ -913,6 +1065,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             searchResults.style.display = "none";
         }
     });
+
+    // التحقق من وجود معلمات البوب عند تحميل الصفحة
+    checkForPopupOnLoad();
 
     searchInput.focus();
     updateTotalDownloads();
