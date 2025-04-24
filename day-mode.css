@@ -86,8 +86,7 @@ body.night-mode .spana  {
   filter: invert(1);
 }
 
-body.night-mode .download-popup img  {
-  border-radius: 12px;
+body.night-mode .download-popup-div {
   background-color: #f0f0f047;
 }
 
@@ -421,6 +420,30 @@ body.night-mode #toggleDownloadCounts {
   box-shadow: 4px -4px 0px #34373e;
 }
 
+body.night-mode .sofe_img {
+  outline-color: #efefef47;
+}
+
+body.night-mode .sofe_img img {
+  filter: invert(1);
+}
+
+body.night-mode .qr_on_close {
+  box-shadow: 0px 1px 0px #f1f1f12b;
+}
+body.night-mode .qr_on_div input {
+  background: #515359;
+  color: #fffaf4;
+}
+body.night-mode .under2 {
+  border: solid 1px #83b9ff;
+  color: #fffaf4;
+}
+body.night-mode {
+  
+}
+
 body .result-item svg {
   fill: #7d7d7d;
 }
+
