@@ -820,7 +820,7 @@ iconTypeButtons.forEach(button => {
                 downloadPopup.style.opacity = 0;
                 downloadPopup.style.transform = 'translateX(100%)';
                 downloadPopup.style.position = 'fixed';
-                downloadPopup.style.zIndex = 1000;
+                downloadPopup.style.zIndex = '1000';
                 
                 setTimeout(() => {
                     downloadPopup.style.transition = 'transform 0.5s ease, opacity 0.5s ease';
