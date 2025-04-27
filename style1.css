@@ -2919,7 +2919,8 @@ user-select: all;
 }
 .input-coa:focus {
   user-select: all;
-  border: solid 2px #26363d42;
+  /* border: solid 2px #26363d42; */
+  border: solid 2px #298dff;
 }
 .fex {
   padding: 8px;
@@ -4079,3 +4080,18 @@ html {
   scroll-behavior: smooth;
 }
 
+
+#code-editor {
+  font-family: monospace;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  color: black;
+}
+
+.highlight {
+  color: blue;
+}
+
+.highlight-brackets {
+  color: #ccc;
+}
