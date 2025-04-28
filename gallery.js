@@ -804,39 +804,38 @@ iconTypeButtons.forEach(button => {
         };
     
         img.onerror = function() {
-            img.onerror = function() {
-    console.error("Error loading image:", displayImageUrl);
-    // محاولة تحميل الصورة الأصلية كحل بديل
-    const fallbackImage = new Image();
-    fallbackImage.onload = function() {
-        popupImage.src = imageUrl;
-        popupImage.dataset.originalImage = imageUrl;
-        popupName.textContent = name;
-        popupLinkInput.value = imageUrl;
-        
-        // عرض رابط المشاركة في البوب
-        showShareableLink(imageUrl, name);
-        
-        downloadPopup.style.display = "block";
-        downloadPopup.style.opacity = 0;
-        downloadPopup.style.transform = 'translateX(100%)';
-        downloadPopup.style.position = 'fixed';
-        downloadPopup.style.zIndex = '1000';
-        
-        setTimeout(() => {
-            downloadPopup.style.transition = 'transform 0.5s ease, opacity 0.5s ease';
-            downloadPopup.style.opacity = 1;
-            downloadPopup.style.transform = 'translateX(0)';
-        }, 10);
-    };
-    fallbackImage.onerror = function() {
-        console.error("Fallback image also failed to load:", imageUrl);
-        popupImage.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text x="10" y="50" font-family="Arial" font-size="14" fill="red">Error loading image</text></svg>';
-        popupName.textContent = name + " (Error)";
-        downloadPopup.style.display = "block";
-    };
-    fallbackImage.src = imageUrl;
-};
+            console.error("Error loading image:", displayImageUrl);
+            // محاولة تحميل الصورة الأصلية كحل بديل
+            const fallbackImage = new Image();
+            fallbackImage.onload = function() {
+                popupImage.src = imageUrl;
+                popupImage.dataset.originalImage = imageUrl;
+                popupName.textContent = name;
+                popupLinkInput.value = imageUrl;
+                
+                // عرض رابط المشاركة في البوب
+                showShareableLink(imageUrl, name);
+                
+                downloadPopup.style.display = "block";
+                downloadPopup.style.opacity = 0;
+                downloadPopup.style.transform = 'translateX(100%)';
+                downloadPopup.style.position = 'fixed';
+                downloadPopup.style.zIndex = '1000';
+                
+                setTimeout(() => {
+                    downloadPopup.style.transition = 'transform 0.5s ease, opacity 0.5s ease';
+                    downloadPopup.style.opacity = 1;
+                    downloadPopup.style.transform = 'translateX(0)';
+                }, 10);
+            };
+            fallbackImage.onerror = function() {
+                console.error("Fallback image also failed to load:", imageUrl);
+                popupImage.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text x="10" y="50" font-family="Arial" font-size="14" fill="red">Error loading image</text></svg>';
+                popupName.textContent = name + " (Error)";
+                downloadPopup.style.display = "block";
+            };
+            fallbackImage.src = imageUrl;
+        };
     
         function copyToClipboard(textAreaId, buttonId) {
             const textArea = document.getElementById(textAreaId);
