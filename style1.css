@@ -1742,8 +1742,7 @@ justify-content: center;
 }
 .tool1 {
   text-align: left;
-  /* width: 84%; */
-  width: 100%;
+  flex: 1 1 auto;
   height: auto;
   margin: 20px 0;
   overflow-y: auto;
@@ -1784,7 +1783,7 @@ justify-content: center;
 .tool2 {
   border-radius: 21px;
   margin: 20px;
-  width: 52px;
+/*   width: 52px; */
   height: auto;
   overflow-y: scroll;
   scrollbar-width: none;
@@ -2927,20 +2926,20 @@ user-select: all;
   text-align: left;
   opacity: .7;
 }
-.history-link i {
-  position: relative;
-  transition: ease 0.2s;
-  cursor: pointer;
-  padding: 0px 10px;
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: white;
-  color: #8d8d8d;
-  margin-left: 2px;
+.history-link ion-icon {
+    position: relative;
+    transition: ease 0.2s;
+    cursor: pointer;
+    padding: 0px 10px;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    color: #8d8d8d;
+    margin-left: 2px;
 }
-.history-link i:active {
+.history-link ion-icon:active {
   color: #494949;
 }
 .ccd {
