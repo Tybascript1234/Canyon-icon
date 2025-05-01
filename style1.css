@@ -2969,7 +2969,7 @@ user-select: all;
 .history-link a {
   margin-left: 10px;
 }
-.history ion-can {
+ion-can {
   position: absolute;
   z-index: 2;
   margin: 8px;
