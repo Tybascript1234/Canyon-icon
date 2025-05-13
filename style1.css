@@ -726,7 +726,7 @@ top: 40px;
 left: 0;
 width: 210px;
 font-size: 16px;
-padding-top: 4px;
+padding-top: 8px;
 padding-bottom: 8px;
 box-shadow: 0px 2px 7px #00000046, 0px 1px 1px #0000004f;
 border-radius: 16px;
@@ -1030,7 +1030,7 @@ cursor: pointer;
 }
 .Everyone-menu a:hover {
 color: #298dff;
-background-color: rgba(232, 234, 237, 0.199);
+background-color: rgb(92 114 138 / 6%);
 }
 .Everyone-menu a:active {
 outline: auto #1884ff;
@@ -2926,7 +2926,7 @@ user-select: all;
   text-align: left;
   opacity: .7;
 }
-.history-link ion-icon {
+.history-link ion-icon,.history-link i {
     position: relative;
     transition: ease 0.2s;
     cursor: pointer;
@@ -2939,7 +2939,7 @@ user-select: all;
     color: #8d8d8d;
     margin-left: 2px;
 }
-.history-link ion-icon:active {
+.history-link ion-icon:active,i:active {
   color: #494949;
 }
 .ccd {
@@ -2955,9 +2955,13 @@ user-select: all;
 .ccd i {
   margin: 0;
   padding: 0;
+  background-color: #0000;
 }
 .ccd:active i {
   color: #494949;
+}
+.ccd:active {
+  background-color: #69738413;
 }
 .ccd::before {
   position: absolute;
@@ -3756,6 +3760,15 @@ body logo {
   width: 100%;
   height: 100%;
   background: #0000;
+}
+
+#category-navigation .xxse {
+  cursor: pointer;
+  padding: 10px 15px;
+  justify-content: space-between;
+}
+#category-navigation .xxse:hover ion-icon {
+  color: #697384;
 }
 
 
