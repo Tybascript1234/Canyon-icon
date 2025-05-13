@@ -1023,6 +1023,8 @@ max-height: 158px;
   0px 1px 3px 0px rgba(0, 0, 0, 0.08);
 }
 .Everyone-menu a {
+position: relative;
+outline: none;
 width: auto;
 padding: 6px 15px;
 justify-content: left;
@@ -1033,7 +1035,16 @@ color: #298dff;
 background-color: rgb(92 114 138 / 6%);
 }
 .Everyone-menu a:active {
-outline: auto #1884ff;
+/* outline: auto #1884ff; */
+}
+.Everyone-menu a::before {
+  position: absolute;
+  content: '';
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index: 4;
 }
 .Everyone-menu .v {
 width: auto;
@@ -3766,6 +3777,7 @@ body logo {
   cursor: pointer;
   padding: 10px 15px;
   justify-content: space-between;
+  outline: none;
 }
 #category-navigation .xxse:hover ion-icon {
   color: #697384;
@@ -3925,7 +3937,7 @@ body logo {
     white-space: break-spaces;
   }
   .Everyone-menu {
-    transition: ease 0.3s;
+    /* transition: ease 0.3s; */
     max-width: 100%;
     position: absolute;
     z-index: 700;
@@ -4061,12 +4073,6 @@ body logo {
   }
   body .xxs {
     flex: auto;
-  }
-  body #alphabet-buttons a:hover .checkbox {
-    box-shadow: 0 0 0 0.2em #d1d8e000 inset;
-  }
-  body #alphabet-buttons a:active .checkbox {
-    box-shadow: 0 0 0 0.2em #d1d8e0 inset;
   }
   body .logo:hover .sse::before {
     margin-top: 0;
