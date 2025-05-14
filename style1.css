@@ -1214,10 +1214,24 @@ box-shadow: 0px 3px 5px -1px rgba(0,0,0,.2),0px 6px 10px 0px rgba(0,0,0,.14),0px
   /* height: 262px; */
   border-radius: 20px;
   margin-bottom: 15px;
+  background: linear-gradient(270deg, #ff55dd, #6085ff, #37ecc8, #ebc73a);
+  animation: waveAnimation 10s ease infinite;
+  background-size: 800% 800%;
   /* border: solid 1px #e9edef00; */
 }
 .title-gallery-div img {
   width: 100%;
+}
+@keyframes waveAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 .title-gallery-div::before {
   border-radius: inherit;
@@ -1321,8 +1335,8 @@ box-shadow: 0px 3px 5px -1px rgba(0,0,0,.2),0px 6px 10px 0px rgba(0,0,0,.14),0px
   width: max-content;
   max-width: 80px;
   overflow: hidden;
-  /* white-space: nowrap; */
-  /* text-overflow: ellipsis; */
+  white-space: nowrap;
+  text-overflow: ellipsis;
   margin: auto;
   margin-bottom: 10px;
   /* left: 50%; */
@@ -1547,10 +1561,14 @@ justify-content: center;
 }
 .colorInput {
   position: absolute;
+  cursor: pointer;
   bottom: 0;
   left: 0;
   z-index: 3;
   /* margin: 10px; */
+}
+.colorInput .wave-button .ripple {
+  background-color: #daaa4567;
 }
 .input-color {
   z-index: 4;
@@ -1764,7 +1782,7 @@ justify-content: center;
 }
 .tool1 {
   text-align: left;
-  flex: 1 1 auto;
+  width: 86%;
   height: auto;
   margin: 20px 0;
   overflow-y: auto;
@@ -3135,7 +3153,7 @@ ion-can {
 
 .visible {
   opacity: 1;
-  transition: opacity 0.0s ease;
+  animation: eew 0.3s ease forwards;
 }
 
 
@@ -3354,6 +3372,7 @@ body.fullscreen-active {
 }
 #content-container.fullscreen .tool1{
   margin-left: 30px;
+  width: 100%;
 }
 #content-container.fullscreen .tool2{
   padding-right: 20px;
@@ -3945,7 +3964,7 @@ body logo {
     font-size: 16px;
   }
   .image-container div {
-    white-space: break-spaces;
+    /* white-space: break-spaces; */
   }
   .Everyone-menu {
     /* transition: ease 0.3s; */
