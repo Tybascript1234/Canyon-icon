@@ -391,7 +391,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     await renderIcons(filteredImages);
   }
 
-  async function renderIcons(filteredImages) {
+async function renderIcons(filteredImages) {
     // إظهار مؤشر التحميل
     loadingIndicator.style.display = "block";
     currentIconTypeText.textContent =
@@ -413,7 +413,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     }
 
-    const batchSize = 50; // تقليل حجم الدفعة لتحسين الأداء
+    const batchSize = 50;
     const resultsFragment = document.createDocumentFragment();
 
     window.addEventListener(
@@ -435,14 +435,34 @@ document.addEventListener("DOMContentLoaded", async () => {
           const imageContainer = document.createElement("button");
           imageContainer.className = "image-container";
 
+          // إضافة div الـ rre
+          const rreDiv = document.createElement("div");
+          rreDiv.id = "rre";
+          rreDiv.style.display = "flex";
+          rreDiv.style.justifyContent = "center";
+          rreDiv.style.alignItems = "center";
+          
+          imageContainer.appendChild(rreDiv);
+
           // استخدام img بدلاً من canvas
           const imgElement = document.createElement("img");
           imgElement.className = "svg-icon";
-          imgElement.loading = "lazy"; // تحميل كسول لتحسين الأداء
+          imgElement.loading = "lazy";
+          imgElement.style.opacity = "1"; // تغيير من 0 إلى 1 لإظهار الصورة مباشرة
           imgElement.src = imageUrl;
           imgElement.dataset.originalImage = imageUrl;
           imgElement.dataset.isLogo = isLogo;
           imgElement.alt = name;
+
+          imgElement.onload = function() {
+            // إزالة العنصر مباشرة بدون تأثيرات
+            rreDiv.remove();
+          };
+
+          imgElement.onerror = function() {
+            // إزالة العنصر مباشرة في حالة الخطأ
+            rreDiv.remove();
+          };
 
           const nameElement = document.createElement("div");
           nameElement.className = "image-name";
@@ -521,13 +541,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         })
       );
 
-      // إعطاء المتصفح فرصة للرسم
       await new Promise((resolve) => setTimeout(resolve, 0));
     }
 
     searchResults.innerHTML = "";
     searchResults.appendChild(resultsFragment);
-  }
+}
 
   async function fetchIoniconsData() {
     try {
