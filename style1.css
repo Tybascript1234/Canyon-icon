@@ -11,7 +11,7 @@ body {
   top: auto;
 }
 lin {
-  opacity: .7;
+  opacity: .3;
   position: absolute;
   bottom: 0;
   margin: auto;
@@ -1297,18 +1297,24 @@ box-shadow: 0px 3px 5px -1px rgba(0,0,0,.2),0px 6px 10px 0px rgba(0,0,0,.14),0px
 }
 #rre {
   position: absolute;
+  animation: moveBox 0.7s infinite linear;
   overflow: hidden;
-  width: 48px;
-  height: 48px;
+  transition: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 100px;
+  border: solid 2px #0000;
+  border-left-color: #0f86ee;
+  border-top-color: #0f86ee;
   z-index: -1;
   top: 20px;
   display: none;
   padding: 0;
   align-items: center;
   justify-content: center;
-  background-color: #a8a8a80c;
+  /* background-color: #a8a8a80c; */
 }
-#rre::before {
+/* #rre::before {
   animation: moveBox 0.7s infinite linear;
   position: absolute;
   content: '';
@@ -1319,13 +1325,17 @@ box-shadow: 0px 3px 5px -1px rgba(0,0,0,.2),0px 6px 10px 0px rgba(0,0,0,.14),0px
   background: #e4e4e4;
   box-shadow: -3px 0px 5px #e4e4e4,3px 0px 5px #e4e4e4;
   margin: 0 0;
-}
+} */
 @keyframes moveBox {
-  from {
-    margin: 0 50px
+  0% {
+    transform: rotate(360deg);
+    border-left-color: #0f86ee;
+    border-top-color: #0f86ee;
   }
-  to {
-    opacity: 0;
+  50% {
+    border-left-color: #0f86ee;
+    border-top-color: #0f86ee;
+    border-right-color: #0f86ee;
   }
 }
 .image-container div {
@@ -1820,7 +1830,8 @@ justify-content: center;
   font-size: 20px;
   font-weight: 500;
 }
-.tool2 {
+body .tool2 {
+  animation: none;
   border-radius: 21px;
   margin: 20px;
 /*   width: 52px; */
@@ -2169,7 +2180,7 @@ justify-content: center;
   position: relative;
   margin-bottom: 10px;
 }
-.Account-tools-div {
+body .Account-tools-div {
   bottom: 50%;
   right: 0;
   transform: translate(-50%, 50%);
@@ -2658,7 +2669,8 @@ user-select: all;
 
 
 /* coffee */
-.coffee {
+body .coffee {
+  transition: none;
   display: none;
   position: fixed;
   overflow: hidden;
@@ -3019,7 +3031,7 @@ ion-can {
   margin: 8px;
   bottom: 0;
   left: 0;
-  filter: opacity(0.5);
+  filter: opacity(0.3);
 }
 .history-Upload {
   background-color: rgba(252, 252, 252, 0);
@@ -3805,9 +3817,13 @@ body logo {
 
 #category-navigation .xxse {
   cursor: pointer;
-  padding: 10px 15px;
+  height: 37px;
+  padding: 0px 15px;
   justify-content: space-between;
   outline: none;
+}
+#category-navigation .xxse ion-icon {
+  font-size: 18px;
 }
 #category-navigation .xxse:hover ion-icon {
   color: #697384;
