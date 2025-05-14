@@ -73,6 +73,14 @@ body.night-mode .links-a:hover {
 color: #ffffffa8;
 }
 
+body.night-mode #category-navigation .xxse:hover {
+  background-color: rgb(252 252 252 / 4%);
+}
+body.night-mode #category-navigation .xxse:hover ion-icon {
+  color: #ffffffda;
+}
+
+
 body.night-mode .menu  {
 background: #34373e;
 backdrop-filter: blur(2px);
