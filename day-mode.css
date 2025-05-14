@@ -126,6 +126,10 @@ body.night-mode .tool-span {
 background-color: #ffffff00;
 }
 
+body.night-mode .Everyone-button:hover .Everyone-f {
+  background-color: #ffffff70;
+}
+
 body.night-mode .xox {
 background-color: #34373e;
 }
@@ -376,13 +380,16 @@ color: #ffffffda;
 
 body.night-mode .onscroll {
 color: white;
-background-color: #282a2c;
+background-color: #36393d;
 }
 body.night-mode .onscroll svg {
 fill: white;
 }
 body.night-mode .onscroll:hover {
-background-color: #36393d;
+background-color: #41464d;
+}
+.scrolled body.menu {
+  background-color: #83b9ff;
 }
 body.night-mode .onscroll:active {
 background-color: #3c4045;
