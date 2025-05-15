@@ -442,6 +442,13 @@ outline-color: #efefef47;
 body.night-mode .sofe_img img {
 filter: invert(1);
 }
+body.night-mode #svg-output-container {
+  background-image: repeating-conic-gradient(#e0ceff 0 25%, transparent 0 50%);
+}
+
+body.night-mode .on-lock {
+  background-image: repeating-conic-gradient(#e0ceff 0 25%, #00000000 0 50%);
+}
 
 body.night-mode .qr_on_close {
 box-shadow: 0px 1px 0px #f1f1f12b;
