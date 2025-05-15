@@ -608,7 +608,7 @@ window.onload = function() {
 document.addEventListener('DOMContentLoaded', (event) => {
     let images = [];
     let svgs = [];
-    let openImageButtonStates = []; // Array to store visibility state of the open button
+    let openImageButtonStates = [];
     let currentIndex = -1;
     let uploadAttemptsLeft = 4;
     let isSaved = false;
@@ -618,6 +618,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
         span.dataset.originalColor = window.getComputedStyle(span).color;
     });
     
+    // حل مشكلة النافذة التلقائية
+    const fileInput = document.getElementById('file-input');
+    fileInput.addEventListener('click', function(e) {
+        e.stopPropagation(); // منع انتشار الحدث
+    });
+    
     document.getElementById('file-input').addEventListener('change', function(event) {
         if (uploadAttemptsLeft > 0) {
             const file = event.target.files[0];
@@ -625,15 +631,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     images.push(e.target.result);
-                    svgs.push(''); // Placeholder for SVG
-                    openImageButtonStates.push(false); // Initialize visibility state
+                    svgs.push('');
+                    openImageButtonStates.push(false);
                     currentIndex = images.length - 1;
                     displayImage(e.target.result);
                     clearSVGContainers();
                     uploadAttemptsLeft--;
                     document.getElementById('uploads-left').textContent = `+ ${uploadAttemptsLeft}`;
-                    updateDownloadButton(); // Update the download button with the current SVG
-                    // Hide the open button when a new image is uploaded
+                    updateDownloadButton();
                     document.getElementById('open-image-button').style.display = 'none';
                 };
                 reader.readAsDataURL(file);
@@ -644,28 +649,49 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
     
     document.getElementById('load-url-button').addEventListener('click', function() {
-        if (uploadAttemptsLeft > 0) { // Check if uploads are still allowed
+        if (uploadAttemptsLeft > 0) {
             const url = document.getElementById('image-url-input').value;
             if (url) {
-                images.push(url);
-                svgs.push(''); // Placeholder for SVG
-                openImageButtonStates.push(false); // Initialize visibility state
-                currentIndex = images.length - 1;
-                displayImage(url);
-                clearSVGContainers();
-                uploadAttemptsLeft--;
-                document.getElementById('uploads-left').textContent = `+ ${uploadAttemptsLeft}`;
-                updateDownloadButton(); // Update the download button with the current SVG
-                // Hide the open button when a new image is uploaded
-                document.getElementById('open-image-button').style.display = 'none';
-                document.getElementById('link-upload-container').style.display = 'none'; // Close the upload container
+                const img = new Image();
+                img.crossOrigin = 'Anonymous';
+                
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.naturalWidth;
+                    canvas.height = img.naturalHeight;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+                    
+                    const dataURL = canvas.toDataURL('image/png');
+                    
+                    images.push(dataURL);
+                    svgs.push('');
+                    openImageButtonStates.push(false);
+                    currentIndex = images.length - 1;
+                    displayImage(dataURL);
+                    clearSVGContainers();
+                    uploadAttemptsLeft--;
+                    document.getElementById('uploads-left').textContent = `+ ${uploadAttemptsLeft}`;
+                    updateDownloadButton();
+                    document.getElementById('open-image-button').style.display = 'none';
+                    document.getElementById('link-upload-container').style.display = 'none';
+                };
+                
+                img.onerror = function() {
+                    alert('لا يمكن تحميل الصورة. تأكد من أن الصورة تدعم CORS أو أنها من مصدر موثوق.');
+                };
+                
+                img.src = url;
             }
         } else {
             alert('قد انتهت الفترة التجريبية');
         }
     });
     
-    document.getElementById('file-upload-button').addEventListener('click', function() {
+    // تعديل هنا لمنع السلوك التلقائي
+    document.getElementById('file-upload-button').addEventListener('click', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
         document.getElementById('file-input').click();
     });
     
@@ -678,8 +704,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             currentIndex--;
             displayImage(images[currentIndex]);
             displaySVG(svgs[currentIndex]);
-            updateDownloadButton(); // Update the download button with the current SVG
-            // Restore the visibility of the open button for the current image
+            updateDownloadButton();
             document.getElementById('open-image-button').style.display = openImageButtonStates[currentIndex] ? 'flex' : 'none';
         }
     });
@@ -689,8 +714,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             currentIndex++;
             displayImage(images[currentIndex]);
             displaySVG(svgs[currentIndex]);
-            updateDownloadButton(); // Update the download button with the current SVG
-            // Restore the visibility of the open button for the current image
+            updateDownloadButton();
             document.getElementById('open-image-button').style.display = openImageButtonStates[currentIndex] ? 'flex' : 'none';
         }
     });
@@ -698,37 +722,42 @@ document.addEventListener('DOMContentLoaded', (event) => {
     document.getElementById('generate-svg-button').addEventListener('click', function() {
         const img = document.getElementById('uploaded-image');
         if (img) {
-            ImageTracer.imageToSVG(img.src, function(svgString){
-                // تحسينات في تحويل الصورة إلى SVG
-                svgString = optimizeSVG(svgString);
-    
-                svgs[currentIndex] = svgString;
-    
-                const svgContainer = document.getElementById('svg-output-container');
-                svgContainer.innerHTML = '';
-                const parser = new DOMParser();
-                const svgDoc = parser.parseFromString(svgString, 'image/svg+xml');
-                svgContainer.appendChild(svgDoc.documentElement);
-    
-                const codeContainer = document.getElementById('svg-code-container');
-                codeContainer.textContent = svgString;
-    
-                updateDownloadButton(); // Update the download button with the current SVG
-    
-                const openButton = document.getElementById('open-image-button');
-                openButton.style.display = 'flex'; // Show the open button for the current image
-    
-                // Save the visibility state of the open button for the current image
-                openImageButtonStates[currentIndex] = true;
-    
-                // Show the notification
-                const notification = document.getElementById('notification');
-                notification.style.display = 'flex';
-                setTimeout(() => {
-                    notification.style.display = 'none';
-                }, 3000);
-    
-            }, { scale: 1, ltres:0.01, qtres:0.01, pathomit:0, colorsampling:0, numberofcolors:64, mincolorratio:0, colorquantcycles:3, strokewidth:1 });
+            try {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.naturalWidth;
+                canvas.height = img.naturalHeight;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+                ctx.getImageData(0, 0, 1, 1);
+                
+                ImageTracer.imageToSVG(img.src, function(svgString){
+                    svgString = optimizeSVG(svgString);
+                    svgs[currentIndex] = svgString;
+
+                    const svgContainer = document.getElementById('svg-output-container');
+                    svgContainer.innerHTML = '';
+                    const parser = new DOMParser();
+                    const svgDoc = parser.parseFromString(svgString, 'image/svg+xml');
+                    svgContainer.appendChild(svgDoc.documentElement);
+
+                    const codeContainer = document.getElementById('svg-code-container');
+                    codeContainer.textContent = svgString;
+
+                    updateDownloadButton();
+                    document.getElementById('open-image-button').style.display = 'flex';
+                    openImageButtonStates[currentIndex] = true;
+
+                    const notification = document.getElementById('notification');
+                    notification.style.display = 'flex';
+                    setTimeout(() => {
+                        notification.style.display = 'none';
+                    }, 3000);
+
+                }, { scale: 1, ltres:0.01, qtres:0.01, pathomit:0, colorsampling:0, numberofcolors:64, mincolorratio:0, colorquantcycles:3, strokewidth:1 });
+            } catch (e) {
+                alert('لا يمكن معالجة هذه الصورة بسبب قيود الأمان. يرجى رفع الصورة مباشرة بدلاً من استخدام رابط.');
+                console.error('Security Error:', e);
+            }
         } else {
             alert('يرجى رفع صورة أولاً.');
         }
@@ -760,10 +789,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
         document.getElementById('uploaded-image-container').innerHTML = '';
         document.getElementById('svg-output-container').innerHTML = '';
         document.getElementById('svg-code-container').textContent = '';
-        document.getElementById('file-input').value = '';
+        fileInput.value = '';
         images = [];
         svgs = [];
-        openImageButtonStates = []; // Reset visibility states
+        openImageButtonStates = [];
         currentIndex = -1;
         uploadAttemptsLeft = 4;
         document.getElementById('uploads-left').textContent = `+ ${uploadAttemptsLeft}`;
@@ -771,16 +800,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
         localStorage.removeItem('savedSVGs');
         localStorage.removeItem('currentIndex');
         localStorage.removeItem('uploadAttemptsLeft');
-        localStorage.removeItem('openImageButtonStates'); // Remove open button visibility states
+        localStorage.removeItem('openImageButtonStates');
         document.getElementById('save-button').innerHTML = '<ion-icon class="Full" name="bookmark-outline" title="Saves"></ion-icon>';
         isSaved = false;
-    
+
         const downloadButton = document.getElementById('download-svg-button');
-        downloadButton.removeAttribute('data-svg'); // Remove SVG data
-        downloadButton.disabled = true; // Disable the download button
-    
-        const openButton = document.getElementById('open-image-button');
-        openButton.style.display = 'none'; // Hide the open button
+        downloadButton.removeAttribute('data-svg');
+        downloadButton.disabled = true;
+
+        document.getElementById('open-image-button').style.display = 'none';
     });
     
     function toggle_button() {
@@ -808,17 +836,16 @@ document.addEventListener('DOMContentLoaded', (event) => {
             localStorage.removeItem('savedSVGs');
             localStorage.removeItem('currentIndex');
             localStorage.removeItem('uploadAttemptsLeft');
-            localStorage.removeItem('openImageButtonStates'); // Remove open button visibility states
+            localStorage.removeItem('openImageButtonStates');
             this.innerHTML = '<ion-icon class="Full" name="bookmark-outline" title="Saves"></ion-icon>';
             isSaved = false;
-            // Hide the open button
             document.getElementById('open-image-button').style.display = 'none';
         } else {
             localStorage.setItem('savedImages', JSON.stringify(images));
             localStorage.setItem('savedSVGs', JSON.stringify(svgs));
             localStorage.setItem('currentIndex', currentIndex);
             localStorage.setItem('uploadAttemptsLeft', uploadAttemptsLeft);
-            localStorage.setItem('openImageButtonStates', JSON.stringify(openImageButtonStates)); // Save open button visibility states
+            localStorage.setItem('openImageButtonStates', JSON.stringify(openImageButtonStates));
             this.innerHTML = '<ion-icon class="Full onclick-button" name="bookmark" title="Cancel saving"></ion-icon>';
             isSaved = true;
         }
@@ -834,13 +861,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
             if (currentIndex >= 0 && currentIndex < images.length) {
                 displayImage(images[currentIndex]);
                 displaySVG(svgs[currentIndex]);
-    
-                // Enable download button with the current SVG data
+
                 const downloadButton = document.getElementById('download-svg-button');
                 downloadButton.setAttribute('data-svg', svgs[currentIndex]);
                 downloadButton.disabled = false;
-    
-                // Restore open button visibility state
+
                 document.getElementById('open-image-button').style.display = openImageButtonStates[currentIndex] ? 'flex' : 'none';
             }
             document.getElementById('save-button').innerHTML = '<ion-icon class="onclick-button" name="bookmark" title="Cancel saving"></ion-icon>';
@@ -858,15 +883,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     });
     
-// تعريف الدالة في النطاق العام
-window.scrollToSection = function (sectionId) {
-    const element = document.getElementById(sectionId);
-    if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-    } else {
-        console.error(`العنصر بمعرف ${sectionId} غير موجود.`);
-    }
-};
+    window.scrollToSection = function(sectionId) {
+        const element = document.getElementById(sectionId);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            console.error(`العنصر بمعرف ${sectionId} غير موجود.`);
+        }
+    };
     
     const spansArray = Array.from(spans);
     spansArray.forEach(span => {
@@ -878,10 +902,11 @@ window.scrollToSection = function (sectionId) {
     
     function displayImage(src) {
         const imageContainer = document.getElementById('uploaded-image-container');
-        imageContainer.innerHTML = ''; // Clear previous image
-    
+        imageContainer.innerHTML = '';
+
         const img = document.createElement('img');
         img.id = 'uploaded-image';
+        img.crossOrigin = 'Anonymous';
         img.src = src;
         imageContainer.appendChild(img);
     }
@@ -892,7 +917,7 @@ window.scrollToSection = function (sectionId) {
         const parser = new DOMParser();
         const svgDoc = parser.parseFromString(svgString, 'image/svg+xml');
         svgContainer.appendChild(svgDoc.documentElement);
-    
+
         const codeContainer = document.getElementById('svg-code-container');
         codeContainer.textContent = svgString;
     }
@@ -902,15 +927,10 @@ window.scrollToSection = function (sectionId) {
         document.getElementById('svg-code-container').textContent = '';
     }
     
-    // تحسينات في تحويل الصورة إلى SVG
     function optimizeSVG(svgString) {
-        // هنا يمكنك إضافة أي تحسينات أخرى في عملية تحويل الصورة إلى SVG
-        // على سبيل المثال، استخدام مكتبات لضغط SVG مثل SVGO
-        // يمكنك استخدام SVGO عبر واجهة برمجة التطبيقات (API) أو كحزمة Node.js
         return svgString;
     }
     
-    // تحسينات في تحميل الصورة SVG
     function downloadSVG(svgString, fileName) {
         const blob = new Blob([svgString], { type: 'image/svg+xml' });
         const url = URL.createObjectURL(blob);
@@ -939,8 +959,8 @@ window.scrollToSection = function (sectionId) {
         const svg = document.querySelector('#svg-output-container svg');
         if (svg) {
             svg.querySelectorAll('path, circle, rect, polyline, polygon').forEach(function(element) {
-                element.style.fill = color; // يغير لون الحشوة
-                element.style.stroke = color; // يغير لون الخط
+                element.style.fill = color;
+                element.style.stroke = color;
             });
         }
     }
@@ -948,39 +968,31 @@ window.scrollToSection = function (sectionId) {
     function updateSVGColorInString(svgString, color) {
         const parser = new DOMParser();
         const svgDoc = parser.parseFromString(svgString, 'image/svg+xml');
-        svgDoc.querySelectorAll('path, circle, rect, polyline, polygon').forEach(function (element) {
+        svgDoc.querySelectorAll('path, circle, rect, polyline, polygon').forEach(function(element) {
             element.setAttribute('fill', color);
             element.setAttribute('stroke', color);
         });
         return new XMLSerializer().serializeToString(svgDoc);
     }
     
-    // إذا أردت جعلها متاحة في النطاق العام:
-    window.updateSVGColorInString = updateSVGColorInString;    
+    window.updateSVGColorInString = updateSVGColorInString;
     
-    // تحديث زر التنزيل ببيانات SVG الحالية
     function updateDownloadButton() {
         const downloadButton = document.getElementById('download-svg-button');
         downloadButton.setAttribute('data-svg', svgs[currentIndex]);
         downloadButton.disabled = !svgs[currentIndex];
     }
     
-    // Show the link upload container when the file input button is clicked
-   // إظهار العنصر عند النقر على زر رفع الصورة
-document.getElementById('file-input-button').addEventListener('click', function () {
-    document.getElementById('link-upload-container').style.display = 'block';
-});
+    document.getElementById('file-input-button').addEventListener('click', function() {
+        document.getElementById('link-upload-container').style.display = 'block';
+    });
 
-// إخفاء العنصر عند رفع الصورة أو تحديد ملف
-document.getElementById('file-input').addEventListener('change', function () {
-    // التحقق من أن هناك ملفاً قد تم تحديده
-    if (this.files && this.files.length > 0) {
-        document.getElementById('link-upload-container').style.display = 'none';
-    }
-});
-
+    document.getElementById('file-input').addEventListener('change', function() {
+        if (this.files && this.files.length > 0) {
+            document.getElementById('link-upload-container').style.display = 'none';
+        }
+    });
     
-    // Drag and drop functionality
     const dropZone = document.getElementById('uploaded-image-container');
     
     dropZone.addEventListener('dragover', function(e) {
@@ -996,21 +1008,20 @@ document.getElementById('file-input').addEventListener('change', function () {
         e.preventDefault();
         this.classList.remove('drag-over');
         
-        if (uploadAttemptsLeft > 0) { // Check if uploads are still allowed
+        if (uploadAttemptsLeft > 0) {
             const file = e.dataTransfer.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     images.push(e.target.result);
-                    svgs.push(''); // Placeholder for SVG
-                    openImageButtonStates.push(false); // Initialize visibility state
+                    svgs.push('');
+                    openImageButtonStates.push(false);
                     currentIndex = images.length - 1;
                     displayImage(e.target.result);
                     clearSVGContainers();
                     uploadAttemptsLeft--;
                     document.getElementById('uploads-left').textContent = `+ ${uploadAttemptsLeft}`;
-                    updateDownloadButton(); // Update the download button with the current SVG
-                    // Hide the open button when a new image is uploaded
+                    updateDownloadButton();
                     document.getElementById('open-image-button').style.display = 'none';
                 };
                 reader.readAsDataURL(file);
@@ -1020,11 +1031,6 @@ document.getElementById('file-input').addEventListener('change', function () {
         }
     });
     
-    document.getElementById('file-upload-button').addEventListener('click', function(event) {
-        event.preventDefault(); // منع السلوك الافتراضي للنموذج
-    
-        document.getElementById('file-input').click();
-    });    
     window.toggle_button = toggle_button;
 });
 
@@ -1455,3 +1461,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
   
   
+
+
+
+//   -----------------------------------------------------------------------------------------
