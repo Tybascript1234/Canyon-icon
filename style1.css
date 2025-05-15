@@ -152,10 +152,10 @@ overflow: hidden;
 }
 .wave-button .ripple {
 position: absolute;
-width: 100px;
-height: 100px;
+width: 90%;
+height: 90%;
 background: #9a9a9a46;
-border-radius: 50%;
+border-radius: 100%;
 transform: scale(0);
 animation: ripple-animation 0.6s linear infinite;
 pointer-events: none;
@@ -378,7 +378,7 @@ background-color: #0084ff21;
 .logo-div {
 position: relative;
 }
-.logo-div-div {
+body .logo-div-div {
 animation: gallery 0.2s ease forwards;
 position: absolute;
 z-index: 10;
@@ -1300,15 +1300,16 @@ box-shadow: 0px 3px 5px -1px rgba(0,0,0,.2),0px 6px 10px 0px rgba(0,0,0,.14),0px
   animation: moveBox 0.7s infinite linear;
   overflow: hidden;
   transition: none;
-  width: 44px;
-  height: 44px;
+  width: 20px;
+  height: 20px;
   border-radius: 100px;
-  border: solid 2px #0000;
+  border: solid 3px #0000;
   border-left-color: #0f86ee;
   border-top-color: #0f86ee;
-  z-index: -1;
-  top: 20px;
+  z-index: 4;
+  top: 8px;
   display: none;
+  margin: 23px;
   padding: 0;
   align-items: center;
   justify-content: center;
@@ -1333,9 +1334,9 @@ box-shadow: 0px 3px 5px -1px rgba(0,0,0,.2),0px 6px 10px 0px rgba(0,0,0,.14),0px
     border-top-color: #0f86ee;
   }
   50% {
-    border-left-color: #0f86ee;
+    /* border-left-color: #0f86ee;
     border-top-color: #0f86ee;
-    border-right-color: #0f86ee;
+    border-right-color: #0f86ee; */
   }
 }
 .image-container div {
@@ -1526,7 +1527,7 @@ justify-content: center;
 }
 .download-fonts-button:active {
   font-size: 16px;
-  background-color: #00000009;
+  background-color: #00000003;
 }
 .download-fonts-button::before {
   content: "";
@@ -2446,7 +2447,8 @@ user-select: all;
 }
 .menu-fmo-div {
   position: relative;
-  padding: 0 35px;
+  padding: 0 44px;
+  padding-right: 16px;
   height: 48px;
   display: flex;
   align-items: center;
@@ -2455,6 +2457,10 @@ user-select: all;
   color: #697384;
   width: auto;
   justify-content: left;
+}
+.menu-fmo-div icon {
+  position: absolute;
+  left: 15px;
 }
 .menu-fmo-div:hover {
   background-color: rgba(0, 0, 0, 0.027);
@@ -2491,7 +2497,7 @@ user-select: all;
   box-shadow: 0px -1px 0px #c8c8c86b;
   background-color: #ffffff;
   backdrop-filter: blur(11px);
-  z-index: 100;
+  z-index: 700;
 }
 .menu2-div {
   animation: popup 0.3s ease forwards;
@@ -3829,6 +3835,13 @@ body logo {
   color: #697384;
 }
 
+icon {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  background-size: cover;
+}
+
 
 
 
@@ -3903,7 +3916,7 @@ body logo {
     height: 41px;
     width: 41px;
   }
-  .Account-tools-div {
+  body .Account-tools-div {
     animation: oli 0.4s ease forwards;
     transition: ease 0.2s;
     left: 50%;
@@ -4128,6 +4141,9 @@ body logo {
   }
   body .title-gallery-div {
     border-radius: 14px;
+  }
+  body #rre {
+    top: 4.4px;
   }
 }
 
