@@ -189,6 +189,7 @@ setTimeout(() => {
             <br>
             <div class="gallery-container">
                 <div class="title-gallery" style="position: relative;">
+                  <!-- <div id="rre" style="display: flex;"></div> -->
                   <div class="title-gallery-div ou" style="display: none;"><img src="" alt=""></div>
                   <div class="xsw2">App icons</div>
                 </div>
@@ -460,14 +461,14 @@ setTimeout(() => {
             </div>
            </div>
           <!-- Upload -->
-           <form class="history" id="link-upload-container">
-            <div class="history-link"><ion-icon id="load-url-button" name="link-outline"></ion-icon><input class="input-coa" type="text" id="image-url-input" style="height: auto;" placeholder="Enter the image link"></div>
+           <form class="history xox box-shadow on" id="link-upload-container">
+            <div class="history-link"><ion-icon id="load-url-button" class="xox" name="link-outline"></ion-icon><input class="input-coa" type="text" id="image-url-input" style="height: auto;" placeholder="Enter the image link"></div>
             <button class="history-Upload Click_focus wave-button" id="file-upload-button">Upload a Image</button>
             <div style="text-align: -webkit-right;"><button type="reset" class="coffee-button wave-button" id="close-upload-container">Cancel</button></div>
             <ion-can class="ion-can">Upload a Image</ion-can>
            </form>
           <!-- الدليل -->
-           <div class="Usage xox" id="wwc8">
+           <div class="Usage xox box-shadow on_click" id="wwc8">
             <h3>How to use</h3>
             <br>
             <div class="Usage-div show-btn" data-target="wwc9">Instructions<ion-icon name="chevron-down-outline"></ion-icon></div>
@@ -511,11 +512,11 @@ setTimeout(() => {
             <hr class="onclick_tool">
             <!-- color -->
             <div class="onclick_tool">
-              <input type="color" id="color-picker" style="display: none;">
-            <div class="tool2-div tool-span wave-button tool2-div-divs show-btn" data-target="wwc8" id=""><ion-icon name="book-outline"></ion-icon><ic class="tool-text">user's Guide</ic></div>
+              
+            <div class="tool2-div tool-span wave-button tool2-div-divs show-btn ou" data-target="wwc8" id=""><ion-icon name="book-outline"></ion-icon><ic class="tool-text">user's Guide</ic></div>
             <div class="tool2-div tool-span wave-button tool2-div-divs" id=""><ion-icon title="Print image" name="print-outline" style="font-size: 22px;"></ion-icon><ic class="tool-text">Print</ic></div>
             <div class="tool2-div tool-span wave-button tool2-div-divs on-lock" id=""><ion-icon title="Cut out background of image" name="image-outline" style="font-size: 22px;"></ion-icon><ic class="tool-text"></ic></div>
-            <label for="color-picker" class="tool2-div tool-span wave-button tool2-div-divs color-div" id=""><a class="tool2-div_color" style="background: linear-gradient(to right, #ffd662, #e25283, #ff776b, #9e82cd);"></a><ic class="tool-text">Image color</ic></label>
+            <label for="color-picker" class="tool2-div tool-span wave-button tool2-div-divs color-div" id=""><input type="color" id="color-picker" style="position: absolute; width: 100%; height: 100%; opacity: 0;"><a class="tool2-div_color" style="background: linear-gradient(to right, #ffd662, #e25283, #ff776b, #9e82cd);"></a><ic class="tool-text">Image color</ic></label>
           </div>
             </div>
           </div>
@@ -561,13 +562,15 @@ setTimeout(() => {
 
         <!-- menu-fmo -->
         <div class="menu-fmo xox on_click" id="wwc6">
+          <div class="menu-fmo-div wave-button" onclick="window.open('https://taibahcloud.com/', '_blank')"><icon style="background-image: url(logo-Taibah-Cart.png);"></icon>Taibah Cart</div>
+            <on-liy class="onliy-hr"></on-liy>
           <div class="menu-fmo-div wave-button" onclick="fffo()"><a id="buttonspan">Message</a></div>
-          <on-liy class="onliy-hr"></on-liy>
           <div class="menu-fmo-div" style="display: none;"><a>GitHub</a><span class="spana"></span></div>
           <div class="menu-fmo-div" style="display: none;"><a>Visit us</a></div>
-          <on-liy class="onliy-hr"></on-liy>
+            <on-liy class="onliy-hr"></on-liy>
           <div class="menu-fmo-div" style="display: none;"><a>Advertisement<a id="nife">3</a></a></div>
-          <div class="menu-fmo-div wave-button show-btn" data-target="wwc21">Can QR</div>
+          <div class="menu-fmo-div wave-button show-btn" data-target="wwc21"><icon style="background-image: url(logo2.png);"></icon>Can QR</div>
+            <on-liy class="onliy-hr"></on-liy>
           <div class="menu-fmo-div show-btn wave-button" data-target="wwc1">Account</div>
           <div class="menu-fmo-div" style="display: none;">Coffee</div>
           <a href="hh.html" class="menu-fmo-div" style="display: none;">Settings</a>
@@ -690,7 +693,7 @@ setTimeout(() => {
     <div class="menu2 xox">
       <div class="menu2-divs">
       <div class="menu2-div show-btn tool2-div-divs wave-button" data-target="wwc6"><span class="material-symbols-outlined">apps</span></div>
-      Tools
+      Menu
       </div>
       <div class="menu2-divs" onclick="window.open('https://creativecloudsit.com/?srsltid=AfmBOooj-okHPBWL_EQTrty6a0gQc3Kr-X_Lbd3-xO6V5I4fOi70V2x4', '_blank')">
       <a class="menu2-div tool2-div-divs wave-button"><img src="download.png" alt=""></a>
