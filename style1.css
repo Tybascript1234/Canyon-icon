@@ -1297,6 +1297,7 @@ box-shadow: 0px 3px 5px -1px rgba(0,0,0,.2),0px 6px 10px 0px rgba(0,0,0,.14),0px
 }
 #rre {
   position: absolute;
+  opacity: 0;
   animation: moveBox 0.7s infinite linear;
   overflow: hidden;
   transition: none;
@@ -2446,17 +2447,17 @@ user-select: all;
   box-shadow: 0px 6px 12px 0px rgba(0, 0, 0, 0.1), 0px 1px 3px 0px rgba(0, 0, 0, 0.08), 0px 3px 6px 0px rgba(0, 0, 0, 0.1), 0px 1px 3px 0px rgba(0, 0, 0, 0.08);
 }
 .menu-fmo-div {
-  position: relative;
-  padding: 0 44px;
-  padding-right: 16px;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  /* font-size: 17px; */
-  cursor: pointer;
-  color: #697384;
-  width: auto;
-  justify-content: left;
+    position: relative;
+    padding: 0 44px;
+    padding-right: 16px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    /* font-size: 17px; */
+    cursor: pointer;
+    color: #697384;
+    width: auto;
+    justify-content: space-between;
 }
 .menu-fmo-div icon {
   position: absolute;
@@ -4144,6 +4145,12 @@ icon {
   }
   body #rre {
     top: 4.4px;
+  }
+  body .menu-fmo-div:hover .spana {
+  transform: none;
+  }
+  body .menu-fmo-div:active .spana {
+  transform: translate(1px, -1px);
   }
 }
 
